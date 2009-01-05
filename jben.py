@@ -13,19 +13,15 @@ import pygtk
 pygtk.require("2.0")
 import gtk
 
-import tab_worddict
-import tab_kanjidict
+from tab_worddict import TabWordDict
+from tab_kanjidict import TabKanjiDict
+from window_kanjihwsearch import WindowKanjiHWSearch
+from dialog_vocablisteditor import DialogVocabListEditor
+from dialog_kanjilisteditor import DialogKanjiListEditor
+from dialog_preferences import DialogPreferences
+import preferences
 
-# These were "constants" under the C++ interface.
-# However, since J-Ben has an alternate Japanese name (Ｊ勉),
-# and since my name can be written in katakana, or the copyright
-# date written in other numbering systems (heisei-based, etc.),
-# I'm now using gettext on these "constants".
-PROGRAM_NAME = _("J-Ben/python")
-AUTHOR_NAME = _("Paul Goins")
-COPYRIGHT_DATE = _("2007, 2008")
-
-VERSION_STR = "1.2.1"
+from jben_global import *
 
 def setup_global_icons():
     icon1 = gtk.gdk.pixbuf_new_from_file("jben.xpm")
@@ -46,10 +42,13 @@ class JBen:
     def __init__(self):
         setup_global_icons()
 
+        preferences.load()
+
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.window.connect("delete_event", self.delete_event)
+        self.window.connect("delete-event", self.delete_event)
         self.window.connect("destroy", self.destroy)
         self.window.set_title(PROGRAM_NAME)
+        self.window.set_default_size(600, 400)
 
         self.menu = self.create_menu()
         self.children = self.create_children()
@@ -134,12 +133,10 @@ class JBen:
 
     def create_children(self):
         tabs = gtk.Notebook()
-        worddict = tab_worddict.TabWordDict()
-        kanjidict = tab_kanjidict.TabKanjiDict()
-        tabs.append_page(worddict.contents,
-                              gtk.Label(_("Word Dictionary")))
-        tabs.append_page(kanjidict.contents,
-                              gtk.Label(_("Kanji Dictionary")))
+        worddict = TabWordDict()
+        kanjidict = TabKanjiDict()
+        tabs.append_page(worddict, gtk.Label(_("Word Dictionary")))
+        tabs.append_page(kanjidict, gtk.Label(_("Kanji Dictionary")))
         return tabs
 
     def main(self):
@@ -150,23 +147,41 @@ class JBen:
 
     def on_menu_edit_vocab(self, widget):
         print "on_menu_edit_vocab"
-        # Create/show vocab list editor
-        # If OK was pressed, update the WordDict GUI's current/max index.
+
+        dialog = DialogVocabListEditor(self.window)
+        result = dialog.run()
+        dialog.destroy()
+
+        if result == gtk.RESPONSE_OK:
+            print "OK was clicked."
+            # If OK was pressed, update the WordDict GUI's current/max index.
+        else:
+            print "Cancel was clicked; dialog input discarded."
 
     def on_menu_edit_kanji(self, widget):
         print "on_menu_edit_kanji"
-        # Create/show kanji list editor
-        # If OK was pressed, update the KanjiDict GUI's current/max index.
+
+        dialog = DialogKanjiListEditor(self.window)
+        result = dialog.run()
+        dialog.destroy()
+
+        if result == gtk.RESPONSE_OK:
+            print "OK was clicked."
+            # If OK was pressed, update the KanjiDict GUI's current/max index.
+        else:
+            print "Cancel was clicked; dialog input discarded."
 
     def on_menu_edit_prefs(self, widget):
         print "on_menu_edit_prefs"
-        # Create/show preferences dialog
-        # If OK was pressed, update necessary fields.
-        # What to update:
-        # * Current dictionary tab
-        #   ...but is it really needed?  Maybe the user can just re-search?
-        #   Does it confuse the user to change stuff automatically like this?
-        # C++ code: (GTK::MainGui.)Update();
+
+        dialog = DialogPreferences(self.window)
+        result = dialog.run()
+        dialog.destroy()
+
+        if result == gtk.RESPONSE_OK:
+            print "OK was clicked."
+        else:
+            print "Cancel was clicked; dialog input discarded."
 
     def on_menu_practice_kanji(self, widget):
         print "on_menu_practice_kanji"
@@ -180,6 +195,7 @@ class JBen:
         print "on_menu_tools_hand"
         # Show kanji handwriting pad... no real reason to make it modal; allow
         # the user to open multiple ones if they desire.
+        hwpad = WindowKanjiHWSearch()
 
     def on_menu_tools_kanji_search(self, widget):
         print "on_menu_tools_kanji_search"

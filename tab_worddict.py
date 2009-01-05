@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Project: J-Ben, Python front-end
 # File: tab_worddict.py
@@ -7,16 +8,17 @@
 
 import gtk
 
-class TabWordDict:
+class TabWordDict(gtk.VBox):
     def __init__(self):
-        self.contents = gtk.VBox(spacing = 5)
-        self.contents.set_border_width(5)
+        gtk.VBox.__init__(self, spacing = 5)
+        self.set_border_width(5)
 
         # Top box: "Enter word or expression:" [________]  [ Search ]
         self.querylabel = gtk.Label(_("Enter word or expression:"))
         self.queryentry = gtk.Entry()
 
         self.searchbutton = gtk.Button(_("_Search"))
+        self.searchbutton.connect("clicked", self.on_search_clicked)
         btnbox = gtk.HButtonBox()
         btnbox.set_spacing(5)
         btnbox.set_layout(gtk.BUTTONBOX_START)
@@ -26,23 +28,26 @@ class TabWordDict:
         topbox.pack_start(self.querylabel, expand = False)
         topbox.pack_start(self.queryentry)
         topbox.pack_start(btnbox, expand = False)
-        self.contents.pack_start(topbox, expand = False)
+        self.pack_start(topbox, expand = False)
 
         # Middle box: a GTKTextView wrapped in a GTKScrolledWindow
         self.output = gtk.TextView()
         self.output.set_editable(False)
         self.output.set_wrap_mode(gtk.WRAP_WORD_CHAR)
-        self.search()
+        self.on_search_clicked(None)
         outputwindow = gtk.ScrolledWindow()
         outputwindow.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         outputwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         outputwindow.add(self.output)
-        self.contents.pack_start(outputwindow)
+        self.pack_start(outputwindow)
 
         # Bottom box: [__Back__] [Forward_] [_Random_]    [#  ] "of # vocab"
         self.backbutton = gtk.Button(stock = gtk.STOCK_GO_BACK)
-        self.nextbutton = gtk.Button(stock = gtk.STOCK_GO_FORWARD)
+        self.backbutton.connect("clicked", self.on_back_clicked)
+        self.forwardbutton = gtk.Button(stock = gtk.STOCK_GO_FORWARD)
+        self.forwardbutton.connect("clicked", self.on_forward_clicked)
         self.randombutton = gtk.Button(_("_Random"))
+        self.randombutton.connect("clicked", self.on_random_clicked)
         self.indexentry = gtk.Entry()
         self.indexentry.set_width_chars(5)
         self.indexentry.set_max_length(5)
@@ -52,15 +57,28 @@ class TabWordDict:
         btnbox2.set_spacing(5)
         btnbox2.set_layout(gtk.BUTTONBOX_START)
         btnbox2.pack_start(self.backbutton)
-        btnbox2.pack_start(self.nextbutton)
+        btnbox2.pack_start(self.forwardbutton)
         btnbox2.pack_start(self.randombutton)
 
         bottombox = gtk.HBox(spacing = 5)
         bottombox.pack_start(btnbox2, expand = False)
         bottombox.pack_end(self.indexlabel, expand = False)
         bottombox.pack_end(self.indexentry, expand = False)
-        self.contents.pack_start(bottombox, expand = False)
+        self.pack_start(bottombox, expand = False)
 
-    def search(self):
+    def on_search_clicked(self, widget):
         # For now, searching is disabled.
+        print "TabWordDict.on_search_clicked"
         self.output.get_buffer().set_text(_("No search has been entered."))
+
+    def on_back_clicked(self, widget):
+        print "TabWordDict.on_back_clicked"
+        pass
+
+    def on_forward_clicked(self, widget):
+        print "TabWordDict.on_forward_clicked"
+        pass
+
+    def on_random_clicked(self, widget):
+        print "TabWordDict.on_random_clicked"
+        pass
