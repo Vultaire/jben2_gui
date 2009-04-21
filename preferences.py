@@ -13,8 +13,7 @@ options = {}
 """Maps preference key strings to stored option values."""
 
 original_save_target = None
-"""
-This variable will be set to the contents of options["config_save_target"]
+"""This variable will be set to the contents of options["config_save_target"]
 when a config file is loaded, in order to track runtime changes.
 """
 
@@ -22,14 +21,13 @@ __CURRENT_CONFIG_VERSION = "2.0"
 """The current version of the config file."""
 
 def load(filename=None):
-    """
-    Load preferences from a config file.
+    """Load preferences from a config file.
 
     If filename is None (default), then J-Ben will search for a config
     file in the program's parent directory (important for self-contained
     "mobile" installs), followed by the user's home directory.
-    """
 
+    """
     loaded = False
 
     if filename:
@@ -54,15 +52,14 @@ def load(filename=None):
         if not loaded or options["config_save_target"] == "home":
             env_path = os.getenv(HOME_ENV)
             if env_path:
-                loaded2 = load(env_path + "/" + CFG_FILE)
+                loaded2 = load("%s/%s" % (env_path, CFG_FILE))
                 if loaded2:
                     loaded = True
 
     return loaded
 
 def save(filename=None):
-    """
-    Save preferences to a config file.
+    """Save preferences to a config file.
 
     If filename is None (default), then J-Ben will save the file based
     on the current install type (standard or mobile).
@@ -72,41 +69,42 @@ def save(filename=None):
     This is necessary in case two config files are located on a
     system (both standard and mobile), in which case J-Ben will look at
     both files and decide which one to use.
-    """
 
+    """
     save_data = __create_config_file_string()
+    #print "save_data = [%s]" % save_data
 
     files = []
     if filename is None:
-        env_path = os.getenv(HOME_ENV)
-        if env_path:
-            if (options["config_save_target"] == "home"
-                or original_save_target == "home"):
-                files.append(env_path + "/" + CFG_FILE)
         if (options["config_save_target"] == "mobile"
             or original_save_target == "mobile"):
             files.append("../" + CFG_FILE)
+        else:  # Default: save to home folder
+            env_path = os.getenv(HOME_ENV)
+            if env_path:
+                files.append("%s/%s" % (env_path, CFG_FILE))
+            else:
+                files.append("../" + CFG_FILE)
     else:
         files.append(filename)
 
     for f in files:
-        if filename:
+        if f:
             try:
-                f = open(filename, "w")
-                f.write(save_data)
-                f.close()
+                fo = open(f, "w")
+                fo.write(save_data)
+                fo.close()
             except:
                 # We can add error handlers later...
-                pass
+                raise
 
-def __set_default_prefs():
-    """
-    Default preferences are defined here.
+def set_default_prefs():
+    """Default preferences are defined here.
 
     These settings are loaded prior to loading any config file.  Any
     new default settings should be defined here.
-    """
 
+    """
     # Changes in Python version
     # 1. JB_DATADIR is now configured in jben_global.py.
     # 2. DSSTR is removed; we will now simply specify "/" as a
@@ -210,15 +208,14 @@ def __set_default_prefs():
     options["kanjitest.wronganswer"]="3"
     options["kanjitest.stopdrill"]="4"
 
-def __upgrade_config_file():
-    """
-    Brings settings loaded from previous config file versions up-to-date.
+def upgrade_config_file():
+    """Brings settings loaded from previous config file versions up-to-date.
 
     Generally speaking, this should not need to be edited.  Only when
     an option string has been renamed, or the config file itself changed,
     should this really need to be touched.
-    """
 
+    """
     version = options["config_version"]
 
     # Iterate through the version-wise changes
@@ -274,15 +271,18 @@ def __create_config_file_string():
     # Example: key	value
     # Notes: First key MUST be "config_version".
 
-    config_string = "config_version\t%s\n" % options["config_version"]
+    header = "config_version\t%s" % options["config_version"]
+    config_strs = []
 
     # These values are handled specially, so we don't auto-include them.
     excludes = ["config_version", "kanji_list", "vocab_list"]
     other_opts = [(k, v) for k, v in options.items() if k not in excludes]
     for k, v in other_opts:
-        config_string.append("%s\t%s\n" % (k, v))
+        config_strs.append("%s\t%s" % (k, v))
 
     # Append kanji and vocab lists
     # ...
 
-    return config_string
+    config_strs.sort()
+    config_strs.insert(0, header)
+    return "\n".join(config_strs) + "\n"
