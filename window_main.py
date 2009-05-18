@@ -16,18 +16,23 @@ from window_kanjihwsearch import WindowKanjiHWSearch
 from dialog_vocablisteditor import DialogVocabListEditor
 from dialog_kanjilisteditor import DialogKanjiListEditor
 from dialog_preferences import DialogPreferences
-from mixins import StoredSize
+from widget_storedsize import StoredSizeWindow
 
-class WindowMain(gtk.Window, StoredSize):
+class InfoMessage(gtk.MessageDialog):
+    def __init__(self, parent=None, title="", message="",
+                 type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK):
+        gtk.MessageDialog.__init__(self, parent,
+                                   gtk.DIALOG_MODAL, type,
+                                   buttons, message)
+	self.set_title(title)
+
+class WindowMain(StoredSizeWindow):
     """The main GUI of J-Ben."""
 
     def __init__(self, param="gui.main.size"):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-        StoredSize.__init__(self, param, 600, 400)
-        self.connect("delete-event", self.delete_event)
+        StoredSizeWindow.__init__(self, param, 600, 400, gtk.WINDOW_TOPLEVEL)
         self.connect("destroy", self.destroy)
         self.set_title(PROGRAM_NAME)
-        self.set_default_size(600, 400)
 
         self.menu = self.create_menu()
         self.children = self.create_children()
@@ -37,10 +42,6 @@ class WindowMain(gtk.Window, StoredSize):
         layout.pack_start(self.children)
 
         self.add(layout)
-
-    def delete_event(self, widget, event, data = None):
-        print self.get_size()
-        return False
 
     def destroy(self, widget, data = None):
         gtk.main_quit()
@@ -125,7 +126,8 @@ class WindowMain(gtk.Window, StoredSize):
         return tabs
 
     def on_menu_file_quit(self, widget):
-        self.destroy(None)
+        if not self.delete_event(None, None):
+            self.destroy(None)
 
     def on_menu_edit_vocab(self, widget):
         print "on_menu_edit_vocab"
@@ -172,6 +174,10 @@ class WindowMain(gtk.Window, StoredSize):
         # * clear dictionary panels (no cheating, at least not that easily!)
         # * show main test dialog
         # * show test results dialog ("post-test")
+        im = InfoMessage(self, _("Not yet implemented"),
+                         _("Sorry, this has not yet been re-implemented."))
+        im.run()
+        im.destroy()
 
     def on_menu_tools_hand(self, widget):
         print "on_menu_tools_hand"
@@ -181,7 +187,10 @@ class WindowMain(gtk.Window, StoredSize):
 
     def on_menu_tools_kanji_search(self, widget):
         print "on_menu_tools_kanji_search"
-        # Show kanji search dialog... Again, not modal.
+        im = InfoMessage(self, _("Not yet implemented"),
+                         _("Sorry, this has not yet been re-implemented."))
+        im.run()
+        im.destroy()
 
     def on_menu_help_about(self, widget):
         message = _(
@@ -208,11 +217,9 @@ class WindowMain(gtk.Window, StoredSize):
             "details."
             ) % (PROGRAM_NAME, VERSION_STR, AUTHOR_NAME, COPYRIGHT_DATE)
 
-        md = gtk.MessageDialog(self, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
-                               gtk.BUTTONS_OK, message)
-        md.set_title(_("About %s") % PROGRAM_NAME)
-        md.run()
-        md.destroy()
+        im = InfoMessage(self, _("About %s") % PROGRAM_NAME, message)
+        im.run()
+        im.destroy()
 
     def on_menu_help_license(self, widget):
         message = _(
@@ -241,8 +248,6 @@ class WindowMain(gtk.Window, StoredSize):
             "directory."
             )
 
-        md = gtk.MessageDialog(self, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
-                               gtk.BUTTONS_OK, message)
-	md.set_title(_("License Information"))
-	md.run()
-        md.destroy()
+        im = InfoMessage(self, _("License Information"), message)
+	im.run()
+        im.destroy()

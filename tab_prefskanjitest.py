@@ -72,3 +72,6 @@ class TabPrefsKanjiTest(gtk.VBox):
         self.pack_start(reading_frame, expand=False)
         self.pack_start(writing_frame, expand=False)
         self.pack_start(shortcut_frame, expand=False)
+
+    def update_prefs(self):
+        pass

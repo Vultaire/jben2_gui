@@ -25,25 +25,23 @@ def setup_global_icons():
     icon4 = gtk.gdk.pixbuf_new_from_file("jben_16.xpm")
     gtk.window_set_default_icon_list(icon1, icon2, icon3, icon4)
 
-class JBen:
+class JBen(object):
     """Base class for J-Ben application."""
 
     def __init__(self):
         setup_global_icons()
-
-        jben_win = WindowMain()
-        jben_win.show_all()
-
-    def main(self):
         preferences.set_default_prefs()
         if preferences.load():
             # Only does something if a config file is out of date.
             preferences.upgrade_config_file()
 
+    def main(self):
+        jben_win = WindowMain()
+        jben_win.show_all()
         gtk.main()
 
         preferences.save()
 
 if __name__ == "__main__":
-    gui = JBen()
-    gui.main()
+    app = JBen()
+    app.main()

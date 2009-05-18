@@ -24,3 +24,11 @@ class TabPrefsOther(gtk.VBox):
 
     def on_mobile_toggle(self, widget):
         print("TabPrefsOther.on_mobile_toggle")
+
+    def update_prefs(self):
+        pass
+
+#
+#	/* Other Options */
+#	chkMobile.set_active(prefs->GetSetting("config_save_target") == "mobile");
+#}

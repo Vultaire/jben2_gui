@@ -33,6 +33,7 @@ def load(filename=None):
     if filename:
         try:
             f = open(filename)
+            print "Reading from file:", filename
             lines = f.readlines()
             f.close()
 
@@ -42,11 +43,18 @@ def load(filename=None):
                 if len(line) == 0 or line[0] == "#" or line[0] == ";":
                     continue
 
-                k, v = re.split("[ \t=:]+", s, 1)
+                k, v = re.split("[ \t=:]+", line, 1)
                 if k and v:
-                    options[k] = v
-        except:
-            pass
+                    v2 = v.lower().strip()
+                    if v2 in ("true", "false"):
+                        options[k] = (v2 == "true")
+                    else:
+                        options[k] = v
+        except IOError, e:
+            if e.args[0] == 2:  # Error 2 == File not found
+                print "Could not find file:", filename
+            else:
+                raise
     else:
         loaded = load("../" + CFG_FILE)
         if not loaded or options["config_save_target"] == "home":
@@ -92,6 +100,7 @@ def save(filename=None):
         if f:
             try:
                 fo = open(f, "w")
+                print "Writing to file:", f
                 fo.write(save_data)
                 fo.close()
             except:
@@ -278,7 +287,7 @@ def __create_config_file_string():
     excludes = ["config_version", "kanji_list", "vocab_list"]
     other_opts = [(k, v) for k, v in options.items() if k not in excludes]
     for k, v in other_opts:
-        config_strs.append("%s\t%s" % (k, v))
+        config_strs.append("%s\t%s" % (k, str(v)))
 
     # Append kanji and vocab lists
     # ...

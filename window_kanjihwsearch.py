@@ -10,11 +10,11 @@ import gtk
 
 from jben_global import *
 from widget_hwpad import WidgetHWPad
+from widget_storedsize import StoredSizeWindow
 
-class WindowKanjiHWSearch(gtk.Window):
-    def __init__(self):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-        self.set_default_size(200, 230)
+class WindowKanjiHWSearch(StoredSizeWindow):
+    def __init__(self, param="gui.kanjihwsearch.size"):
+        StoredSizeWindow.__init__(self, param, 200, 230, gtk.WINDOW_TOPLEVEL)
         self.set_title(_("%s: Kanji Handwriting Pad") % PROGRAM_NAME)
         self.set_border_width(5)
 

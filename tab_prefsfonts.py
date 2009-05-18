@@ -71,3 +71,16 @@ class TabPrefsFonts(gtk.VBox):
 
     def on_font_change(self, widget):
         print("TabPrefsFonts.on_font_change")
+
+    def update_prefs(self):
+        pass
+
+#	/* Init font display */
+#	sFontJaNormal = prefs->GetSetting("font.ja");
+#	sFontJaLarge  = prefs->GetSetting("font.ja.large");
+#	sFontEnNormal = prefs->GetSetting("font.en");
+#	sFontEnSmall  = prefs->GetSetting("font.en.small");
+#	UpdateFontControl(tvJaNormal, sFontJaNormal);
+#	UpdateFontControl(tvJaLarge,  sFontJaLarge);
+#	UpdateFontControl(tvEnNormal, sFontEnNormal);
+#	UpdateFontControl(tvEnSmall,  sFontEnSmall);

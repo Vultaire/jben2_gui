@@ -7,10 +7,12 @@
 # Created on: 26 Nov 2008
 
 import gtk
+from widget_storedsize import StoredSizeDialog
 
-class DialogKanjiListEditor(gtk.Dialog):
+class DialogKanjiListEditor(StoredSizeDialog):
     def __init__(self, parent):
-        gtk.Dialog.__init__(self, _("Kanji List Editor"), parent)
+        StoredSizeDialog.__init__(self, "gui.kanjilisteditor.size", -1, -1,
+                                  _("Kanji List Editor"), parent)
 
         self.edit_box = gtk.TextView()
         self.edit_box.set_accepts_tab(False)
