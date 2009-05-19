@@ -28,6 +28,7 @@ def load(filename=None):
     "mobile" installs), followed by the user's home directory.
 
     """
+    global original_save_target
     loaded = False
 
     if filename:
@@ -53,6 +54,7 @@ def load(filename=None):
                             options[k] = v
                 except ValueError:
                     print _("Warning: unable to split line: %s" % line)
+            original_save_target = options["config_save_target"]
         except IOError, e:
             if e.args[0] == 2:  # Error 2 == File not found
                 print "Could not find file:", filename
@@ -85,17 +87,20 @@ def save(filename=None):
     save_data = __create_config_file_string()
     #print "save_data = [%s]" % save_data
 
-    files = []
+    files = set()
     if filename is None:
-        if (options["config_save_target"] == "mobile"
-            or original_save_target == "mobile"):
-            files.append("../" + CFG_FILE)
-        else:  # Default: save to home folder
-            env_path = os.getenv(HOME_ENV)
-            if env_path:
-                files.append("%s/%s" % (env_path, CFG_FILE))
+        env_path = os.getenv(HOME_ENV)
+        if env_path: home_path = "%s/%s" % (env_path, CFG_FILE)
+        else: home_path = None
+        mobile_path = "../%s" % CFG_FILE
+
+        targets = (options["config_save_target"], original_save_target)
+        for target in targets:
+            if target == "unset": target = "home"
+            if target == "mobile" or not home_path:
+                files.add(mobile_path)
             else:
-                files.append("../" + CFG_FILE)
+                files.add(home_path)
     else:
         files.append(filename)
 

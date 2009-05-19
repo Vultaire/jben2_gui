@@ -9,6 +9,8 @@
 #       ported it to Python and rearranged some things.
 
 import gtk
+from preferences import options
+
 
 class TabPrefsKanjiTest(gtk.VBox):
     def __init__(self):
@@ -34,37 +36,44 @@ class TabPrefsKanjiTest(gtk.VBox):
         writing_frame = gtk.Frame(_("Writing test"))
         writing_frame.add(writing_vbox)
 
-        label_strs = [_("Correct answer: "), _("Wrong answer: "),
-                      _("Show answer: "), _("Stop drill: ")]
-        labels = []
-        for str in label_strs:
-            l = gtk.Label(str)
-            l.set_alignment(0.0, 0.5)
-            labels.append(l)
-
-        self.ent_correct = gtk.Entry()
-        self.ent_wrong = gtk.Entry()
-        self.ent_show = gtk.Entry()
-        self.ent_stop = gtk.Entry()
-        for o in [self.ent_correct, self.ent_wrong,
-                  self.ent_show, self.ent_stop]:
-            o.set_max_length(1)
-            o.set_size_request(30, -1)
-
         shortcut_table = gtk.Table(2,4)
+        strings = [
+            ("keys.kanjitest.correct", _("Correct answer: ")),
+            ("keys.kanjitest.wrong", _("Wrong answer: ")),
+            ("keys.kanjitest.show", _("Show answer: ")),
+            ("keys.kanjitest.stop", _("Stop drill: "))
+            ]
+        self.shortcut_ctls = []
+        for key, label_str in strings:
+            label = gtk.Label(label_str)
+            label.set_alignment(0.0, 0.5)
+
+            entry = gtk.Entry()
+            keyval = options.get(key)
+            if keyval:
+                keyval = int(keyval)
+                uval = gtk.gdk.keyval_to_unicode(keyval)
+                s = unichr(uval).encode("utf-8")
+                entry.set_text(s)
+            entry.set_max_length(1)
+            entry.set_size_request(30, -1)
+
+            self.shortcut_ctls.append((key, label, entry))
+
         shortcut_table.set_border_width(5)
         shortcut_table.set_row_spacings(5)
         shortcut_table.set_col_spacings(5)
         shortcut_table.set_col_spacing(1, 20)
-        print("Col spacing: %d" % shortcut_table.get_col_spacing(1))
-        shortcut_table.attach(labels[0], 0,1,0,1, gtk.FILL, gtk.FILL)
-        shortcut_table.attach(self.ent_correct, 1,2,0,1, gtk.FILL, gtk.FILL)
-        shortcut_table.attach(labels[1], 2,3,0,1, gtk.FILL, gtk.FILL)
-        shortcut_table.attach(self.ent_wrong, 3,4,0,1, gtk.FILL, gtk.FILL)
-        shortcut_table.attach(labels[2], 0,1,1,2, gtk.FILL, gtk.FILL)
-        shortcut_table.attach(self.ent_show, 1,2,1,2, gtk.FILL, gtk.FILL)
-        shortcut_table.attach(labels[3], 2,3,1,2, gtk.FILL, gtk.FILL)
-        shortcut_table.attach(self.ent_stop, 3,4,1,2, gtk.FILL, gtk.FILL)
+
+        for i, (key, label, entry) in enumerate(self.shortcut_ctls):
+            entry.connect("key-press-event", self.on_key_press_event,
+                          self.shortcut_ctls[i])
+            x = (i % 2) * 2
+            y = i / 2
+            shortcut_table.attach(label, x, x+1, y, y+1,
+                                  gtk.FILL, gtk.FILL)
+            shortcut_table.attach(entry, x+1, x+2, y, y+1,
+                                  gtk.FILL, gtk.FILL)
 
         shortcut_frame = gtk.Frame(_("Keyboard shortcuts"))
         shortcut_frame.add(shortcut_table)
@@ -73,5 +82,35 @@ class TabPrefsKanjiTest(gtk.VBox):
         self.pack_start(writing_frame, expand=False)
         self.pack_start(shortcut_frame, expand=False)
 
+    def on_key_press_event(self, widget, event, data=None):
+        key, label, entry = data
+
+        if event.keyval in (gtk.keysyms.Up,
+                            gtk.keysyms.Down,
+                            gtk.keysyms.Left,
+                            gtk.keysyms.Right,
+                            gtk.keysyms.Tab,
+                            gtk.keysyms.ISO_Left_Tab, # Shift-Tab...?
+                            gtk.keysyms.Escape,
+                            gtk.keysyms.Return,
+                            gtk.keysyms.BackSpace,
+                            gtk.keysyms.Delete):
+            return False
+        try:
+            ukeyval = gtk.gdk.keyval_to_unicode(event.keyval)
+            strval = unichr(ukeyval).encode("utf-8")
+            widget.set_text(strval)
+        except:
+            print _("Unhandled keypress captured: "
+                    "keyval: 0x%X, hardware_keycode: 0x%X") \
+                % (event.keyval, event.hardware_keycode)
+        return True
+
     def update_prefs(self):
-        pass
+        for key, label, entry in self.shortcut_ctls:
+            s = entry.get_text()
+            if not s.strip():
+                options.pop(key, None)
+            else:
+                uval = ord(s.decode())
+                options[key] = str(gtk.gdk.unicode_to_keyval(uval))

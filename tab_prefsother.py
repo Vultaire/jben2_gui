@@ -9,6 +9,8 @@
 import gtk
 import os
 
+from preferences import options
+
 class TabPrefsOther(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self, spacing = 5)
@@ -19,6 +21,8 @@ class TabPrefsOther(gtk.VBox):
             # Windows only: "mobile mode"
             self.chkMobile = gtk.CheckButton(
                 _("Mobile mode (settings saved to current directory)"))
+            self.chkMobile.set_active(
+                str(options.get("config_save_target")) == "mobile")
             self.chkMobile.connect("toggled", self.on_mobile_toggle)
             self.pack_start(self.chkMobile, expand = False)
 
@@ -26,9 +30,6 @@ class TabPrefsOther(gtk.VBox):
         print("TabPrefsOther.on_mobile_toggle")
 
     def update_prefs(self):
-        pass
-
-#
-#	/* Other Options */
-#	chkMobile.set_active(prefs->GetSetting("config_save_target") == "mobile");
-#}
+        if self.chkMobile.get_active(): s = "mobile"
+        else: s = "home"
+        options["config_save_target"] = s

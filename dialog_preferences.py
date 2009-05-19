@@ -29,13 +29,11 @@ class DialogPreferences(StoredSizeDialog):
         tabs.append_page(self.tab_kanjidict, gtk.Label(_("Kanji Dictionary")))
         tabs.append_page(self.tab_fonts, gtk.Label(_("Fonts")))
         tabs.append_page(self.tab_kanjitest, gtk.Label(_("Kanji test")))
-        self.tab_kanjitest.set_sensitive(False)
 
         # Not sure what the os.name is under windows; the below is temporary.
         if os.name == "nt":
             self.tab_other = TabPrefsOther()
             tabs.append_page(self.tab_other, gtk.Label("Other"))
-            self.tab_other.set_sensitive(False)
 
         self.vbox.set_spacing(5)
         self.vbox.pack_start(tabs)
