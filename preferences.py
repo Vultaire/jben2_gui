@@ -43,13 +43,16 @@ def load(filename=None):
                 if len(line) == 0 or line[0] == "#" or line[0] == ";":
                     continue
 
-                k, v = re.split("[ \t=:]+", line, 1)
-                if k and v:
-                    v2 = v.lower().strip()
-                    if v2 in ("true", "false"):
-                        options[k] = (v2 == "true")
-                    else:
-                        options[k] = v
+                try:
+                    k, v = re.split("[ \t=:]+", line, 1)
+                    if k and v:
+                        v2 = v.lower().strip()
+                        if v2 in ("true", "false"):
+                            options[k] = (v2 == "true")
+                        else:
+                            options[k] = v
+                except ValueError:
+                    print _("Warning: unable to split line: %s" % line)
         except IOError, e:
             if e.args[0] == 2:  # Error 2 == File not found
                 print "Could not find file:", filename
@@ -287,7 +290,10 @@ def __create_config_file_string():
     excludes = ["config_version", "kanji_list", "vocab_list"]
     other_opts = [(k, v) for k, v in options.items() if k not in excludes]
     for k, v in other_opts:
-        config_strs.append("%s\t%s" % (k, str(v)))
+        if v != '':
+            config_strs.append("%s\t%s" % (k, str(v)))
+        else:
+            print _('Warning: dropping empty setting "%s"!' % k)
 
     # Append kanji and vocab lists
     # ...

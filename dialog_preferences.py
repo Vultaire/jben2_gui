@@ -29,7 +29,6 @@ class DialogPreferences(StoredSizeDialog):
         tabs.append_page(self.tab_kanjidict, gtk.Label(_("Kanji Dictionary")))
         tabs.append_page(self.tab_fonts, gtk.Label(_("Fonts")))
         tabs.append_page(self.tab_kanjitest, gtk.Label(_("Kanji test")))
-        self.tab_fonts.set_sensitive(False)
         self.tab_kanjitest.set_sensitive(False)
 
         # Not sure what the os.name is under windows; the below is temporary.

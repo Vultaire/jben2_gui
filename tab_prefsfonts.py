@@ -7,80 +7,111 @@
 # Created on: 28 Nov 2008
 
 import gtk
+import os
+from preferences import options
+
 
 class TabPrefsFonts(gtk.VBox):
+
     def __init__(self):
+
         gtk.VBox.__init__(self, spacing = 5)
 
         # We're loading 4 rows of GUI controls, all following the same
         # order: 0 = Japanese Normal, 1 = Japanese Large,
         # 2 = English Normal, 3 = English Small.
 
-        labels = []
-        labels.append(gtk.Label(_("Japanese Font, Normal")))
-        labels.append(gtk.Label(_("Japanese Font, Large")))
-        labels.append(gtk.Label(_("English Font, Normal")))
-        labels.append(gtk.Label(_("English Font, Small")))
-        for l in labels:
-            l.set_alignment(1.0, 0.5)
+        params = [("font.ja", _("Japanese Font, Normal")),
+                  ("font.ja.large", _("Japanese Font, Large")),
+                  ("font.native", _("English Font, Normal")),
+                  ("font.native.small", _("English Font, Small"))]
 
-        self.JaNormalDisp = gtk.TextView()
-        self.JaLargeDisp  = gtk.TextView()
-        self.EnNormalDisp = gtk.TextView()
-        self.EnSmallDisp  = gtk.TextView()
-        displays = []
-        displays.append(self.JaNormalDisp)
-        displays.append(self.JaLargeDisp)
-        displays.append(self.EnNormalDisp)
-        displays.append(self.EnSmallDisp)
-        for d in displays:
-            d.set_accepts_tab(False)
-            d.set_editable(False)
-        frames = []
-        for i in range(4):
-            frames.append(gtk.Frame())
-            frames[i].add(displays[i])
-            frames[i].set_shadow_type(gtk.SHADOW_IN)
-
-        self.btnJaNormal = gtk.Button(_("Change..."))
-        self.btnJaLarge  = gtk.Button(_("Change..."))
-        self.btnEnNormal = gtk.Button(_("Change..."))
-        self.btnEnSmall  = gtk.Button(_("Change..."))
-        buttons = []
-        buttons.append(self.btnJaNormal)
-        buttons.append(self.btnJaLarge)
-        buttons.append(self.btnEnNormal)
-        buttons.append(self.btnEnSmall)
-        for b in buttons:
-            b.connect("clicked", self.on_font_change)
-        bboxes = []
-        for i in range(4):
-            bboxes.append(gtk.HButtonBox())
-            bboxes[i].pack_start(buttons[i])
-
+        self.controls = []
         table = gtk.Table(4, 3)
-        for i in range(4):
-            table.attach(labels[i], 0, 1, i, i + 1,
+        for k, s in params:
+            self.controls.append(
+                (k, gtk.Label(s), gtk.TextView(), gtk.Button(_("Change..."))))
+
+        for i, (key, label, textview, button) in enumerate(self.controls):
+
+            label.set_alignment(1.0, 0.5)
+
+            textview.set_accepts_tab(False)
+            textview.set_editable(False)
+
+            # Tacking the font_name onto the textview for convenience
+            textview.font_name = self.get_font_name(key)
+
+            self.update_font_control(self.controls[i], textview.font_name)
+
+            button.connect("clicked", self.on_font_change, self.controls[i])
+
+            frame = gtk.Frame()
+            frame.add(textview)
+            frame.set_shadow_type(gtk.SHADOW_IN)
+            bbox = gtk.HButtonBox()
+            bbox.pack_start(button)
+
+            table.attach(label, 0, 1, i, i + 1,
                          gtk.FILL, gtk.SHRINK, 5, 5)
-            table.attach(frames[i], 1, 2, i, i + 1,
+            table.attach(frame, 1, 2, i, i + 1,
                          gtk.FILL | gtk.EXPAND, gtk.SHRINK, 5, 5)
-            table.attach(bboxes[i], 2, 3, i, i + 1,
+            table.attach(bbox, 2, 3, i, i + 1,
                          gtk.SHRINK, gtk.SHRINK, 5, 5)
 
         self.pack_start(table, expand = False);
 
-    def on_font_change(self, widget):
-        print("TabPrefsFonts.on_font_change")
+    def get_font_name(self, key):
+        font_name = options.get(key)
+        if not font_name:
+            if os.name == "nt":
+                if key == "font.native": return "Tahoma 12"
+                elif key == "font.native.small": return "Tahoma 8"
+                elif key == "font.ja": return "MS Mincho 16"
+                elif key == "font.ja.large": return "MS Mincho 32"
+            else:
+                if key == "font.native": return "sans 12"
+                elif key == "font.native.small": return "sans 8"
+                elif key == "font.ja": return "serif 16"
+                elif key == "font.ja.large": return "serif 32"
+        return font_name
+
+    def update_font_control(self, ctrls, font_name):
+        key, label, textview, button = ctrls
+        print u"update_font_control: set %08X to font %s" \
+              % (id(textview), font_name)
+        buf = textview.get_buffer()
+        buf.set_text("")
+
+        table = buf.get_tag_table()
+        tag = table.lookup("font")
+        if tag:
+            table.remove(tag)
+
+        tag = gtk.TextTag("font")
+        tag.set_property("font", font_name)
+        table.add(tag)
+        start = buf.get_start_iter()
+        buf.insert_with_tags(start, font_name, tag)
+
+    def on_font_change(self, widget, ctrls):
+        print("TabPrefsFonts.on_font_change for key %s" % ctrls[0])
+        key, label, textview, button = ctrls
+	fd = gtk.FontSelectionDialog(_("Choose Font"))
+        if "font.ja" in key:
+            fd.set_preview_text(_("ROMAJI romaji 日本語　にほんご　ニホンゴ"))
+	fd.set_font_name(textview.font_name)
+	result = fd.run()
+        fd.hide()
+        if result == gtk.RESPONSE_OK:
+            textview.font_name = fd.get_font_name();
+            self.update_font_control(ctrls, textview.font_name)
 
     def update_prefs(self):
-        pass
-
-#	/* Init font display */
-#	sFontJaNormal = prefs->GetSetting("font.ja");
-#	sFontJaLarge  = prefs->GetSetting("font.ja.large");
-#	sFontEnNormal = prefs->GetSetting("font.en");
-#	sFontEnSmall  = prefs->GetSetting("font.en.small");
-#	UpdateFontControl(tvJaNormal, sFontJaNormal);
-#	UpdateFontControl(tvJaLarge,  sFontJaLarge);
-#	UpdateFontControl(tvEnNormal, sFontEnNormal);
-#	UpdateFontControl(tvEnSmall,  sFontEnSmall);
+        for key, label, textview, button in self.controls:
+            buf = textview.get_buffer()
+            s = buf.get_start_iter()
+            e = buf.get_end_iter()
+            text = textview.get_buffer().get_text(s, e, False)
+            options[key] = text
+            print "Setting '%s' to '%s'" % (key, text)
