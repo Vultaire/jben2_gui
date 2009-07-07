@@ -49,8 +49,8 @@ if JB_DATADIR is None:
         pass
 
 if os.name == "nt":
-    CFG_FILE = "pyjben.cfg"
+    CFG_FOLDER = "J-Ben Settings"
     HOME_ENV = "APPDATA"
 else:
-    CFG_FILE = ".pyjben"
+    CFG_FOLDER = ".jben.d"
     HOME_ENV = "HOME"

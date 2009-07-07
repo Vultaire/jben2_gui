@@ -65,9 +65,21 @@ class WindowKanjiHWSearch(StoredSizeWindow):
 
     def on_clear_clicked(self, widget):
         print "WindowKanjiHWSearch.on_clear_clicked"
+        self.drawing_widget.clear()
 
     def on_hwpad_button_released(self, widget, event):
         print "WindowKanjiHWSearch.on_hwpad_button_released"
         results = self.drawing_widget.get_results()
-        # Set buttons... out of battery; do later.
+
+        def assign_buttons(result, button):
+            if button is None: return
+            if result is None:
+                button.set_label("　")
+                button.set_sensitive(False)
+            else:
+                button.set_label(result)
+                button.set_sensitive(True)
+
+        map(assign_buttons, results, self.buttons)
+
         return True

@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,13 +7,17 @@
 # Author: Paul Goins
 # Created on: 25 Nov 2008
 
-import gtk
-import cairo
+import gtk, cairo
+import os
+from subprocess import Popen, PIPE
 
-class Point:
+class Point(object):
     def __init__(self, init_x, init_y):
         self.x = init_x
         self.y = init_y
+    def __str__(self):
+        """kpengine expects a very simple format."""
+        return "%s %s" % (self.x, self.y)
 
 class WidgetHWPad(gtk.DrawingArea):
     def __init__(self):
@@ -74,7 +79,7 @@ class WidgetHWPad(gtk.DrawingArea):
     def on_motion(self, widget, event):
         if event.state | gtk.gdk.BUTTON1_MASK:
             if self.current_line:
-                self.current_line.append(Point(event.x, event.y))
+                self.current_line.append(Point(int(event.x), int(event.y)))
             self.update_drawing_area()
 
         # This was marked as non-Win32 in the C++ version.  Unsure whether
@@ -87,7 +92,7 @@ class WidgetHWPad(gtk.DrawingArea):
         # On left mouse click, create a new line
         if event.button == 1:
             self.current_line = []
-            self.current_line.append(Point(event.x, event.y))
+            self.current_line.append(Point(int(event.x), int(event.y)))
 
         return True
 
@@ -128,11 +133,40 @@ class WidgetHWPad(gtk.DrawingArea):
 
         return self.results
 
+    def clear(self):
+	self.current_line = None
+	self.lines = []
+	self.results = []
+        self.update_drawing_area()
+
     def update_drawing_area(self):
         self.window.invalidate_rect(None, False)
 
     def look_up_chars(self):
         print "WidgetHWPad.look_up_chars()"
+        #return
 
-        # Currently this does nothing.  This -will- call the jben_kpengine(.exe)
-        # external program and capture its results.
+        if os.name == "nt":
+            exe_name = "../deploy_jben/bin/jben_kpengine.exe"
+            data_dir = "../deploy_jben/kpengine_data"
+        else:
+            exe_name = "/home/vultaire/tmp/jben/bin/linux/release/kpengine/jben_kpengine"
+            data_dir = "/home/vultaire/code/projects/jben/src/kpengine"
+
+
+        # Line format:
+        # x y x y x y x y x y\n     (line 1)
+        # x y x y x y x y\n         (line 2)
+        # \n                        (end of kanji)
+        pipe_data = "\n".join(
+            [" ".join([str(point) for point in line])
+             for line in self.lines]) + "\n\n"
+
+        p = Popen([exe_name, "-d", data_dir], stdin=PIPE, stdout=PIPE)
+        stdout, stderr = p.communicate(pipe_data)
+
+        klist = stdout[1:].strip().split()
+        self.results = []
+        if klist:
+            for kanji in klist:
+                self.results.append(unichr(int(kanji)))

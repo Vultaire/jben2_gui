@@ -61,11 +61,11 @@ def load(filename=None):
             else:
                 raise
     else:
-        loaded = load("../" + CFG_FILE)
+        loaded = load("../%s/jben.cfg" % CFG_FOLDER)
         if not loaded or options["config_save_target"] == "home":
             env_path = os.getenv(HOME_ENV)
             if env_path:
-                loaded2 = load("%s/%s" % (env_path, CFG_FILE))
+                loaded2 = load("%s/%s/jben.cfg" % (env_path, CFG_FOLDER))
                 if loaded2:
                     loaded = True
 
@@ -90,9 +90,9 @@ def save(filename=None):
     files = set()
     if filename is None:
         env_path = os.getenv(HOME_ENV)
-        if env_path: home_path = "%s/%s" % (env_path, CFG_FILE)
+        if env_path: home_path = "%s/%s/jben.cfg" % (env_path, CFG_FOLDER)
         else: home_path = None
-        mobile_path = "../%s" % CFG_FILE
+        mobile_path = "../%s/jben.cfg" % CFG_FOLDER
 
         targets = (options["config_save_target"], original_save_target)
         for target in targets:
@@ -107,6 +107,9 @@ def save(filename=None):
     for f in files:
         if f:
             try:
+                dirname = os.path.dirname(f)
+                if not os.path.exists(dirname):
+                    os.mkdir(dirname)
                 fo = open(f, "w")
                 print "Writing to file:", f
                 fo.write(save_data)
@@ -141,49 +144,49 @@ def set_default_prefs():
     # Replaced by the following, more explicit options:
 
     # KDO_READINGS:
-    options["kdict.render.onyomi"] = "true"
-    options["kdict.render.kunyomi"] = "true"
-    options["kdict.render.nanori"] = "true"
-    options["kdict.render.radical_name"] = "true"
+    options["kdict.render.onyomi"] = True
+    options["kdict.render.kunyomi"] = True
+    options["kdict.render.nanori"] = True
+    options["kdict.render.radical_name"] = True
 
     # KDO_MEANINGS:
-    options["kdict.render.meaning"] = "true"  # ENGLISH
-    #options["kdict.render.meaning.fr"] = "true"  # Example for French
+    options["kdict.render.meaning"] = True  # ENGLISH
+    #options["kdict.render.meaning.fr"] = True  # Example for French
 
     # KDO_HIGHIMPORTANCE:
-    options["kdict.render.stroke_count"] = "true"
-    options["kdict.render.jouyou_grade"] = "true"
-    options["kdict.render.jlpt_level"] = "true"
-    options["kdict.render.frequency"] = "true"
+    options["kdict.render.stroke_count"] = True
+    options["kdict.render.jouyou_grade"] = True
+    options["kdict.render.jlpt_level"] = True
+    options["kdict.render.frequency"] = True
 
     # KDO_MULTIRAD:
-    options["kdict.render.radical_list"] = "false"
+    options["kdict.render.radical_list"] = False
 
     # KDO_VOCABCROSSREF:
-    options["kdict.render.vocab_cross_ref"] = "true"
+    options["kdict.render.vocab_cross_ref"] = True
 
     # KDO_DICTIONARIES:
-    options["kdict.render.dictionaries"] = "false"
+    options["kdict.render.dictionaries"] = False
     # Additional keys for specific dictionaries are boolean flags tagged onto
     # the end of the above key.
-    # Example: kdict.render.dictionaries.kld = "true"
+    # Example: kdict.render.dictionaries.kld = True
     # (kld = Kanji Learners' Dictionary)
 
     # KDO_LOWIMPORTANCE:
-    options["kdict.render.jis-208"] = "false"
-    options["kdict.render.jis-212"] = "false"
-    options["kdict.render.jis-213"] = "false"
-    options["kdict.render.unicode"] = "false"
-    options["kdict.render.kangxi_radical"] = "false"
-    options["kdict.render.nelson_radical"] = "false"
-    options["kdict.render.pinyin_roman"] = "false"
-    options["kdict.render.korean"] = "false"
-    options["kdict.render.korean_roman"] = "false"
-    options["kdict.render.cross_ref"] = "false"
+    options["kdict.render.jis-208"] = False
+    options["kdict.render.jis-212"] = False
+    options["kdict.render.jis-213"] = False
+    options["kdict.render.unicode"] = False
+    options["kdict.render.kangxi_radical"] = False
+    options["kdict.render.nelson_radical"] = False
+    options["kdict.render.pinyin_roman"] = False
+    options["kdict.render.korean"] = False
+    options["kdict.render.korean_roman"] = False
+    options["kdict.render.cross_ref"] = False
 
     # KDO_SOD_*:
-    options["kdict.render.kanjicafe_sods"] = "true"
-    options["kdict.render.kanjicafe_sodas"] = "true"
+    options["kdict.render.kanjicafe_sods"] = True
+    options["kdict.render.kanjicafe_sodas"] = True
 
     # Define default paths to supported (and future supported) dicts.
     # J-Ben will automatically append ".gz" and load compressed dictionaries
@@ -214,12 +217,12 @@ def set_default_prefs():
 
     options["sod_dir"] = JB_DATADIR + "/sods"
 
-    options["kanjitest.writing.showonyomi"]="true"
-    options["kanjitest.writing.showkunyomi"]="true"
-    options["kanjitest.writing.showenglish"]="true"
-    options["kanjitest.reading.showonyomi"]="false"
-    options["kanjitest.reading.showkunyomi"]="false"
-    options["kanjitest.reading.showenglish"]="false"
+    options["kanjitest.writing.showonyomi"]=True
+    options["kanjitest.writing.showkunyomi"]=True
+    options["kanjitest.writing.showenglish"]=True
+    options["kanjitest.reading.showonyomi"]=False
+    options["kanjitest.reading.showkunyomi"]=False
+    options["kanjitest.reading.showenglish"]=False
     options["kanjitest.showanswer"]="1"
     options["kanjitest.correctanswer"]="2"
     options["kanjitest.wronganswer"]="3"
