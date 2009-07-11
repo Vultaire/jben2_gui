@@ -449,5 +449,4 @@ if __name__ == "__main__":
     else:
         charset = "utf-8"
     for i, entry in enumerate(kp.search(sys.argv[2].decode(charset))):
-        print "Entry %d: %s", (i, entry)
-        print "RESULTS:", entry.to_string()
+        print "Entry %d:\n%s\n" % (i+1, entry.to_string())
