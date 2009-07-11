@@ -4,6 +4,8 @@
 import gettext
 gettext.install('pyjben', unicode=True)
 
+from parsers.kanjidic2 import kanjidic2_key_to_str
+
 # Copied from J-Ben 1.x and modified using Gnome Character Map's
 # "Unicode Block" information.
 # Verified against http://unicode.org/Public/UNIDATA/Blocks.txt.
@@ -29,6 +31,36 @@ def jstring_convert(us):
     parts = us.split('.', 1)
     if len(parts) == 1: return us
     return u"%s(%s)" % tuple(parts)
+
+def kanjidic_key_to_kanjidic2(dkey):
+    """Converts KANJIDIC dictionary keys to KANJIDIC2.
+
+    If unable to find a KANJIDIC2 key, returns the original key.
+
+    """
+    d = {
+        "H": "halpern_njecd",
+        "N": "nelson_c",
+        "V": "nelson_n",
+        "IN": "sh_kk",
+        #"M": "moro"  morohashi stuff, ...do later
+        "E": "henshall",
+        "K": "gakken",
+        "L": "heisig",
+        "O": "oneill_names",
+        "DB": "busy_people",
+        "DC": "crowley",
+        "DF": "jf_cards",
+        "DG": "kodansha_compact",
+        "DH": "henshall3",
+        "DJ": "kanji_in_context",
+        "DK": "halpern_kkld",
+        "DO": "oneill_kk",
+        "DS": "sakade",
+        "DT": "tutt_cards",
+        "DM": "maniette"
+        }
+    return d.get(dkey, dkey)
 
 class KanjidicEntry(object):
 
@@ -80,15 +112,15 @@ class KanjidicEntry(object):
         lines.append(self.literal)
         if self.onyomi:
             lines.append(_(u"Onyomi: %s")
-                         % u" ".join(
+                         % u"、".join(
                              [jstring_convert(us) for us in self.onyomi]))
         if self.kunyomi:
             lines.append(_(u"Kunyomi: %s")
-                         % u" ".join(
+                         % u"、".join(
                              [jstring_convert(us) for us in self.kunyomi]))
         if self.nanori:
             lines.append(_(u"Nanori: %s")
-                         % u" ".join(
+                         % u"、".join(
                              [jstring_convert(us) for us in self.nanori]))
         if self.meanings:
             lines.append(_(u"Meaning: %s") % _(u"; ").join(self.meanings))
@@ -145,11 +177,13 @@ class KanjidicEntry(object):
                          % self.sh_desc)
         if self.fc:
             lines.append(_(u"Four Corner code: %s") % self.fc)
-        # STILL NEED TO HANDLE THESE:
-        #self.dcodes = {}
         if self.dcodes:
-            # Need to handle on a per dict basis
-            pass
+            # Probably we should sort these in some way... but for
+            # now, just display.
+            for k, v in self.dcodes.iteritems():
+                k = kanjidic2_key_to_str(
+                    kanjidic_key_to_kanjidic2(k))
+                lines.append(_(u"%s: %s") % (k, v))
 
         if self.radname:
             lines.append(_(u"Radical name: %s") % self.radname)
@@ -258,6 +292,10 @@ class KanjidicParser(object):
             entry.radname = data
 
     def _parse_info(self, entry, state, data):
+        onechar_dicts = set(('H', 'N', 'V', 'E', 'K', 'L', 'O'))
+        strval_dicts = set(('DB',))
+        intval_dicts = set(('DC', 'DF', 'DG', 'DH', 'DJ',
+                            'DK', 'DO', 'DS', 'DT', 'DM'))
         try:
             c = data[0]
             if c == 'U':
@@ -292,92 +330,38 @@ class KanjidicParser(object):
             elif c == 'T':
                 state.t_class = int(data[1:])
             # Below this point is dictionary/query codes.
-            # Much of this is copied and modified from J-Ben 1's source code.
-            elif c == 'H':
-                # New Japanese-English Character Dictionary (Halpern)
-                entry.dcodes["halpern_njecd"] = data[1:]
-            elif c == 'N':
-                # Modern Reader's Japanese-English Character Dictionary (Nelson)
-                entry.dcodes["nelson_c"] = data[1:]
-            elif c == 'V':
-                # The New Nelson's Japanese-English Character Dictionary
-                entry.dcodes["nelson_n"] = data[1:]
+            elif c in strval_dicts:
+                entry.dcodes[c] = data[1:]
+            elif c in intval_dicts:
+                entry.dcodes[c] = int(data[1:])
             elif c == 'P':
                 # SKIP codes.
                 # Thanks to changes in permissible SKIP code usage (change to
                 # Creative Commons licensing in January 2008), we can now use
                 # this without problems.
                 entry.skip.append(data[1:]);
-            elif c == 'I':  # Spahn/Hadamitzky dictionaries
-                if data[1] =='N':
-                    # Kanji & Kana (Spahn, Hadamitzky)
-                    entry.dcodes["sh_kk"] = data[2:]
-                else:
-                    # Query Code: Kanji Dictionary (Spahn, Hadamitzky)
-                    entry.sh_desc = data[1:]
             elif c == 'Q':
                 # Four Corner code
                 entry.fc = data[1:]
+            elif c == 'I':  # Spahn/Hadamitzky dictionaries
+                if data[1] =='N':
+                    # IN = Kanji & Kana (Spahn, Hadamitzky)
+                    entry.dcodes[data[:2]] = data[2:]
+                else:
+                    # Query Code: Kanji Dictionary (Spahn, Hadamitzky)
+                    entry.sh_desc = data[1:]
             elif c == 'M':
-                if data[1] == 'N':
-                    # Morohashi Daikanwajiten Index
-                    #entry.dcodes["moro"].insert(0,"] ps->substr(2));
-                    pass
-                elif data[1] == 'P':
-                    # Morohashi Daikanwajiten Volume/Page
-                    #entry.dcodes["moro"] \
-                    #    .append(1, '/').append(ps->substr(2));
-                    pass
-            elif c == 'E':
-                # A Guide to Remembering Japanese Characters (Henshall)
-                entry.dcodes["henshall"] = data[1:]
-            elif c == 'K':
-                # Gakken Kanji Dictionary ("A New Dictionary of Kanji Usage")
-                entry.dcodes["gakken"] = data[1:]
-            elif c == 'L':
-                # Remembering the Kanji (Heisig)
-                entry.dcodes["heisig"] = data[1:]
-            elif c == 'O':
-                # Japanese Names (O'Neill)
-                entry.dcodes["oneill_names"] = data[1:]
+                # Morohashi Daikanwajiten
+                entry.dcodes[data[:2]] = data[2:]
             elif c == 'D':
-                c = data[1]
-                if c == 'B':
-                    # Japanese for Busy People (AJLT)
-                    entry.dcodes["busy_people"] = data[2:]
-                elif c == 'C':
-                    # The Kanji Way to Japanese Language Power (Crowley)
-                    entry.dcodes["crowley"] = int(data[2:])
-                elif c == 'F':
-                    # Japanese Kanji Flashcards (White Rabbit Press)
-                    entry.dcodes["jf_cards"] = int(data[2:])
-                elif c == 'G':
-                    # Kodansha Compact Kanji Guide
-                    entry.dcodes["kodansha_compact"] = int(data[2:])
-                elif c == 'H':
-                    # A Guide To Reading and Writing Japanese (Henshall)
-                    entry.dcodes["henshall3"] = int(data[2:])
-                elif c == 'J':
-                    # Kanji in Context (Nishiguchi and Kono)
-                    entry.dcodes["kanji_in_context"] = int(data[2:])
-                elif c == 'K':
-                    # Kodansha Kanji Learner's Dictionary (Halpern)
-                    entry.dcodes["halpern_kkld"] = int(data[2:])
-                elif c == 'O':
-                    # Essential Kanji (O'Neill)
-                    entry.dcodes["oneill_kk"] = int(data[2:])
-                elif c == 'R':
+                key = data[:2]
+                if key in intval_dicts:
+                    entry.dcodes[key] = int(data[2:])
+                elif key in strval_dicts:
+                    entry.dcodes[key] = data[2:]
+                elif key == 'DR':
                     # Query Code: 2001 Kanji (De Roo)
                     entry.deroo = int(data[2:])
-                elif c == 'S':
-                    # A Guide to Reading and Writing Japanese (Sakade)
-                    entry.dcodes["sakade"] = int(data[2:])
-                elif c == 'T':
-                    # Tuttle Kanji Cards (Kask)
-                    entry.dcodes["tutt_cards"] = int(data[2:])
-                elif c == 'M':
-                    # Yves Maniette's French adaption of Heisig
-                    entry.dcodes["maniette"] = int(data[2:])
                 else:
                     entry.unparsed.append(data)
             else:
