@@ -423,9 +423,8 @@ class KanjidicParser(object):
     def search(self, literal):
         entry = self.get_entry()
         while entry:
-            if literal == entry.literal: break
+            if literal == entry.literal: yield entry
             entry = self.get_entry()
-        return entry
 
 
 if __name__ == "__main__":
@@ -449,21 +448,6 @@ if __name__ == "__main__":
         charset = "sjis"
     else:
         charset = "utf-8"
-    entry = kp.search(sys.argv[2].decode(charset))
-    print "RESULTS:", entry.to_string()
-
-#    err_count = 0
-#    entry = kp.get_entry()
-#    while entry:
-#        try:
-#            if entry.unparsed:
-#                lines = []
-#                lines.append(_(u"[%s] Unparsed: [%s]")
-#                             % (entry.literal, ", ".join(entry.unparsed)))
-#                print u"\n".join(lines)
-#        except UnicodeEncodeError, e:
-#            err_count += 1
-#        entry = kp.get_entry()
-#    if err_count:
-#        print _(u"Warning: could not print %d entries, since they could not be "
-#                 "properly displayed on your terminal.") % err_count
+    for i, entry in enumerate(kp.search(sys.argv[2].decode(charset))):
+        print "Entry %d: %s", (i, entry)
+        print "RESULTS:", entry.to_string()
