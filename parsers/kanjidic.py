@@ -1,10 +1,46 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import gettext
+# Copyright (c) 2009, Paul Goins
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+"""A parser for KANJIDIC.
+
+This parser is dependent on a small amount of code kept in the
+kanjidic2 parser, so be sure to grab both if you are using these
+modules in your own programs.
+
+"""
+
+import gzip, gettext
 gettext.install('pyjben', unicode=True)
 
-from parsers.kanjidic2 import kanjidic2_key_to_str
+from parsers.kanjidic_common \
+     import jstring_convert, kanjidic2_key_to_str, qcode_to_desc
 
 # Copied from J-Ben 1.x and modified using Gnome Character Map's
 # "Unicode Block" information.
@@ -23,14 +59,6 @@ def is_katakana(uc):
 
 def is_furigana(uc):
     return is_hiragana(uc) or is_katakana(uc)
-
-def jstring_convert(us):
-    """Convert's from Jim Breen's -x.xx- notation to 〜x(xx)〜 notation."""
-    if us[0] == u'-' or us[-1] == u'-':
-        us = us.replace(u'-', u'〜')
-    parts = us.split('.', 1)
-    if len(parts) == 1: return us
-    return u"%s(%s)" % tuple(parts)
 
 def kanjidic_key_to_kanjidic2(dkey):
     """Converts KANJIDIC dictionary keys to KANJIDIC2.
@@ -90,10 +118,7 @@ class KanjidicEntry(object):
         # "Query codes": Pattern-based lookup
         # Includes SKIP, DeRoo, Spahn/Hadamitzky, and Four Corners systems
         # Codes: P, DRnnnn, Inxnn.n, Qnnnn.n
-        self.skip = []
-        self.deroo = None
-        self.sh_desc = None
-        self.fc = None
+        self.qcodes = {}
 
         # Dictionary codes
         # Non-D codes: H, N, V, INnnnn, MNnnnnnnn/MPnn.nnnn, Ennnn, Knnnn, Lnnnn, Onnnn
@@ -109,7 +134,7 @@ class KanjidicEntry(object):
     def to_string(self, **kwargs):
         """A default "to-string" dump of a KanjidicEntry."""
         lines = []
-        lines.append(self.literal)
+        lines.append(_(u"Literal: %s") % self.literal)
         if self.onyomi:
             lines.append(_(u"Onyomi: %s")
                          % u"、".join(
@@ -148,35 +173,31 @@ class KanjidicEntry(object):
             lines.append(_(u"JLPT Level: %d") % self.jlpt)
 
         # Query codes
-        if self.skip:
-            lines.append(_(u"SKIP code: %s")
-                         % _(u", ").join(self.skip))
-        if self.misclass:
-            miscodes = []
-            for code in self.misclass:
-                code_type = code[:3]
-                code_val = code[3:]
-                if code_type == u'ZSP': # "stroke_count"
-                    miscodes.append(_(u"%s (stroke count)") % code_val)
-                elif code_type == u'ZPP': # "posn"
-                    miscodes.append(_(u"%s (position)") % code_val)
-                elif code_type == u'ZBP':   # "stroke_and_posn"
-                    miscodes.append(_(u"%s (stroke and position)") % code_val)
-                elif code_type == u'ZRP': # "stroke_diff"
-                    miscodes.append(_(u"%s (debatable count)") % code_val)
-                else:
-                    lines.append(_(u"Unrecognized misclassification code: %s")
-                                 % unicode(code))
-            if miscodes:
-                lines.append(_(u"SKIP miscodes: %s")
-                             % _(u", ").join(miscodes))
-        if self.deroo:
-            lines.append(_(u"De Roo code: %s") % self.deroo)
-        if self.sh_desc:
-            lines.append(_(u"Spahn/Hadamitzky Kanji Dictionary code: %s")
-                         % self.sh_desc)
-        if self.fc:
-            lines.append(_(u"Four Corner code: %s") % self.fc)
+        if self.qcodes:
+            for k, v in self.qcodes.iteritems():
+                desc = qcode_to_desc(k)
+                lines.append(_(u"%s code: %s") % (desc, self.qcodes[k]))
+
+                if k == 'skip' and self.misclass:
+                    miscodes = []
+                    for code in self.misclass:
+                        code_type = code[:2]
+                        code_val = code[2:]
+                        if code_type == u'SP':   # "stroke_count"
+                            miscodes.append(_(u"%s (stroke count)") % code_val)
+                        elif code_type == u'PP': # "posn"
+                            miscodes.append(_(u"%s (position)") % code_val)
+                        elif code_type == u'BP': # "stroke_and_posn"
+                            miscodes.append(_(u"%s (stroke and position)") % code_val)
+                        elif code_type == u'RP': # "stroke_diff"
+                            miscodes.append(_(u"%s (debatable count)") % code_val)
+                        else:
+                            lines.append(_(u"Unrecognized misclassification code: %s")
+                                         % unicode(code))
+                    if miscodes:
+                        lines.append(_(u"SKIP miscodes: %s")
+                                     % _(u", ").join(miscodes))
+
         if self.dcodes:
             # Probably we should sort these in some way... but for
             # now, just display.
@@ -214,6 +235,21 @@ class KanjidicEntry(object):
 
         #self.xref = []
         if self.xref:
+            # From KANJIDIC documentation:
+            #
+            # Xxxxxxx -- a cross-reference code. An entry of, say,
+            # XN1234 will mean that the user is referred to the kanji
+            # with the (unique) Nelson index of 1234. XJ0xxxx and
+            # XJ1xxxx are cross-references to the kanji with the JIS
+            # hexadecimal code of xxxx. The `0' means the reference is
+            # to a JIS X 0208 kanji, and the `1' references a JIS X
+            # 0212 kanji.
+            #
+
+            # For now, just dump to the console.
+            lines.append(_(u"Crossref codes: %s") % ", ".join(self.xref))
+
+            # From J-Ben 1:
             #/* Crossref codes */
             #if(!k.var_j208.empty())
             #result << "<li>JIS-208: " << k.var_j208 << "</li>";
@@ -237,7 +273,6 @@ class KanjidicEntry(object):
             #if(!k.var_s_h.empty())
             #result << "<li>Spahn/Hadamitzky Kanji Dictionary code: "
             #<< k.var_s_h << "</li>";
-            pass
 
         if self.unparsed:
             lines.append(_(u"Unrecognized codes: %s")
@@ -263,11 +298,8 @@ class ParserState(object):
 class KanjidicParser(object):
 
     def __init__(self, filename, encoding="EUC-JP"):
-        f = open(filename, "rb")
-        data = f.read()
-        f.close()
-        data = data.decode(encoding)
-        self.data = data.splitlines()
+        self.filename = filename
+        self.encoding = encoding
 
     def get_entry(self):
         line = None
@@ -330,26 +362,27 @@ class KanjidicParser(object):
             elif c == 'T':
                 state.t_class = int(data[1:])
             # Below this point is dictionary/query codes.
-            elif c in strval_dicts:
+            elif c in onechar_dicts:
                 entry.dcodes[c] = data[1:]
-            elif c in intval_dicts:
-                entry.dcodes[c] = int(data[1:])
             elif c == 'P':
                 # SKIP codes.
                 # Thanks to changes in permissible SKIP code usage (change to
                 # Creative Commons licensing in January 2008), we can now use
                 # this without problems.
-                entry.skip.append(data[1:]);
+                if entry.qcodes.get('skip'):
+                    print "ALERT!  ALERT!  entry.skip already set!"
+                    exit(1)
+                entry.qcodes['skip'] = data[1:];
             elif c == 'Q':
                 # Four Corner code
-                entry.fc = data[1:]
+                entry.qcodes['four_corner'] = data[1:]
             elif c == 'I':  # Spahn/Hadamitzky dictionaries
                 if data[1] =='N':
                     # IN = Kanji & Kana (Spahn, Hadamitzky)
                     entry.dcodes[data[:2]] = data[2:]
                 else:
                     # Query Code: Kanji Dictionary (Spahn, Hadamitzky)
-                    entry.sh_desc = data[1:]
+                    entry.qcodes['sh_desc'] = data[1:]
             elif c == 'M':
                 # Morohashi Daikanwajiten
                 entry.dcodes[data[:2]] = data[2:]
@@ -361,7 +394,7 @@ class KanjidicParser(object):
                     entry.dcodes[key] = data[2:]
                 elif key == 'DR':
                     # Query Code: 2001 Kanji (De Roo)
-                    entry.deroo = int(data[2:])
+                    entry.qcodes['deroo'] = int(data[2:])
                 else:
                     entry.unparsed.append(data)
             else:
@@ -420,12 +453,22 @@ class KanjidicParser(object):
 
         return entry
 
-    def search(self, literal):
-        entry = self.get_entry()
-        while entry:
-            if literal == entry.literal: yield entry
+    def search(self, literal, use_cache=False):
+        if use_cache and self.cache:
+            pass
+        else:
+            if len(self.filename) >= 3 and self.filename[-3:] == ".gz":
+                f = gzip.open(self.filename)
+            else:
+                f = open(self.filename, "rb")
+            data = f.read()
+            f.close()
+            data = data.decode(self.encoding)
+            self.data = data.splitlines()
             entry = self.get_entry()
-
+            while entry:
+                if literal == entry.literal: yield entry
+                entry = self.get_entry()
 
 if __name__ == "__main__":
     import sys, os
@@ -445,8 +488,9 @@ if __name__ == "__main__":
         exit(-1)
 
     if os.name == "nt":
-        charset = "sjis"
+        charset = "cp932"
     else:
         charset = "utf-8"
+
     for i, entry in enumerate(kp.search(sys.argv[2].decode(charset))):
-        print "Entry %d:\n%s\n" % (i+1, entry.to_string())
+        print _(u"Entry %d:\n%s\n") % (i+1, entry.to_string())
