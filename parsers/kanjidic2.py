@@ -81,8 +81,6 @@ class Kanjidic2Entry(object):
         self.xref = []
         self.misclass = []
 
-        self.unparsed = []
-
     def to_string(self, **kwargs):
         """A default "to-string" dump of a Kanjidic2Entry."""
         lines = []
@@ -133,16 +131,14 @@ class Kanjidic2Entry(object):
 
                 if k == 'skip' and self.misclass:
                     miscodes = []
-                    for code in self.misclass:
-                        code_type = code[:2]
-                        code_val = code[2:]
-                        if code_type == u'SP':   # "stroke_count"
+                    for code_type, code_val in self.misclass:
+                        if code_type == u'stroke_count':
                             miscodes.append(_(u"%s (stroke count)") % code_val)
-                        elif code_type == u'PP': # "posn"
+                        elif code_type == u'posn':
                             miscodes.append(_(u"%s (position)") % code_val)
-                        elif code_type == u'BP': # "stroke_and_posn"
+                        elif code_type == u'stroke_and_posn':
                             miscodes.append(_(u"%s (stroke and position)") % code_val)
-                        elif code_type == u'RP': # "stroke_diff"
+                        elif code_type == u'stroke_diff':
                             miscodes.append(_(u"%s (debatable count)") % code_val)
                         else:
                             lines.append(_(u"Unrecognized misclassification code: %s")
@@ -155,8 +151,14 @@ class Kanjidic2Entry(object):
             # Probably we should sort these in some way... but for
             # now, just display.
             for k, v in self.dcodes.iteritems():
-                k = kanjidic2_key_to_str(k)
-                lines.append(_(u"%s: %s") % (k, v))
+                k_desc = kanjidic2_key_to_str(k)
+                if k == "moro":
+                    # v is a (index, volume, page) tuple.  v/p may be null.
+                    if v[1] or v[2]:
+                        v = u"index %s, volume %d, page %d" % v
+                    else:
+                        v = unicode(v[0])
+                lines.append(_(u"%s: %s") % (k_desc, v))
 
         if self.radname:
             lines.append(_(u"Radical name: %s") % self.radname)
@@ -177,6 +179,9 @@ class Kanjidic2Entry(object):
 
         # "self.unicode" is always present. ;)
         lines.append(_(u"Unicode: 0x%04X") % ord(self.literal))
+
+        # ***FIXME: The below entries have not been tested since they
+        # are not yet properly 
         if self.jis:
             def jis_hex_to_kuten(hex_code):
                 """KANJIDIC2-style kuten string"""
@@ -229,24 +234,34 @@ class Kanjidic2Entry(object):
             #result << "<li>Spahn/Hadamitzky Kanji Dictionary code: "
             #<< k.var_s_h << "</li>";
 
-        if self.unparsed:
-            lines.append(_(u"Unrecognized codes: %s")
-                         % (u", ").join(self.unparsed))
-
         return u"\n".join(lines)
 
 class KD2SAXHandler(xml.sax.handler.ContentHandler):
 
-    """SAX handler for KANJIDIC2."""
+    """SAX handler for KANJIDIC2.
 
-    def __init__(self, *args, **kwargs):
-        #self.limit = 1
+    If not using caching, parsing should take a minimal amount of
+    memory as only the matching results are stored and returned.  A
+    single non-cached search will be slightly faster than a cached one
+    (over 10% on my machine).  However, realistically this function
+    should only be used for systems which are severely strapped for
+    memory.
+
+    Further, rather than using KANJIDIC2, why not just use classic
+    KANJIDIC?
+
+    """
+
+    def __init__(self, use_cache, search_str, *args, **kwargs):
         xml.sax.handler.ContentHandler.__init__(self, *args, **kwargs)
         self.parsing = False
         self.kanji = None
         self.path = []
         self.full_keys = set()
         self.data = {}
+
+        self.use_cache = use_cache
+        self.search_str = search_str
 
     def get_path(self):
         return u"/".join([i[0] for i in self.path])
@@ -278,11 +293,10 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
             if name == "character":
                 #print "endElement called:", name
                 #print "End of character entry reached"
-                self.data[self.kanji.literal] = self.kanji
+                if self.use_cache or (self.kanji.literal in self.search_str):
+                    self.data[self.kanji.literal] = self.kanji
                 self.kanji = None
                 self.parsing = False
-                #self.limit -= 1
-                #if self.limit <= 0: exit(0)
 
     def characters(self, content):
         content = content.strip()
@@ -335,8 +349,7 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
                 if qc_type == 'skip':
                     misclass = attrs.get(u'skip_misclass')
                     if misclass:
-                        # HANDLE LATER, TODO
-                        pass
+                        self.kanji.misclass.append((misclass, content))
                     else:
                         self.kanji.qcodes[qc_type] = content
                 else:
@@ -346,12 +359,16 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
                 if attr == u'moro':
                     m_vol = attrs.get(u'm_vol')
                     m_page = attrs.get(u'm_page')
-                    # Do something with this... TODO
+                    if m_vol: m_vol = int(m_vol)
+                    if m_page: m_page = int(m_page)
+                    self.kanji.dcodes[attr] = (content, m_vol, m_page)
                 else:
                     try:
                         self.kanji.dcodes[attr] = int(content)
                     except ValueError:
                         self.kanji.dcodes[attr] = content
+
+            # FIXME/TODO: These still need to be implemented!
             elif node == u"cp_value":  # codepoint/cp_value
                 pass
             elif node == u"rad_value": # radical/rad_value
@@ -360,7 +377,7 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
                 pass
             elif node == u"rad_name":  # misc/rad_name
                 pass
-            else:
+            else:  # Anything unhandled...
                 try:
                     path = self.get_path()
                     print u"Characters found: path=%s, attrs=(%s), content: %s" \
@@ -371,47 +388,56 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
                 except UnicodeEncodeError:
                     pass  # Can't display code on console; just squelch the output.
                 except Exception, e:
-                    print u"EXCEPTION occurred:", unicode(e.__class__.__str__), unicode(e)
+                    print u"EXCEPTION occurred:", \
+                          unicode(e.__class__.__str__), unicode(e)
 
 class Kanjidic2Parser(object):
 
-    def __init__(self, filename, encoding="utf-8"):
+    def __init__(self, filename, use_cache=True, encoding="utf-8"):
+        """Initializer for Kanjidic2Parser.
+
+        About use_cache: Kanjidic2 is a large, heavy to parse file.
+        Although it takes a large amount of memory, it is ideal to
+        retain it in memory to increase the speed of subsequent
+        searches.
+
+        """
         self.filename = filename
         self.encoding = encoding
         self.cache = None
+        self.use_cache = use_cache
 
-    def load_via_sax(self):
+    def load_via_sax(self, use_cache, search_str):
         if len(self.filename) >= 3 and self.filename[-3:] == ".gz":
             f = gzip.open(self.filename)
         else:
             f = open(self.filename, "rb")
 
-        sh = KD2SAXHandler()
+        sh = KD2SAXHandler(use_cache, search_str)
         isource = xml.sax.xmlreader.InputSource()
         isource.setEncoding("utf-8")
         isource.setByteStream(f)
         xml.sax.parse(isource, sh)
         f.close()
-        self.cache = sh.data
+        return sh.data
 
-    def search(self, search_str, use_cache=True):
-        # Cacheing has 2 meanings in J-Ben:
-        # 1. Storing the results of a previous read locally.
-        # 2. Reading in prepased data from a file on disk
-        #
-        # KANJIDIC2 is a huge file; although it's huge to store it in memory,
-        # it's even harsher to repeatedly seek the whole file from disk on
-        # each search.
-        if (not use_cache) or (not self.cache):
+    def search(self, search_str):
+        data = None
+        if self.use_cache: data = self.cache
+        if not data:
             # Pick a loader.
             # Opt 1: sax... very powerful, but too much code with my impl?
             # Opt 2: elementtree... more memory required, loads
             # everything at once...
             # Opt 3: sax... redo to store all vars as lists, or similar.
-            self.load_via_sax()  # First attempt of a SAX style loader.
+
+            # First attempt of a SAX style loader.
+            data = self.load_via_sax(self.use_cache, search_str)
+
+            if self.use_cache: self.cache = data
 
         for char in search_str:
-            kanji = self.cache.get(char)
+            kanji = data.get(char)
             if kanji: yield kanji
 
 

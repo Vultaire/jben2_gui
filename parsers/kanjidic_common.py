@@ -55,7 +55,7 @@ def kanjidic2_key_to_str(dkey):
         "nelson_n":
         _(u"The New Nelson Japanese-English Character Dictionary (Haig)"),
         "sh_kk": _(u"Kanji and Kana (Spahn/Hadamitzky)"),
-        #"moro": "Morohashi Daikanwajiten"  morohashi stuff, ...do later
+        "moro": _(u"Morohashi Daikanwajiten"),
         "henshall":
         _(u"A Guide To Remembering Japanese Characters (Henshall)"),
         "gakken": _(u"A New Dictionary of Kanji Usage (Gakken)"),

@@ -6,6 +6,8 @@
 # Author: Paul Goins
 # Created on: 20 Nov 2008
 
+"""J-Ben main module."""
+
 import gettext
 gettext.install("jben")
 

@@ -71,7 +71,7 @@ def kanjidic_key_to_kanjidic2(dkey):
         "N": "nelson_c",
         "V": "nelson_n",
         "IN": "sh_kk",
-        #"M": "moro"  morohashi stuff, ...do later
+        "MN": "moro"
         "E": "henshall",
         "K": "gakken",
         "L": "heisig",
@@ -202,9 +202,19 @@ class KanjidicEntry(object):
             # Probably we should sort these in some way... but for
             # now, just display.
             for k, v in self.dcodes.iteritems():
+                if k == "MP": continue
                 k = kanjidic2_key_to_str(
                     kanjidic_key_to_kanjidic2(k))
-                lines.append(_(u"%s: %s") % (k, v))
+                if k == "MN":
+                    lines.append(_(u"%s: %s") % (k, v))
+                else:
+                    vp = self.dcodes.get("MP")
+                    if vp:
+                        vol, page = vp.split('.', 1)
+                        lines.append(_(u"%s: Index %s, Volume %s, Page %s") \
+                                     % (k, v, vol, page))
+                    else:
+                        lines.append(_(u"%s: %s") % (k, v))
 
         if self.radname:
             lines.append(_(u"Radical name: %s") % self.radname)
@@ -297,9 +307,11 @@ class ParserState(object):
 
 class KanjidicParser(object):
 
-    def __init__(self, filename, encoding="EUC-JP"):
+    def __init__(self, filename, use_cache=True, encoding="EUC-JP"):
         self.filename = filename
         self.encoding = encoding
+        self.use_cache = use_cache
+        self.cache = {}
 
     def get_entry(self):
         line = None
@@ -453,9 +465,11 @@ class KanjidicParser(object):
 
         return entry
 
-    def search(self, literal, use_cache=False):
-        if use_cache and self.cache:
-            pass
+    def search(self, query):
+        if self.use_cache and self.cache:
+            for char in query:
+                kanji = self.cache.get(char)
+                if kanji: yield kanji
         else:
             if len(self.filename) >= 3 and self.filename[-3:] == ".gz":
                 f = gzip.open(self.filename)
@@ -467,7 +481,9 @@ class KanjidicParser(object):
             self.data = data.splitlines()
             entry = self.get_entry()
             while entry:
-                if literal == entry.literal: yield entry
+                if self.use_cache:
+                    self.cache[entry.literal] = entry
+                if entry.literal in query: yield entry
                 entry = self.get_entry()
 
 if __name__ == "__main__":
