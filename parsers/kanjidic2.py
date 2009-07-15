@@ -41,12 +41,17 @@ gettext.install('pyjben', unicode=True)
 from parsers.kanjidic_common \
      import jstring_convert, kanjidic2_key_to_str, qcode_to_desc
 
+def jis_kuten_to_hex(kuten):
+    """Kuten string to hex conversion"""
+    pieces = map(int, kuten.split(u'-'))
+    print "DEBUG: kuten: %s, pieces: %s" % (kuten, str(pieces))
+    return ((pieces[0] + 0x20) << 8) + (pieces[1] + 0x20)
+
 class Kanjidic2Entry(object):
 
     def __init__(self):
         # Key info
         self.literal = None
-        self.jis = None
         self.meanings = {}
         self.ja_kun = []
         self.ja_on = []
@@ -60,6 +65,7 @@ class Kanjidic2Entry(object):
         self.jlpt = None
 
         # Info of low importance for most target users
+        self.cps = []  # JIS codepoints
         self.radical = None
         self.radical_c = None  # "Classic" KangXi Zidian radical
         self.radname = None
@@ -73,7 +79,8 @@ class Kanjidic2Entry(object):
         self.qcodes = {}
 
         # Dictionary codes
-        # Non-D codes: H, N, V, INnnnn, MNnnnnnnn/MPnn.nnnn, Ennnn, Knnnn, Lnnnn, Onnnn
+        # Non-D codes: H, N, V, INnnnn, MNnnnnnnn/MPnn.nnnn, Ennnn,
+        #              Knnnn, Lnnnn, Onnnn
         # D codes: DB, DC, DF, DG, DH, DJ, DK, DM, DO, DR, DS, DT, DM
         self.dcodes = {}
 
@@ -180,59 +187,33 @@ class Kanjidic2Entry(object):
         # "self.unicode" is always present. ;)
         lines.append(_(u"Unicode: 0x%04X") % ord(self.literal))
 
-        # ***FIXME: The below entries have not been tested since they
-        # are not yet properly 
-        if self.jis:
-            def jis_hex_to_kuten(hex_code):
-                """KANJIDIC2-style kuten string"""
-                return u"%s-%s" % (
-                    (((hex_code >> 8) & 0xFF) - 0x20),
-                    ((hex_code & 0xFF) - 0x20))
+        if self.cps:
+            for jis_set, kuten in self.cps:
+                # jis_set == "jis###" - we'll just splice the last 3 digits in
+                hexcode = jis_kuten_to_hex(kuten)
+                lines.append(_(u"JIS X 0%s code: Kuten = %s, Hex = 0x%04X")
+                             % (jis_set[3:], kuten, hexcode))
 
-            kuten = jis_hex_to_kuten(self.jis)
-            lines.append(_(u"JIS code: Kuten = %s, Hex = 0x%04X")
-                         % (kuten, self.jis))
-
-        #self.xref = []
         if self.xref:
-            # From KANJIDIC documentation:
-            #
-            # Xxxxxxx -- a cross-reference code. An entry of, say,
-            # XN1234 will mean that the user is referred to the kanji
-            # with the (unique) Nelson index of 1234. XJ0xxxx and
-            # XJ1xxxx are cross-references to the kanji with the JIS
-            # hexadecimal code of xxxx. The `0' means the reference is
-            # to a JIS X 0208 kanji, and the `1' references a JIS X
-            # 0212 kanji.
-            #
-
-            # For now, just dump to the console.
-            lines.append(_(u"Crossref codes: %s") % ", ".join(self.xref))
-
-            # From J-Ben 1:
-            #/* Crossref codes */
-            #if(!k.var_j208.empty())
-            #result << "<li>JIS-208: " << k.var_j208 << "</li>";
-            #if(!k.var_j212.empty())
-            #result << "<li>JIS-212: " << k.var_j212 << "</li>";
-            #if(!k.var_j213.empty())
-            #result << "<li>JIS-213: " << k.var_j213 << "</li>";
-            #if(!k.var_ucs.empty())
-            #result << "<li>Unicode: " << k.var_ucs << "</li>";
-            #if(!k.var_deroo.empty())
-            #result << "<li>De Roo code: " << k.var_deroo << "</li>";
-            #if(!k.var_nelson_c.empty())
-            #result << "<li>Modern Reader's Japanese-English Character "
-            #"Dictionary (Nelson): " << k.var_nelson_c << "</li>";
-            #if(!k.var_njecd.empty())
-            #result << "<li>New Japanese-English Character Dictionary "
-            #"(Halpern): " << k.var_njecd << "</li>";
-            #if(!k.var_oneill.empty())
-            #result << "<li>Japanese Names (O'Neill): " << k.var_oneill
-            #<< "</li>";
-            #if(!k.var_s_h.empty())
-            #result << "<li>Spahn/Hadamitzky Kanji Dictionary code: "
-            #<< k.var_s_h << "</li>";
+            for var_type, code in self.xref:
+                d = {
+                    'jis208': u'JIS X 0208',
+                    'jis212': u'JIS X 0212',
+                    'jis213': u'JIS X 0213',
+                    'deroo': u'De Roo',
+                    'njecd': u'Halpern NJECD',
+                    's_h': u'Kanji Dictionary (Spahn/Hadamitzky)',
+                    'nelson_c': u'"Classic" Nelson',
+                    'oneill': u"Japanese Names (O'Neill)",
+                    'ucs': u'Unicode hex'
+                    }
+                s = d.get(var_type, var_type)
+                if var_type[:3] == u'jis':
+                    hexcode = jis_kuten_to_hex(code)
+                    lines.append(_(u"Crossref: JIS X 0208: Kuten = %s, "
+                                   u"Hex = 0x%04X") % (code, hexcode))
+                else:
+                    lines.append(_(u"Crossref: %s code: %s") % (s, code))
 
         return u"\n".join(lines)
 
@@ -301,15 +282,6 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
     def characters(self, content):
         content = content.strip()
         if content and self.parsing:
-            # Sanity check: see if the current node type is already
-            # included under a different full path.
-            #path = self.get_path()
-            #self.full_keys.add(path)
-            #
-            #keys = [k for k in self.full_keys if k[-(len(node)):] == node]
-            #if len(keys) != 1:
-            #    print "CHECKME: Node: %s, Keys: %s" % (node, str(keys))
-
             node, attrs = self.path[-1]
 
             # I am exploiting the fact that any given element type can
@@ -368,15 +340,21 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
                     except ValueError:
                         self.kanji.dcodes[attr] = content
 
-            # FIXME/TODO: These still need to be implemented!
             elif node == u"cp_value":  # codepoint/cp_value
-                pass
+                cp_type = attrs[u'cp_type']
+                if cp_type != u'ucs':
+                    self.kanji.cps.append((cp_type, content))
             elif node == u"rad_value": # radical/rad_value
-                pass
+                rad_type = attrs[u'rad_type']
+                if rad_type == "classical":
+                    self.kanji.radical_c = int(content)
+                else: # nelson_c
+                    self.kanji.radical = int(content)
             elif node == u"variant":   # misc/variant
-                pass
+                var_type = attrs[u'var_type']
+                self.kanji.xref.append((var_type, content))
             elif node == u"rad_name":  # misc/rad_name
-                pass
+                self.kanji.radname = content
             else:  # Anything unhandled...
                 try:
                     path = self.get_path()
@@ -384,7 +362,6 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
                           % (path,
                              self.get_attr_str(),
                              content)
-                    # Do some stuff based upon the current path and content
                 except UnicodeEncodeError:
                     pass  # Can't display code on console; just squelch the output.
                 except Exception, e:

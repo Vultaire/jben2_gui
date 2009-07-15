@@ -104,7 +104,6 @@ class KanjidicEntry(object):
     def __init__(self):
         # Key info
         self.literal = None
-        self.jis = None
         self.meanings = []
         self.kunyomi = []
         self.onyomi = []
@@ -118,6 +117,7 @@ class KanjidicEntry(object):
         self.jlpt = None
 
         # Info of low importance for most target users
+        self.jis = None
         self.radical = None
         self.radical_c = None  # "Classic" KangXi Zidian radical
         self.radname = None
@@ -130,7 +130,9 @@ class KanjidicEntry(object):
         self.qcodes = {}
 
         # Dictionary codes
-        # Non-D codes: H, N, V, INnnnn, MNnnnnnnn/MPnn.nnnn, Ennnn, Knnnn, Lnnnn, Onnnn
+
+        # Non-D codes: H, N, V, INnnnn, MNnnnnnnn/MPnn.nnnn, Ennnn,
+        #              Knnnn, Lnnnn, Onnnn
         # D codes: DB, DC, DF, DG, DH, DJ, DK, DM, DO, DR, DS, DT, DM
         self.dcodes = {}
 
@@ -243,23 +245,11 @@ class KanjidicEntry(object):
         lines.append(_(u"Unicode: 0x%04X") % ord(self.literal))
         if self.jis:
             kuten = jis_hex_to_kuten(self.jis)
-            lines.append(_(u"JIS code: Kuten = %s, Hex = 0x%04X")
-                         % (kuten, self.jis))
+            jis_set = u"208"  # For now, hard-code it.
+            lines.append(_(u"JIS X 0%s code: Kuten = %s, Hex = 0x%04X")
+                         % (jis_set, kuten, self.jis))
 
-        #self.xref = []
         if self.xref:
-            # FIXME/TODO: Finish this section!
-            # From KANJIDIC documentation:
-            #
-            # Xxxxxxx -- a cross-reference code. An entry of, say,
-            # XN1234 will mean that the user is referred to the kanji
-            # with the (unique) Nelson index of 1234. XJ0xxxx and
-            # XJ1xxxx are cross-references to the kanji with the JIS
-            # hexadecimal code of xxxx. The `0' means the reference is
-            # to a JIS X 0208 kanji, and the `1' references a JIS X
-            # 0212 kanji.
-            #
-
             for ref in self.xref:
                 if ref[0] == 'J':
                     # JIS crossrefs
@@ -470,25 +460,44 @@ class KanjidicParser(object):
         return entry
 
     def search(self, query):
-        if self.use_cache and self.cache:
-            for char in query:
-                kanji = self.cache.get(char)
-                if kanji: yield kanji
-        else:
+        """Returns a list of kanji entries matching kanji in the query.
+
+        Note: Previous versions implemented this as a generator.
+        While I liked that solution, it did not maintain the order of
+        kanji in the query.  Since the KANJIDIC2 parser does this,
+        I've done it here as well for consistency.
+
+        """
+        results = []
+
+        data = None
+        if self.use_cache: data = self.cache
+
+        if not data:
             if len(self.filename) >= 3 and self.filename[-3:] == ".gz":
                 f = gzip.open(self.filename)
             else:
                 f = open(self.filename, "rb")
-            data = f.read()
+            fdata = f.read()
             f.close()
-            data = data.decode(self.encoding)
-            self.data = data.splitlines()
+            fdata = fdata.decode(self.encoding)
+            # seld.data is needed by self.get_entry()
+            self.data = fdata.splitlines()
+
+            data = {}
             entry = self.get_entry()
             while entry:
                 if self.use_cache:
                     self.cache[entry.literal] = entry
-                if entry.literal in query: yield entry
+                if entry.literal in query: data[entry.literal] = entry
                 entry = self.get_entry()
+            pass
+
+        for char in query:
+            kanji = data.get(char)
+            if kanji: results.append(kanji)
+
+        return results
 
 if __name__ == "__main__":
     import sys, os

@@ -64,7 +64,7 @@ class KanjidicTest(unittest.TestCase):
         self.assertTrue(second_t <= first_t)
 
     def test_no_cache(self):
-        """KANJIDIC2: Check that parser works without caching."""
+        """KANJIDIC: Check that parser works without caching."""
         self.kp = kanjidic.KanjidicParser(SRC_NAME, use_cache=False)
 
         self.assertFalse(self.kp.cache)
