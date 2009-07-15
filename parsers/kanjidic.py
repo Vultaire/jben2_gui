@@ -36,11 +36,14 @@ modules in your own programs.
 
 """
 
-import gzip, gettext
+import re, gzip, gettext
 gettext.install('pyjben', unicode=True)
 
 from parsers.kanjidic_common \
      import jstring_convert, kanjidic2_key_to_str, qcode_to_desc
+
+
+alpha_regex = re.compile(u"(^[^0-9]+)(.*)")
 
 # Copied from J-Ben 1.x and modified using Gnome Character Map's
 # "Unicode Block" information.
@@ -60,6 +63,12 @@ def is_katakana(uc):
 def is_furigana(uc):
     return is_hiragana(uc) or is_katakana(uc)
 
+def jis_hex_to_kuten(hex_code):
+    """KANJIDIC2-style kuten string"""
+    return u"%s-%s" % (
+        (((hex_code >> 8) & 0xFF) - 0x20),
+        ((hex_code & 0xFF) - 0x20))
+
 def kanjidic_key_to_kanjidic2(dkey):
     """Converts KANJIDIC dictionary keys to KANJIDIC2.
 
@@ -71,7 +80,7 @@ def kanjidic_key_to_kanjidic2(dkey):
         "N": "nelson_c",
         "V": "nelson_n",
         "IN": "sh_kk",
-        "MN": "moro"
+        "MN": "moro",
         "E": "henshall",
         "K": "gakken",
         "L": "heisig",
@@ -211,7 +220,7 @@ class KanjidicEntry(object):
                     vp = self.dcodes.get("MP")
                     if vp:
                         vol, page = vp.split('.', 1)
-                        lines.append(_(u"%s: Index %s, Volume %s, Page %s") \
+                        lines.append(_(u"%s: Index %s, Volume %s, Page %s")
                                      % (k, v, vol, page))
                     else:
                         lines.append(_(u"%s: %s") % (k, v))
@@ -233,18 +242,13 @@ class KanjidicEntry(object):
         # "self.unicode" is always present. ;)
         lines.append(_(u"Unicode: 0x%04X") % ord(self.literal))
         if self.jis:
-            def jis_hex_to_kuten(hex_code):
-                """KANJIDIC2-style kuten string"""
-                return u"%s-%s" % (
-                    (((hex_code >> 8) & 0xFF) - 0x20),
-                    ((hex_code & 0xFF) - 0x20))
-
             kuten = jis_hex_to_kuten(self.jis)
             lines.append(_(u"JIS code: Kuten = %s, Hex = 0x%04X")
                          % (kuten, self.jis))
 
         #self.xref = []
         if self.xref:
+            # FIXME/TODO: Finish this section!
             # From KANJIDIC documentation:
             #
             # Xxxxxxx -- a cross-reference code. An entry of, say,
@@ -256,33 +260,33 @@ class KanjidicEntry(object):
             # 0212 kanji.
             #
 
-            # For now, just dump to the console.
-            lines.append(_(u"Crossref codes: %s") % ", ".join(self.xref))
+            for ref in self.xref:
+                if ref[0] == 'J':
+                    # JIS crossrefs
+                    jis_id = ref[1]
+                    hexcode = int(ref[2:], 16)
+                    kuten = jis_hex_to_kuten(hexcode)
+                    if jis_id == '0':
+                        lines.append(_(u"Crossref: JIS X 0208: Kuten = %s, "
+                                       u"Hex = 0x%04X") % (kuten, hexcode))
+                    elif jis_id == '1':
+                        lines.append(_(u"Crossref: JIS X 0208: Kuten = %s, "
+                                       u"Hex = 0x%04X") % (kuten, hexcode))
+                    else:
+                        s = _(u"Crossref: JIS (UNHANDLED JIS CODESET): "
+                              u"Kuten = %s, Hex = 0x%04X") % (kuten, hexcode)
+                        lines.append(s)
+                        # Not really "unparsed", but it is unhandled...
+                        unparsed.append(s)
+                    pass
+                else:
+                    m = alpha_regex.match(ref)
+                    k = kanjidic2_key_to_str(
+                        kanjidic_key_to_kanjidic2(m.group(1)))
 
-            # From J-Ben 1:
-            #/* Crossref codes */
-            #if(!k.var_j208.empty())
-            #result << "<li>JIS-208: " << k.var_j208 << "</li>";
-            #if(!k.var_j212.empty())
-            #result << "<li>JIS-212: " << k.var_j212 << "</li>";
-            #if(!k.var_j213.empty())
-            #result << "<li>JIS-213: " << k.var_j213 << "</li>";
-            #if(!k.var_ucs.empty())
-            #result << "<li>Unicode: " << k.var_ucs << "</li>";
-            #if(!k.var_deroo.empty())
-            #result << "<li>De Roo code: " << k.var_deroo << "</li>";
-            #if(!k.var_nelson_c.empty())
-            #result << "<li>Modern Reader's Japanese-English Character "
-            #"Dictionary (Nelson): " << k.var_nelson_c << "</li>";
-            #if(!k.var_njecd.empty())
-            #result << "<li>New Japanese-English Character Dictionary "
-            #"(Halpern): " << k.var_njecd << "</li>";
-            #if(!k.var_oneill.empty())
-            #result << "<li>Japanese Names (O'Neill): " << k.var_oneill
-            #<< "</li>";
-            #if(!k.var_s_h.empty())
-            #result << "<li>Spahn/Hadamitzky Kanji Dictionary code: "
-            #<< k.var_s_h << "</li>";
+                    v = ref[m.span()[1]:]
+                    lines.append(_(u"Crossref: %s: %s")
+                                 % (k, m.group(2)))
 
         if self.unparsed:
             lines.append(_(u"Unrecognized codes: %s")
@@ -380,7 +384,7 @@ class KanjidicParser(object):
                 # SKIP codes.
                 # Thanks to changes in permissible SKIP code usage (change to
                 # Creative Commons licensing in January 2008), we can now use
-                # this without problems.
+                # this without problems.  Jack Halpern, thank you!
                 if entry.qcodes.get('skip'):
                     print "ALERT!  ALERT!  entry.skip already set!"
                     exit(1)
