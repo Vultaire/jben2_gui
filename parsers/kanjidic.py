@@ -101,21 +101,19 @@ def kanjidic_key_to_kanjidic2(dkey):
 
 class KanjidicEntry(object):
 
-    def __init__(self):
+    def __init__(self, raw_entry):
         # Key info
         self.literal = None
         self.meanings = []
         self.kunyomi = []
         self.onyomi = []
         self.nanori = []
-
         # Secondary info
         self.strokes = None
         self.strokes_miss = []
         self.freq = None
         self.grade = None
         self.jlpt = None
-
         # Info of low importance for most target users
         self.jis = None
         self.radical = None
@@ -123,24 +121,160 @@ class KanjidicEntry(object):
         self.radname = None
         self.pinyin = []
         self.korean = []
-
         # "Query codes": Pattern-based lookup
         # Includes SKIP, DeRoo, Spahn/Hadamitzky, and Four Corners systems
-        # Codes: P, DRnnnn, Inxnn.n, Qnnnn.n
         self.qcodes = {}
-
         # Dictionary codes
-
-        # Non-D codes: H, N, V, INnnnn, MNnnnnnnn/MPnn.nnnn, Ennnn,
-        #              Knnnn, Lnnnn, Onnnn
-        # D codes: DB, DC, DF, DG, DH, DJ, DK, DM, DO, DR, DS, DT, DM
         self.dcodes = {}
-
         # Dictionary-related metadata
         self.xref = []
         self.misclass = []
-
         self.unparsed = []
+
+        self.parse_entry(raw_entry)
+
+    def parse_entry(self, raw_entry):
+        if not raw_entry:
+            return None
+
+        state = ParserState()  # Holds "t class"
+
+        # First 2 fields are always the same
+        pieces = raw_entry.split(None, 2)
+        misc = pieces.pop()
+        self.jis = int(pieces.pop(), 16)
+        self.literal = pieces.pop()
+
+        # Parse the remainder
+        si = ei = 0
+        while si < len(misc):
+            c = misc[si]
+            i = ord(c)
+            if c == u' ':
+                si += 1
+                continue
+            if i > 0xFF or c in (u'-', u'.'):
+                # Parse Japanese
+                ei = misc.find(u' ', si+1)
+                if ei == -1:
+                    ei = len(misc) + 1
+                sub = misc[si:ei]
+
+                self._parse_japanese(state, sub)
+            elif c == u'{':
+                # Parse Translation
+                si += 1  # Move si inside of {
+                ei = misc.find(u'}', si+1)
+                if ei == -1:
+                    ei = len(misc) + 1
+                sub = misc[si:ei]
+                ei += 1  # Move ei past }
+
+                self.meanings.append(sub)
+            else:
+                # Parse info field
+                ei = misc.find(u' ', si+1)
+                if ei == -1:
+                    ei = len(misc) + 1
+                sub = misc[si:ei]
+
+                self._parse_info(state, sub)
+
+            si = ei + 1
+
+    def _parse_japanese(self, state, data):
+        if not state.t_class:
+            # Check hiragana/katakana
+            for c in data:
+                if is_hiragana(c):
+                    self.kunyomi.append(data)
+                    break
+                elif is_katakana(c):
+                    self.onyomi.append(data)
+                    break
+        elif state.t_class == 1:
+            self.nanori.append(data)
+        elif state.t_class == 2:
+            self.radname = data
+
+    def _parse_info(self, state, data):
+        onechar_dicts = set(('H', 'N', 'V', 'E', 'K', 'L', 'O'))
+        strval_dicts = set(('DB',))
+        intval_dicts = set(('DC', 'DF', 'DG', 'DH', 'DJ',
+                            'DK', 'DO', 'DS', 'DT', 'DM'))
+        try:
+            c = data[0]
+            if c == 'U':
+                # Unicode value - we alread store the literal as unicode, so let's
+                # use this as our encoding sanity check!
+                assert ord(self.literal) == int(data[1:], 16), \
+                    "Encoding error detected"
+            elif c == 'B':
+                self.radical = int(data[1:])
+            elif c == 'C':
+                self.radical_c = int(data[1:])
+            elif c == 'F':
+                self.freq = int(data[1:])
+            elif c == 'G':
+                self.grade = int(data[1:])
+            elif c == 'J':
+                self.jlpt = int(data[1:])
+            elif c == 'S':
+                i = int(data[1:])
+                if not self.strokes:
+                    self.strokes = i
+                else:
+                    self.strokes_miss.append(i)
+            elif c == 'W':
+                self.korean.append(data[1:])
+            elif c == 'Y':
+                self.pinyin.append(data[1:])
+            elif c == 'X':
+                self.xref.append(data[1:])
+            elif c == 'Z':
+                self.misclass.append(data[1:])
+            elif c == 'T':
+                state.t_class = int(data[1:])
+            # Below this point is dictionary/query codes.
+            elif c in onechar_dicts:
+                self.dcodes[c] = data[1:]
+            elif c == 'P':
+                # SKIP codes.
+                # Thanks to changes in permissible SKIP code usage (change to
+                # Creative Commons licensing in January 2008), we can now use
+                # this without problems.  Jack Halpern, thank you!
+                if self.qcodes.get('skip'):
+                    print "ALERT!  ALERT!  self.skip already set!"
+                    exit(1)
+                self.qcodes['skip'] = data[1:];
+            elif c == 'Q':
+                # Four Corner code
+                self.qcodes['four_corner'] = data[1:]
+            elif c == 'I':  # Spahn/Hadamitzky dictionaries
+                if data[1] =='N':
+                    # IN = Kanji & Kana (Spahn, Hadamitzky)
+                    self.dcodes[data[:2]] = data[2:]
+                else:
+                    # Query Code: Kanji Dictionary (Spahn, Hadamitzky)
+                    self.qcodes['sh_desc'] = data[1:]
+            elif c == 'M':
+                # Morohashi Daikanwajiten
+                self.dcodes[data[:2]] = data[2:]
+            elif c == 'D':
+                key = data[:2]
+                if key in intval_dicts:
+                    self.dcodes[key] = int(data[2:])
+                elif key in strval_dicts:
+                    self.dcodes[key] = data[2:]
+                elif key == 'DR':
+                    # Query Code: 2001 Kanji (De Roo)
+                    self.qcodes['deroo'] = int(data[2:])
+                else:
+                    self.unparsed.append(data)
+            else:
+                self.unparsed.append(data)
+        except:
+            self.unparsed.append(data)
 
     def to_string(self, **kwargs):
         """A default "to-string" dump of a KanjidicEntry."""
@@ -307,158 +441,6 @@ class KanjidicParser(object):
         self.use_cache = use_cache
         self.cache = {}
 
-    def get_entry(self):
-        line = None
-        while self.data and (not line or line[0] == u"#"):
-            line = self.data.pop(0).strip()
-        return self.parse_line(line)
-
-
-    def _parse_japanese(self, entry, state, data):
-        if not state.t_class:
-            # Check hiragana/katakana
-            for c in data:
-                if is_hiragana(c):
-                    entry.kunyomi.append(data)
-                    break
-                elif is_katakana(c):
-                    entry.onyomi.append(data)
-                    break
-        elif state.t_class == 1:
-            entry.nanori.append(data)
-        elif state.t_class == 2:
-            entry.radname = data
-
-    def _parse_info(self, entry, state, data):
-        onechar_dicts = set(('H', 'N', 'V', 'E', 'K', 'L', 'O'))
-        strval_dicts = set(('DB',))
-        intval_dicts = set(('DC', 'DF', 'DG', 'DH', 'DJ',
-                            'DK', 'DO', 'DS', 'DT', 'DM'))
-        try:
-            c = data[0]
-            if c == 'U':
-                # Unicode value - we alread store the literal as unicode, so let's
-                # use this as our encoding sanity check!
-                assert ord(entry.literal) == int(data[1:], 16), \
-                    "Encoding error detected"
-            elif c == 'B':
-                entry.radical = int(data[1:])
-            elif c == 'C':
-                entry.radical_c = int(data[1:])
-            elif c == 'F':
-                entry.freq = int(data[1:])
-            elif c == 'G':
-                entry.grade = int(data[1:])
-            elif c == 'J':
-                entry.jlpt = int(data[1:])
-            elif c == 'S':
-                i = int(data[1:])
-                if not entry.strokes:
-                    entry.strokes = i
-                else:
-                    entry.strokes_miss.append(i)
-            elif c == 'W':
-                entry.korean.append(data[1:])
-            elif c == 'Y':
-                entry.pinyin.append(data[1:])
-            elif c == 'X':
-                entry.xref.append(data[1:])
-            elif c == 'Z':
-                entry.misclass.append(data[1:])
-            elif c == 'T':
-                state.t_class = int(data[1:])
-            # Below this point is dictionary/query codes.
-            elif c in onechar_dicts:
-                entry.dcodes[c] = data[1:]
-            elif c == 'P':
-                # SKIP codes.
-                # Thanks to changes in permissible SKIP code usage (change to
-                # Creative Commons licensing in January 2008), we can now use
-                # this without problems.  Jack Halpern, thank you!
-                if entry.qcodes.get('skip'):
-                    print "ALERT!  ALERT!  entry.skip already set!"
-                    exit(1)
-                entry.qcodes['skip'] = data[1:];
-            elif c == 'Q':
-                # Four Corner code
-                entry.qcodes['four_corner'] = data[1:]
-            elif c == 'I':  # Spahn/Hadamitzky dictionaries
-                if data[1] =='N':
-                    # IN = Kanji & Kana (Spahn, Hadamitzky)
-                    entry.dcodes[data[:2]] = data[2:]
-                else:
-                    # Query Code: Kanji Dictionary (Spahn, Hadamitzky)
-                    entry.qcodes['sh_desc'] = data[1:]
-            elif c == 'M':
-                # Morohashi Daikanwajiten
-                entry.dcodes[data[:2]] = data[2:]
-            elif c == 'D':
-                key = data[:2]
-                if key in intval_dicts:
-                    entry.dcodes[key] = int(data[2:])
-                elif key in strval_dicts:
-                    entry.dcodes[key] = data[2:]
-                elif key == 'DR':
-                    # Query Code: 2001 Kanji (De Roo)
-                    entry.qcodes['deroo'] = int(data[2:])
-                else:
-                    entry.unparsed.append(data)
-            else:
-                entry.unparsed.append(data)
-        except:
-            entry.unparsed.append(data)
-
-    def parse_line(self, line):
-        if not line:
-            return None
-        entry = KanjidicEntry()
-        state = ParserState()  # Holds "t class"
-
-        # First 2 fields are always the same
-        pieces = line.split(None, 2)
-        entry.literal = pieces.pop(0)
-        entry.jis = int(pieces.pop(0), 16)
-        misc = pieces.pop()
-
-        # Parse the remainder
-        si = ei = 0
-        while si < len(misc):
-            c = misc[si]
-            i = ord(c)
-            if c == u' ':
-                si += 1
-                continue
-            if i > 0xFF or c in (u'-', u'.'):
-                # Parse Japanese
-                ei = misc.find(u' ', si+1)
-                if ei == -1:
-                    ei = len(misc) + 1
-                sub = misc[si:ei]
-
-                self._parse_japanese(entry, state, sub)
-            elif c == u'{':
-                # Parse Translation
-                si += 1  # Move si inside of {
-                ei = misc.find(u'}', si+1)
-                if ei == -1:
-                    ei = len(misc) + 1
-                sub = misc[si:ei]
-                ei += 1  # Move ei past }
-
-                entry.meanings.append(sub)
-            else:
-                # Parse info field
-                ei = misc.find(u' ', si+1)
-                if ei == -1:
-                    ei = len(misc) + 1
-                sub = misc[si:ei]
-
-                self._parse_info(entry, state, sub)
-
-            si = ei + 1
-
-        return entry
-
     def search(self, query):
         """Returns a list of kanji entries matching kanji in the query.
 
@@ -481,17 +463,15 @@ class KanjidicParser(object):
             fdata = f.read()
             f.close()
             fdata = fdata.decode(self.encoding)
-            # seld.data is needed by self.get_entry()
-            self.data = fdata.splitlines()
+            lines = fdata.splitlines()
+            lines = [line for line in lines if line and (line[0] != u"#")]
 
             data = {}
-            entry = self.get_entry()
-            while entry:
+            for line in lines:
+                entry = KanjidicEntry(line)
                 if self.use_cache:
                     self.cache[entry.literal] = entry
                 if entry.literal in query: data[entry.literal] = entry
-                entry = self.get_entry()
-            pass
 
         for char in query:
             kanji = data.get(char)

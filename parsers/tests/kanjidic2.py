@@ -74,30 +74,3 @@ class Kanjidic2Test(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
-
-
-if __name__ == "__main__":
-    import sys, os
-
-    if len(sys.argv) < 2:
-        print _(u"Please specify a dictionary file.")
-        exit(-1)
-    try:
-        kp = KanjidicParser(sys.argv[1])
-    except Exception, e:
-        print _(u"Could not create KanjidicParser: %s") % unicode(e)
-        exit(-1)
-
-    if len(sys.argv) < 3:
-        print _(u"Please specify a kanji.  "
-                u"(Copy/paste, or Alt-Zenkaku/Hankaku)")
-        exit(-1)
-
-    if os.name == "nt":
-        charset = "cp932"
-    else:
-        charset = "utf-8"
-
-    for i, entry in enumerate(kp.search(sys.argv[2].decode(charset))):
-        print _(u"Entry %d:\n%s\n") % (i+1, entry.to_string())
