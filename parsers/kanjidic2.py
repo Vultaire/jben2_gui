@@ -28,12 +28,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""A parser for KANJIDIC2.
-
-This module is incomplete and currently just holds helper code for the
-KANJIDIC parser.
-
-"""
+"""A parser for KANJIDIC2."""
 
 import gzip, xml.sax, gettext
 gettext.install('pyjben', unicode=True)
