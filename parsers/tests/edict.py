@@ -11,25 +11,25 @@ SRC_NAME = "/".join((SRC_DIR, SRC_NAME))
 class EdictTest(unittest.TestCase):
 
     def setUp(self):
-        self.ep = edict.EdictParser(SRC_NAME)
+        self.parser = edict.EdictParser(SRC_NAME)
 
     def test_japanese_search(self):
         """EDICT: Search for Japanese word/phrase"""
         query = u"日本"
-        l = [entry for entry in self.ep.search(query)]
+        l = [entry for entry in self.parser.search(query)]
         self.assertTrue(len(l) > 0)
 
     def test_native_search(self):
         """EDICT: Search for non-Japanese word/phrase"""
         query = u"Japan"
-        l = [entry for entry in self.ep.search(query)]
+        l = [entry for entry in self.parser.search(query)]
         self.assertTrue(len(l) > 0)
 
     def test_unparsed(self):
         """EDICT: Check for unhandled EDICT fields"""
-        l = [k for k in self.ep.search(u"")]
+        l = [k for k in self.parser.search(u"")]
         unparsed = set()
-        for key, entry in self.ep.cache.iteritems():
+        for key, entry in self.parser.cache.iteritems():
             for item in entry.unparsed: unparsed.add(item)
         if unparsed:
             #self.fail(u"Unhandled fields found: %s" % u", ".join(unparsed))
@@ -38,12 +38,12 @@ class EdictTest(unittest.TestCase):
 
     def test_caching(self):
         """EDICT: Check that caching is working"""
-        self.assertFalse(self.ep.cache)
+        self.assertFalse(self.parser.cache)
         t = time.time()
         self.test_japanese_search()
         first_t = time.time() - t
 
-        self.assertTrue(self.ep.cache)
+        self.assertTrue(self.parser.cache)
         t = time.time()
         self.test_japanese_search()
         second_t = time.time() - t
@@ -54,14 +54,14 @@ class EdictTest(unittest.TestCase):
 
     def test_no_cache(self):
         """EDICT: Check that parser works without caching."""
-        self.ep = edict.EdictParser(SRC_NAME, use_cache=False)
+        self.parser = edict.EdictParser(SRC_NAME, use_cache=False)
 
-        self.assertFalse(self.ep.cache)
+        self.assertFalse(self.parser.cache)
         t = time.time()
         self.test_japanese_search()
         first_t = time.time() - t
 
-        self.assertFalse(self.ep.cache)
+        self.assertFalse(self.parser.cache)
         t = time.time()
         self.test_japanese_search()
         second_t = time.time() - t
@@ -70,7 +70,7 @@ class EdictTest(unittest.TestCase):
         print "\tSecond query time: %f" % second_t
 
     def tearDown(self):
-        self.ep = None
+        self.parser = None
 
 if __name__ == "__main__":
     unittest.main()

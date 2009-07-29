@@ -30,21 +30,47 @@
 
 """A basic parser for JMdict."""
 
-# Need to heavily revise this.
-# We get everything in, but things aren't properly associated.
+# Parsing is now handled, but some things are still needed:
 #
-# For each Entry:
-#  1 ID
-#  0+ kanji elements (kanji blob, info, priority)
-#  1+ reading elements (reading blob, info, priority)
-#  0/1 info elements (bibliography stuff, etc.)
-#  1+ sense elements (glosses, etc.)
+# 1. Passing in of the parser object, or some config structure, so
+#    that only desired fields are stored.  (Otherwise we'll waste more
+#    memory than necessary on our cache, and on JMdict there's a lot
+#    of stuff to store.)
+# 2. Indices
 #
-# 
+# HOW TO INDEX JMDICT ENTRIES
+#
+# JMdict is a Japanese-English dictionary file, however in practice it
+# is used for bidirectional searches.
+#
+# What we have: big list of entries, japanese readings/kanji as
+# central entries, glosses as native language entries, multiple
+# glosses per entry.
+#
+# Japanese indexing, *basic*
+# Entries to consider:
+#    reb+, keb*.  Index on both for sure.  Do first 
+# Indices
+# 1. Starts-with index: {first_char: set()} or {first_char: []}
+#    - We could do secondary buckets if desired, but let's just do one
+#      to start.
+#    - Separate dicts for readings/kanji?  Same?  (If separate, we
+#      need to search both...)
+#
+# Native language indexing
+# Entries to consider: gloss
+# Other factors: language (default: en, others supported)
 
+# - dict indexes can be made in the same way, but only one rather than
+#   the dual reading/kanji dicts for Japanese.
+# - Should be able to create indices in separate languages
+# - Should be able to restrict searches to a single language
+# FORMAT:
+# native_indices {lang: indices={}}
+# (Dict based on lang, maps to other indices}
 
 from xml.sax.handler import ContentHandler, DTDHandler, EntityResolver
-from xml.sax.xmlreader import InputSource, XMLReader
+from xml.sax.xmlreader import InputSource
 import xml.sax
 import gzip, gettext
 gettext.install('pyjben', unicode=True)
@@ -111,7 +137,7 @@ class JMDSAXHandler(ContentHandler):
         self.entry = None
         self.path = []
         self.full_keys = set()
-        self.data = {}
+        self.data = []
         self.node_content = ""
 
         self.use_cache = use_cache
@@ -249,12 +275,16 @@ class JMDSAXHandler(ContentHandler):
                         print node
                         raise Exception(u"Shouldn't-Happen-Error")
 
-                ent_seq = entry.ent_seq
-                if ent_seq in range(1000090, 2014140):
-                    print entry.to_string(), "\n"
-                if ent_seq >= 1000090:
-                    import sys
-                    sys.exit(-1)
+                # LATER: do some optimization if doing non-cached searches.
+                # (probably won't help many people though...)
+                #if not self.use_cache:
+                #    raise Exception(u"JMdict no-cache-mode not yet supported!")
+                #else:
+                #    self.data.append(entry)
+
+                # For now: all entries go into the data list.
+                self.data.append(entry)
+
                 entry = None
                 self.parsing = False
 
@@ -301,6 +331,19 @@ class JMdictParser(object):
         self.cache = None
         self.use_cache = use_cache
 
+        # All cached entries will be stored here
+        self.entries = []
+        self.entry_count = 0
+
+        # Indices
+        # Basic level index: key: set()
+        #     Alternatively: key: list (constant order)
+
+        self.j_ind = {}  # Japanese (ind_type: index)
+        self.n_ind = {}  # Native (lang: lang_indices)
+        #                      (lang: index)
+        self.index_list = ["starts_with"]  # List of indices to auto-create
+
     def load_via_sax(self, use_cache, search_str):
         if len(self.filename) >= 3 and self.filename[-3:] == ".gz":
             f = gzip.open(self.filename)
@@ -337,10 +380,44 @@ class JMdictParser(object):
 
             if self.use_cache: self.cache = data
 
-        for char in search_str:
-            kanji = data.get(char)
-            if kanji: yield kanji
+            self.create_indices(data, self.index_list)
 
+        # Add search logic here
+        i = 0
+        for entry in data:
+            i += 1
+            yield entry
+            if i >= 5: exit(0)
+
+    def create_indices(self, data, desired_indices):
+        """Creates desired indices for a set of input data."""
+        for i, entry in enumerate(data):
+            for index_name in desired_indices:
+                if index_name == "starts_with":
+                    # Make targets
+                    j_targets = set()
+                    n_targets = {}
+                    for k_ele in entry.k_ele:
+                        j_targets.add(k_ele[u"keb"][0])
+                    for r_ele in entry.r_ele:
+                        j_targets.add(r_ele[u"reb"][0])
+                    for sense in entry.sense:
+                        if not sense.has_key(u"gloss"): continue
+                        for gloss, lang, gender in sense[u"gloss"]:
+                            n_targets.setdefault(lang, set()).add(gloss[0])
+                    # Append to indices (assuming indices as lists)
+                    for target in j_targets:
+                        self.j_ind.setdefault(index_name, {}) \
+                            .setdefault(target, []) \
+                            .append(i)
+                    for lang, targ_set in n_targets.iteritems():
+                        for target in targ_set:
+                            self.n_ind.setdefault(lang, {}) \
+                                .setdefault(index_name, {}) \
+                                .setdefault(target, []) \
+                                .append(i)
+                else:
+                    raise Exception(u"Unsupported index type")
 
 if __name__ == "__main__":
     import sys, os
