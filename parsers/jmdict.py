@@ -365,7 +365,17 @@ class JMdictParser(object):
         f.close()
         return sh.data
 
-    def search(self, search_str):
+    def search(self, search_str, index="starts_with", n_langs=["eng"],
+               n_fallback=True):
+        """Search JMdict for a Japanese or native language query.
+
+        search_str: the query
+        index: index to use (valid values: starts_with, None)
+        n_langs: list of native languages to search for
+        n_fallback: If True, processes languages in a "fallback" fashion:
+                    for each entry examined, only look at the first language
+                    to have glosses and ignore the rest.
+        """
         data = None
         if self.use_cache: data = self.cache
         if not data:
@@ -382,15 +392,78 @@ class JMdictParser(object):
 
             self.create_indices(data, self.index_list)
 
-        # Add search logic here
-        i = 0
-        for entry in data:
-            i += 1
-            yield entry
-            if i >= 5: exit(0)
+        results = []
+        if index == "starts_with":
+            # Indexed lookup
+            key = search_str[0]
+
+            # Japanese first:
+            idx = self.j_ind.get(index)
+            if idx:
+                idx = idx.get(key)
+            if idx:
+                for entry in [data[i] for i in idx]:
+                    added = False
+                    for k_ele in entry.k_ele:
+                        if search_str == k_ele[u"keb"][:len(search_str)]:
+                            results.append(entry)
+                            added = True
+                            break
+                    if added: continue
+                    for r_ele in entry.r_ele:
+                        if search_str == r_ele[u"reb"][:len(search_str)]:
+                            results.append(entry)
+                            break
+
+            # Native language next:
+            # WEAKNESS: if we later support searching via other
+            # languages which use Chinese characters, we may end up
+            # with duplicates with this code.
+            for lang in n_langs:
+                search_keys = None
+                idx = self.n_ind.get(lang)
+                if idx:
+                    idx = idx.get(index)
+                if idx:
+                    idx = idx.get(key)
+                if idx:
+                    for entry in [data[i] for i in idx]:
+                        if n_fallback:
+                            # NOT YET IMPLEMENTED
+                            pass
+                        #else:
+
+                        for sense in entry.sense:
+                            for gloss, lang, gender in sense[u"gloss"]:
+                                if search_str == gloss[:len(search_str)]:
+                                    results.append(entry)
+                                    continue
+        elif not index:
+            # Non-indexed lookup
+            # WARNING: this could be VERY slow!
+            for entry in data:
+                # Japanese search:
+                # *** TO DO ***
+
+                # Native language search:
+                for sense in entry.sense:
+                    for gloss, lang, gender in sense[u"gloss"]:
+                        if lang not in n_langs:
+                            continue
+                        if search_str == gloss[:len(search_str)]:
+                            results.add(entry)
+                            break
+        else:
+            raise Exception(u"Unhandled index type: %s" % index)
+
+        return results
 
     def create_indices(self, data, desired_indices):
         """Creates desired indices for a set of input data."""
+        # Initialize indices
+        self.j_ind = {}
+        self.n_ind = {}
+
         for i, entry in enumerate(data):
             for index_name in desired_indices:
                 if index_name == "starts_with":

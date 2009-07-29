@@ -17,14 +17,45 @@ class JMdictTest(unittest.TestCase):
 
     def test_japanese_search(self):
         """JMDICT: Search for Japanese word/phrase"""
-        query = u"日本"
-        l = [entry for entry in self.parser.search(query)]
+        parser = self.parser
+        desired_indices = ["starts_with"]
+
+        data = self._parse_x_entries(SRC_NAME, 10)
+        parser.cache = data
+        parser.create_indices(data, desired_indices)
+
+        query = u"仝"
+        l = parser.search(query)
+        #print
+        #print "====="
+        #for entry in l:
+        #    print entry.to_string()
+        self.assertTrue(len(l) > 0)
+        #print "====="
+        query = u"おなじく"
+        l = parser.search(query)
+        #for entry in l:
+        #    print entry.to_string()
+        #print "====="
         self.assertTrue(len(l) > 0)
 
     def test_native_search(self):
         """JMDICT: Search for non-Japanese word/phrase"""
-        query = u"Japan"
-        l = [entry for entry in self.parser.search(query)]
+        # Let's cheat a little: reading in the whole JMdict will make
+        # our unit tests UNBEARABLY slow.
+        #
+        # This test will fail if "repetition mark" does not show up
+        # within the first 10 entries.  In such a case, the test will
+        # need to be updated.
+        parser = self.parser
+        desired_indices = ["starts_with"]
+
+        data = self._parse_x_entries(SRC_NAME, 10)
+        parser.cache = data
+        parser.create_indices(data, desired_indices)
+
+        query = u"repetition mark"
+        l = parser.search(query)
         self.assertTrue(len(l) > 0)
 
     def test_unparsed(self):
@@ -71,11 +102,12 @@ class JMdictTest(unittest.TestCase):
         print "\n\tFirst query time:  %f" % first_t
         print "\tSecond query time: %f" % second_t
 
-    def _parse_5_entries(self, filename):
-        """Helper function: reads 5 entries from the JMdict file.
+    def _parse_x_entries(self, filename, max_entries):
+        """Helper function: reads max_entries entries from the JMdict file.
 
-        The text for 5 entries of JMdict are naively read in, then
-        converted to a file-like object which the parser will use.
+        The text for max_entries entries of JMdict are naively read
+        in, then converted to a file-like object which the parser will
+        use.
 
         """
         # Copied from parsers.jmdict
@@ -84,8 +116,8 @@ class JMdictTest(unittest.TestCase):
         else:
             f = open(filename, "rb")
 
-        # Grab just the first 5 entries, then close f and make a new
-        # "f" via the StringIO lib.
+        # Grab just the first max_entries entries, then close f and
+        # make a new "f" via the StringIO lib.
         lines = []
         count = 0
         while True:
@@ -93,7 +125,7 @@ class JMdictTest(unittest.TestCase):
             lines.append(line)
             if "</entry>" in line:
                 count += 1
-                if count >= 5: break
+                if count >= max_entries: break
         f.close()
         lines.append("</JMdict>\n")
         f = StringIO("".join(lines))
@@ -116,14 +148,14 @@ class JMdictTest(unittest.TestCase):
 
     def test_limited_parse(self):
         """JMDICT: Parse 5 entries successfully."""
-        data = self._parse_5_entries(SRC_NAME)
+        data = self._parse_x_entries(SRC_NAME, 5)
         self.assertEqual(len(data), 5)
 
     def test_indexing(self):
         parser = self.parser
         desired_indices = ["starts_with"]
 
-        data = self._parse_5_entries(SRC_NAME)
+        data = self._parse_x_entries(SRC_NAME, 5)
 
         print "CREATING INDICES"
         parser.create_indices(data, desired_indices)
@@ -147,13 +179,14 @@ class JMdictTest(unittest.TestCase):
     def tearDown(self):
         self.parser = None
 
-    del test_japanese_search
-    del test_native_search
+    #del test_japanese_search
+    #del test_native_search
     del test_unparsed
     del test_caching
     del test_no_cache
 
     del test_limited_parse
+    del test_indexing
 
 if __name__ == "__main__":
     unittest.main()
