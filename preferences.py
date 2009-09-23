@@ -7,7 +7,7 @@
 # Created on: 20 December 2008
 
 from jben_global import *
-import re
+import sys, os, re
 
 options = {}
 """Maps preference key strings to stored option values."""
@@ -61,6 +61,13 @@ def load(filename=None):
             else:
                 raise
     else:
+        # The idea here was to load from the local directory tree
+        # first, then from the home directory if directed to do so.
+        #
+        # This may be changed to something simpler later, but the code
+        # is actually quite simple as is; perhaps I'll leave in this
+        # "switching" functionality.
+        #
         loaded = load("../%s/jben.cfg" % CFG_FOLDER)
         if not loaded or options["config_save_target"] == "home":
             env_path = os.getenv(HOME_ENV)
@@ -309,3 +316,33 @@ def __create_config_file_string():
     config_strs.sort()
     config_strs.insert(0, header)
     return "\n".join(config_strs) + "\n"
+
+def get_dict_path():
+    # Check folders in sequence for if they're writeable
+    # 1. hard-coded, UNIX: /usr/local/share/jben
+    # 2. hard-coded, UNIX: /usr/share/jben
+    # 3. relative link, global: ../share/jben
+    # 4. home folder
+
+    # It does no harm to have dictionaries installed at the global
+    # level; it's still up to the users if they want to use them.  So,
+    # we'll try to install at the highest priority levels first.
+    if os.name == "nt":
+        dirs = ["/usr/local/share/jben",
+                "/usr/share/jben"]
+    else:
+        dirs = []
+    dirs.append("../share/jben")
+    env_path = os.getenv(HOME_ENV)
+    if env_path:
+        dirs.append("%s/%s" % (env_path, CFG_FOLDER))
+
+    target = None
+    for path in dirs:
+        if not os.path.exists(path): continue
+        path = "%s/%s" % (path, "dicts")
+        if (os.path.exists(path) == False) or os.access(path, os.W_OK):
+            target = path
+            break
+
+    return target

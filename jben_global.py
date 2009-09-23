@@ -8,6 +8,9 @@
 
 import os
 
+import gettext
+gettext.install("jben")
+
 VERSION_STR = "1.99"
 """This is the current version of J-Ben."""
 
