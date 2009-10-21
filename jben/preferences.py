@@ -327,6 +327,13 @@ def get_dict_path():
     # It does no harm to have dictionaries installed at the global
     # level; it's still up to the users if they want to use them.  So,
     # we'll try to install at the highest priority levels first.
+
+    # Copied from dict_downloader.py:
+    # Should default to something like $HOME/.jben.d/dicts for single
+    # user install, or ../share/jben/dicts for all user install.
+    # ... "All user install" will initially NOT be supported, but will
+    # be later.
+
     if os.name == "nt":
         dirs = ["/usr/local/share/jben",
                 "/usr/share/jben"]
