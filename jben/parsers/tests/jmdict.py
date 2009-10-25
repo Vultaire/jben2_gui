@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+
 import unittest, time
 from cStringIO import StringIO
-from parsers import jmdict
+from ..parsers import jmdict
 from xml.sax.xmlreader import InputSource
 
 SRC_NAME = "jmdict"

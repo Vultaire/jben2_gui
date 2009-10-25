@@ -8,6 +8,7 @@
 
 import gtk
 
+
 class TabWordDict(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self, spacing = 5)

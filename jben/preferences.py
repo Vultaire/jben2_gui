@@ -6,7 +6,9 @@
 # Author: Paul Goins
 # Created on: 20 December 2008
 
-from jben_global import *
+from __future__ import absolute_import
+
+from jben.jben_global import *
 import sys, os, re
 
 options = {}

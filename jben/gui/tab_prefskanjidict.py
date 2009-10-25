@@ -6,8 +6,10 @@
 # Author: Paul Goins
 # Created on: 28 Nov 2008
 
+from __future__ import absolute_import
+
 import gtk
-from preferences import options
+from jben.preferences import options
 
 
 class TabPrefsKanjiDict(gtk.VBox):

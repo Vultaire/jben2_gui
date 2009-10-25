@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+
 import unittest, time
-from parsers import kanjidic
+from ..parsers import kanjidic
 
 SRC_NAME = "kanjidic"
 SRC_DIR = "../dicts"

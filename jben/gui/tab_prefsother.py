@@ -6,10 +6,13 @@
 # Author: Paul Goins
 # Created on: 28 Nov 2008
 
+from __future__ import absolute_import
+
 import gtk
 import os
 
-from preferences import options
+from jben.preferences import options
+
 
 class TabPrefsOther(gtk.VBox):
     def __init__(self):

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+
 import unittest, time
-from parsers import edict
+from ..parsers import edict
 
 SRC_NAME = "edict"
 SRC_DIR = "../dicts"

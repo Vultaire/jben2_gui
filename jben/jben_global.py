@@ -6,12 +6,13 @@
 # Author: Paul Goins
 # Created on: 25 Nov 2008
 
-import os
+from __future__ import absolute_import
 
+import os
 import gettext
 gettext.install("jben")
 
-VERSION_STR = "1.99"
+VERSION_STR = "1.9"
 """This is the current version of J-Ben."""
 
 # These were "constants" under the C++ interface.

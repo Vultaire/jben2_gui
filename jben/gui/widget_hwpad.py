@@ -11,6 +11,7 @@ import gtk, cairo
 import os
 from subprocess import Popen, PIPE
 
+
 class Point(object):
     def __init__(self, init_x, init_y):
         self.x = init_x

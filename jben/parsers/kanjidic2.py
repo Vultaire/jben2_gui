@@ -30,10 +30,12 @@
 
 """A parser for KANJIDIC2."""
 
+from __future__ import absolute_import
+
 import gzip, xml.sax, gettext
 gettext.install('pyjben', unicode=True)
 
-from parsers.kanjidic_common \
+from .kanjidic_common \
      import jstring_convert, kanjidic2_key_to_str, qcode_to_desc
 
 def jis_kuten_to_hex(kuten):

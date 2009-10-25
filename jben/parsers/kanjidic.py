@@ -36,10 +36,12 @@ modules in your own programs.
 
 """
 
+from __future__ import absolute_import
+
 import re, gzip, gettext
 gettext.install('pyjben', unicode=True)
 
-from parsers.kanjidic_common \
+from .kanjidic_common \
      import jstring_convert, kanjidic2_key_to_str, qcode_to_desc
 
 

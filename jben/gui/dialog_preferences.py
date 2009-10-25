@@ -6,14 +6,17 @@
 # Author: Paul Goins
 # Created on: 28 Nov 2008
 
+from __future__ import absolute_import
+
 import gtk
 import os
 
-from widget_storedsize import StoredSizeDialog
-from tab_prefskanjidict import TabPrefsKanjiDict
-from tab_prefsfonts     import TabPrefsFonts
-from tab_prefskanjitest import TabPrefsKanjiTest
-from tab_prefsother     import TabPrefsOther
+from .widget_storedsize import StoredSizeDialog
+from .tab_prefskanjidict import TabPrefsKanjiDict
+from .tab_prefsfonts import TabPrefsFonts
+from .tab_prefskanjitest import TabPrefsKanjiTest
+from .tab_prefsother import TabPrefsOther
+
 
 class DialogPreferences(StoredSizeDialog):
     def __init__(self, parent):

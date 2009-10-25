@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import preferences as p
+from __future__ import absolute_import
+
+import jben.preferences as p
 
 dicts = (("EDICT (Small, fast)"),
          #("EDICT2 (Smaller, fast) Recommended)"),

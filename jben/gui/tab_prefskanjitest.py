@@ -8,8 +8,10 @@
 # Note: Original author of this was Alain Bertrand.  I fixed some bugs,
 #       ported it to Python and rearranged some things.
 
+from __future__ import absolute_import
+
 import gtk
-from preferences import options
+from jben.preferences import options
 
 
 class TabPrefsKanjiTest(gtk.VBox):

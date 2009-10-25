@@ -8,6 +8,8 @@
 
 """J-Ben main module."""
 
+from __future__ import absolute_import
+
 import gettext
 gettext.install("jben")
 
@@ -15,19 +17,20 @@ import pygtk
 pygtk.require("2.0")
 import gtk
 
-from window_main import WindowMain
-import preferences
-
-from jben_global import *
+from jben.gui.window_main import WindowMain
+from jben.jben_global import *
+from jben import preferences
 
 def setup_global_icons():
-    icon1 = gtk.gdk.pixbuf_new_from_file("jben.xpm")
-    icon2 = gtk.gdk.pixbuf_new_from_file("jben_48.xpm")
-    icon3 = gtk.gdk.pixbuf_new_from_file("jben_32.xpm")
-    icon4 = gtk.gdk.pixbuf_new_from_file("jben_16.xpm")
+    icon1 = gtk.gdk.pixbuf_new_from_file("images/jben.xpm")
+    icon2 = gtk.gdk.pixbuf_new_from_file("images/jben_48.xpm")
+    icon3 = gtk.gdk.pixbuf_new_from_file("images/jben_32.xpm")
+    icon4 = gtk.gdk.pixbuf_new_from_file("images/jben_16.xpm")
     gtk.window_set_default_icon_list(icon1, icon2, icon3, icon4)
 
+
 class JBen(object):
+
     """Base class for J-Ben application."""
 
     def __init__(self):
