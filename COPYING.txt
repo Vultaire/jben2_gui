@@ -1,0 +1,8 @@
+Important: The J-Ben and jbparse packages are under different licenses.
+
+- J-Ben is under the GNU General Public License (GPL) version 2.
+- jbparse is an independent library written to support J-Ben, and is
+  released under a two-clause new style BSD license.
+
+For license details, see jben/COPYING.txt and jbparse/COPYING.txt
+respectively.
