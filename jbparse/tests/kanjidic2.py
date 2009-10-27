@@ -3,10 +3,10 @@
 from __future__ import absolute_import
 
 import unittest, time
-from ..parsers import kanjidic2
+from jbparse import kanjidic2
 
 SRC_NAME = "kanjidic2.xml"
-SRC_DIR = "../dicts"
+SRC_DIR = "../../dicts"
 
 SRC_NAME = "/".join((SRC_DIR, SRC_NAME))
 

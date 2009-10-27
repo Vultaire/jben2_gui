@@ -4,11 +4,11 @@ from __future__ import absolute_import
 
 import unittest, time
 from cStringIO import StringIO
-from ..parsers import jmdict
+from jbparse import jmdict
 from xml.sax.xmlreader import InputSource
 
 SRC_NAME = "jmdict"
-SRC_DIR = "../dicts"
+SRC_DIR = "../../dicts"
 
 SRC_NAME = "/".join((SRC_DIR, SRC_NAME))
 

@@ -3,10 +3,10 @@
 from __future__ import absolute_import
 
 import unittest, time
-from ..parsers import edict
+from jbparse import edict
 
 SRC_NAME = "edict"
-SRC_DIR = "../dicts"
+SRC_DIR = "../../dicts"
 
 SRC_NAME = "/".join((SRC_DIR, SRC_NAME))
 
