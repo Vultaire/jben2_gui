@@ -6,7 +6,7 @@ from jben import jben_global
 
 setup(name='jben',
       version=jben_global.VERSION_STR,
-      description='J-Ben parsing library',
+      description='J-Ben: A Japanese study program (pre-alpha)',
       author=jben_global.AUTHOR_NAME,
       author_email='general@vultaire.net',
       url='http://jben.vultaire.net/',
