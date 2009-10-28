@@ -12,7 +12,6 @@ setup(name='jben',
       url='http://jben.vultaire.net/',
       packages=['jben'],
       requires=['jbparse'],
-      data_files=['', ['COPYING.txt']],
       classifiers=[
           'Environment :: Win32 (MS Windows)',
           'Environment :: X11 Applications :: GTK',
