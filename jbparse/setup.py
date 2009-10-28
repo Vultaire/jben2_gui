@@ -11,7 +11,6 @@ setup(name='jbparse',
       url='http://jben.vultaire.net/',
       packages=['jbparse'],
       provides=['jbparse'],
-      data_files=['', ['COPYING.txt']],
       classifiers=[
           'Development Status :: 3 - Alpha',
           'Intended Audience :: Developers',
