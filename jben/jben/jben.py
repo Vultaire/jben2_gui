@@ -21,12 +21,14 @@ from jben.gui.window_main import WindowMain
 from jben.jben_global import *
 from jben import preferences
 
+from os import path
+
 def setup_global_icons():
-    icon1 = gtk.gdk.pixbuf_new_from_file("images/jben.xpm")
-    icon2 = gtk.gdk.pixbuf_new_from_file("images/jben_48.xpm")
-    icon3 = gtk.gdk.pixbuf_new_from_file("images/jben_32.xpm")
-    icon4 = gtk.gdk.pixbuf_new_from_file("images/jben_16.xpm")
-    gtk.window_set_default_icon_list(icon1, icon2, icon3, icon4)
+    files = ["jben.xpm", "jben_48.xpm", "jben_32.xpm", "jben_16.xpm"]
+    mod_path = path.dirname(__file__)
+    icons = [gtk.gdk.pixbuf_new_from_file(path.join(mod_path, "images", f))
+             for f in files]
+    gtk.window_set_default_icon_list(*icons)
 
 
 class JBen(object):
