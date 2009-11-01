@@ -70,11 +70,11 @@ def load(filename=None):
         # is actually quite simple as is; perhaps I'll leave in this
         # "switching" functionality.
         #
-        loaded = load("../%s/jben.cfg" % CFG_FOLDER)
+        loaded = load(os.path.join("..", CFG_FOLDER, "jben.cfg"))
         if not loaded or options["config_save_target"] == "home":
             env_path = os.getenv(HOME_ENV)
             if env_path:
-                loaded2 = load("%s/%s/jben.cfg" % (env_path, CFG_FOLDER))
+                loaded2 = load(os.path.join(env_path, CFG_FOLDER, "jben.cfg"))
                 if loaded2:
                     loaded = True
 
@@ -99,9 +99,11 @@ def save(filename=None):
     files = set()
     if filename is None:
         env_path = os.getenv(HOME_ENV)
-        if env_path: home_path = "%s/%s/jben.cfg" % (env_path, CFG_FOLDER)
-        else: home_path = None
-        mobile_path = "../%s/jben.cfg" % CFG_FOLDER
+        if env_path:
+            home_path = os.path.join(env_path, CFG_FOLDER, "jben.cfg")
+        else:
+            home_path = None
+        mobile_path = os.path.join("..", CFG_FOLDER, "jben.cfg")
 
         targets = (options["config_save_target"], original_save_target)
         for target in targets:
@@ -337,19 +339,19 @@ def get_dict_path():
     # be later.
 
     if os.name == "nt":
+        dirs = []
+    else:
         dirs = ["/usr/local/share/jben",
                 "/usr/share/jben"]
-    else:
-        dirs = []
     dirs.append("../share/jben")
     env_path = os.getenv(HOME_ENV)
     if env_path:
-        dirs.append("%s/%s" % (env_path, CFG_FOLDER))
+        dirs.append(os.path.join(env_path, CFG_FOLDER))
 
     target = None
     for path in dirs:
         if not os.path.exists(path): continue
-        path = "%s/%s" % (path, "dicts")
+        path = os.path.join(path, "dicts")
         if (os.path.exists(path) == False) or os.access(path, os.W_OK):
             target = path
             break
