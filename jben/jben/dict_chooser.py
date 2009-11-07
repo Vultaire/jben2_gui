@@ -75,6 +75,8 @@ def set_word_dicts(dicts):
 def set_kanji_dicts(dicts):
     set_dicts("dict.kanji", dicts)
 
+
+
 def console_chooser():
     """Select dictionaries from the console."""
 
@@ -168,7 +170,6 @@ def console_chooser():
         if choice == 'y':
             for f in needed_files:
                 download_dict(f)
-
 
 if __name__ == "__main__":
     p.load()

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Project: J-Ben, Python front-end
-# File: dialog_preferences.py
+# File: jben/gui/dialog/preferences.py
 # Author: Paul Goins
 # Created on: 28 Nov 2008
 
@@ -11,11 +11,11 @@ from __future__ import absolute_import
 import gtk
 import os
 
-from .widget_storedsize import StoredSizeDialog
-from .tab_prefskanjidict import TabPrefsKanjiDict
-from .tab_prefsfonts import TabPrefsFonts
-from .tab_prefskanjitest import TabPrefsKanjiTest
-from .tab_prefsother import TabPrefsOther
+from ..widget_storedsize import StoredSizeDialog
+from ..tab_prefskanjidict import TabPrefsKanjiDict
+from ..tab_prefsfonts import TabPrefsFonts
+from ..tab_prefskanjitest import TabPrefsKanjiTest
+from ..tab_prefsother import TabPrefsOther
 
 
 class DialogPreferences(StoredSizeDialog):

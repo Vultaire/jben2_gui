@@ -17,7 +17,7 @@ import pygtk
 pygtk.require("2.0")
 import gtk
 
-from jben.gui.window_main import WindowMain
+from jben.gui.window.main import WindowMain
 from jben.jben_global import *
 from jben import preferences
 

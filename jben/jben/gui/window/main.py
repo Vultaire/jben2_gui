@@ -11,14 +11,13 @@ from __future__ import absolute_import
 import gtk
 
 from jben.jben_global import *
-from .widget_hwpad import WidgetHWPad
-from .tab_worddict import TabWordDict
-from .tab_kanjidict import TabKanjiDict
-from .window_kanjihwsearch import WindowKanjiHWSearch
-from .dialog_vocablisteditor import DialogVocabListEditor
-from .dialog_kanjilisteditor import DialogKanjiListEditor
-from .dialog_preferences import DialogPreferences
-from .widget_storedsize import StoredSizeWindow
+from .kanjihwsearch import WindowKanjiHWSearch
+from ..tab_worddict import TabWordDict
+from ..tab_kanjidict import TabKanjiDict
+from jben.gui.dialog.vocablisteditor import DialogVocabListEditor
+from jben.gui.dialog.kanjilisteditor import DialogKanjiListEditor
+from jben.gui.dialog.preferences import DialogPreferences
+from ..widget_storedsize import StoredSizeWindow
 
 class InfoMessage(gtk.MessageDialog):
     def __init__(self, parent=None, title="", message="",

@@ -11,8 +11,8 @@ from __future__ import absolute_import
 import gtk
 
 from jben.jben_global import *
-from .widget_hwpad import WidgetHWPad
-from .widget_storedsize import StoredSizeWindow
+from jben.gui.widget.hwpad import WidgetHWPad
+from ..widget_storedsize import StoredSizeWindow
 
 
 class WindowKanjiHWSearch(StoredSizeWindow):

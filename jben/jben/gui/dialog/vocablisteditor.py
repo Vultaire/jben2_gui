@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 # Project: J-Ben, Python front-end
-# File: dialog_vocablisteditor.py
+# File: jben/gui/dialog/vocablisteditor.py
 # Author: Paul Goins
 # Created on: 26 Nov 2008
 
 from __future__ import absolute_import
 
 import gtk
-from .widget_storedsize import StoredSizeDialog
+from ..widget_storedsize import StoredSizeDialog
 
 class DialogVocabListEditor(StoredSizeDialog):
     def __init__(self, parent):
