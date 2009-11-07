@@ -17,7 +17,7 @@ from ..tab_kanjidict import TabKanjiDict
 from jben.gui.dialog.vocablisteditor import DialogVocabListEditor
 from jben.gui.dialog.kanjilisteditor import DialogKanjiListEditor
 from jben.gui.dialog.preferences import DialogPreferences
-from ..widget_storedsize import StoredSizeWindow
+from jben.gui.widget.storedsize import StoredSizeWindow
 
 class InfoMessage(gtk.MessageDialog):
     def __init__(self, parent=None, title="", message="",

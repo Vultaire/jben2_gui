@@ -9,7 +9,7 @@
 from __future__ import absolute_import
 
 import gtk
-from ..widget_storedsize import StoredSizeDialog
+from jben.gui.widget.storedsize import StoredSizeDialog
 
 class DialogVocabListEditor(StoredSizeDialog):
     def __init__(self, parent):

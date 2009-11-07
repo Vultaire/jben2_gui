@@ -12,7 +12,7 @@ import gtk
 
 from jben.jben_global import *
 from jben.gui.widget.hwpad import WidgetHWPad
-from ..widget_storedsize import StoredSizeWindow
+from jben.gui.widget.storedsize import StoredSizeWindow
 
 
 class WindowKanjiHWSearch(StoredSizeWindow):
