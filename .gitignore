@@ -2,3 +2,7 @@ gtk-redist
 *.pyc
 *~
 #*#
+jben/build
+jben/dist
+jbparse/build
+jbparse/dist
