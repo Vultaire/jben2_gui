@@ -15,17 +15,11 @@ from .kanjihwsearch import WindowKanjiHWSearch
 from ..widget.worddict import TabWordDict
 from ..widget.kanjidict import TabKanjiDict
 from ..widget.storedsize import StoredSizeWindow
+from ..widget.infomessage import show_message
 from ..dialog.vocablisteditor import DialogVocabListEditor
 from ..dialog.kanjilisteditor import DialogKanjiListEditor
 from ..dialog.preferences import DialogPreferences
 
-class InfoMessage(gtk.MessageDialog):
-    def __init__(self, parent=None, title="", message="",
-                 type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK):
-        gtk.MessageDialog.__init__(self, parent,
-                                   gtk.DIALOG_MODAL, type,
-                                   buttons, message)
-	self.set_title(title)
 
 class WindowMain(StoredSizeWindow):
     """The main GUI of J-Ben."""
@@ -175,10 +169,8 @@ class WindowMain(StoredSizeWindow):
         # * clear dictionary panels (no cheating, at least not that easily!)
         # * show main test dialog
         # * show test results dialog ("post-test")
-        im = InfoMessage(self, _("Not yet implemented"),
-                         _("Sorry, this has not yet been re-implemented."))
-        im.run()
-        im.destroy()
+        show_message(self, _("Not yet implemented"),
+                     _("Sorry, this has not yet been re-implemented."))
 
     def on_menu_tools_hand(self, widget):
         print "on_menu_tools_hand"
@@ -188,10 +180,8 @@ class WindowMain(StoredSizeWindow):
 
     def on_menu_tools_kanji_search(self, widget):
         print "on_menu_tools_kanji_search"
-        im = InfoMessage(self, _("Not yet implemented"),
-                         _("Sorry, this has not yet been re-implemented."))
-        im.run()
-        im.destroy()
+        show_message(self, _("Not yet implemented"),
+                     _("Sorry, this has not yet been re-implemented."))
 
     def on_menu_help_about(self, widget):
         message = _(
@@ -221,10 +211,7 @@ class WindowMain(StoredSizeWindow):
                  jben_globals.AUTHOR_NAME,
                  jben_globals.COPYRIGHT_DATE)
 
-        im = InfoMessage(self, _("About %s") % jben_globals.PROGRAM_NAME,
-                         message)
-        im.run()
-        im.destroy()
+        show_message(self, _("About %s") % jben_globals.PROGRAM_NAME, message)
 
     def on_menu_help_license(self, widget):
         message = _(
@@ -253,6 +240,4 @@ class WindowMain(StoredSizeWindow):
             "directory."
             )
 
-        im = InfoMessage(self, _("License Information"), message)
-	im.run()
-        im.destroy()
+        show_message(self, _("License Information"), message)

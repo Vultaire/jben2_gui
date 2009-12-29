@@ -15,12 +15,9 @@ from __future__ import absolute_import
 import sys, os, re
 from jben import jben_globals
 
-def make_alnum_tuple(str):
+def make_alnum_list(str):
     # From Chris Hulan's alphanum.py chunkify function, available at
     # http://www.davekoelle.com/alphanum.html.
-    print "==========="
-    print str
-    print "==========="
     chunks = re.findall("(\d+|\D+)", str)
     chunks = [re.match('\d',x) and int(x) or x for x in chunks]
     return chunks
@@ -28,7 +25,7 @@ def make_alnum_tuple(str):
 
 class Preferences(dict):
 
-    CURRENT_CONFIG_VERSION = make_alnum_tuple("2.0")
+    CURRENT_CONFIG_VERSION = make_alnum_list("2.0")
 
     def __init__(self):
         dict.__init__(self)
@@ -42,7 +39,7 @@ class Preferences(dict):
         self.original_save_target = self["config_save_target"]
 
     def is_outdated(self):
-        version = make_alnum_tuple(self.get('config_version', "0"))
+        version = make_alnum_list(self.get('config_version', "0"))
         return version < Preferences.CURRENT_CONFIG_VERSION
 
     def load(self, filename=None):

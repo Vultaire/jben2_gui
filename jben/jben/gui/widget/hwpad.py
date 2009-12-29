@@ -7,9 +7,15 @@
 # Author: Paul Goins
 # Created on: 25 Nov 2008
 
+# I think I originally wrote this to be a generic writing pad object,
+# but currently it is linked specifically into kanji handwriting
+# recognition.
+
 import gtk, cairo
 import os
 from subprocess import Popen, PIPE
+
+from .infomessage import show_message
 
 
 class Point(object):
@@ -153,6 +159,22 @@ class WidgetHWPad(gtk.DrawingArea):
         else:
             exe_name = "/home/vultaire/tmp/jben/bin/linux/release/kpengine/jben_kpengine"
             data_dir = "/home/vultaire/code/projects/jben/src/kpengine"
+
+        if not os.path.exists(exe_name) or not os.path.isfile(exe_name):
+            show_message(
+                None, _("Could not find jben_kpengine"),
+                _("J-Ben currently requires the jben_kpengine executable from "
+                  "a J-Ben 1.x.x release to perform handwriting recognition.  "
+                  "Since it could not be found, this feature will not work."))
+            return
+
+        elif not os.path.exists(data_dir) or not os.path.isdir(data_dir):
+            show_message(
+                None, _("Could not find kpengine_data"),
+                _("J-Ben currently requires the kpengine data from "
+                  "a J-Ben 1.x.x release to perform handwriting recognition.  "
+                  "Since it could not be found, this feature will not work."))
+            return
 
 
         # Line format:
