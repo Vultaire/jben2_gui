@@ -18,36 +18,34 @@ pygtk.require("2.0")
 import gtk
 
 from jben.gui.window.main import WindowMain
-from jben.jben_global import *
-from jben import preferences
+from jben.preferences import Preferences
+from jben import global_refs
 
 from os import path
-
-def setup_global_icons():
-    files = ["jben.xpm", "jben_48.xpm", "jben_32.xpm", "jben_16.xpm"]
-    mod_path = path.dirname(__file__)
-    icons = [gtk.gdk.pixbuf_new_from_file(path.join(mod_path, "images", f))
-             for f in files]
-    gtk.window_set_default_icon_list(*icons)
-
 
 class JBen(object):
 
     """Base class for J-Ben application."""
 
     def __init__(self):
-        setup_global_icons()
-        preferences.set_default_prefs()
-        if preferences.load():
-            # Only does something if a config file is out of date.
-            preferences.upgrade_config_file()
+        # Init globals
+        global_refs.prefs = Preferences()
+        # Init app object vars
+        self.setup_global_icons()
+
+    def setup_global_icons(self):
+        files = ["jben.xpm", "jben_48.xpm", "jben_32.xpm", "jben_16.xpm"]
+        mod_path = path.dirname(__file__)
+        icons = [gtk.gdk.pixbuf_new_from_file(
+                path.join(mod_path, "images", f))
+                 for f in files]
+        gtk.window_set_default_icon_list(*icons)
 
     def main(self):
         jben_win = WindowMain()
         jben_win.show_all()
         gtk.main()
-
-        preferences.save()
+        global_refs.prefs.save()
 
 if __name__ == "__main__":
     app = JBen()

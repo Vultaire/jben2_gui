@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 import gtk
-from jben import preferences
+from jben import global_refs
 
 
 class StoredSizeBase(object):
@@ -28,9 +28,10 @@ class StoredSizeBase(object):
 
     def __init__(self, param, width=-1, height=-1):
         self.param_name = param
+        prefs = global_refs.prefs
         pref = None
         if param:
-            pref = preferences.options.get(param)
+            pref = prefs.get(param)
         if pref:
             width, height = [int(v) for v in pref.split("x", 1)]
         self.set_default_size(width, height)
@@ -42,7 +43,8 @@ class StoredSizeBase(object):
         self.maximized = False
 
     def delete_event(self, widget, event, data=None):
-        preferences.options[self.param_name] = "%dx%d" % self.stored_size
+        prefs = global_refs.prefs
+        prefs[self.param_name] = "%dx%d" % self.stored_size
         return False
 
     # Not sure how best to handle size tracking *ONLY* when *NOT* maximized...
@@ -73,7 +75,7 @@ class StoredSizeBase(object):
 
 class StoredSizeWindow(gtk.Window, StoredSizeBase):
 
-    """Modified gtk.Window with size stored in the preferences singleton.
+    """Modified gtk.Window with size stored in the preferences object.
 
     Although defaults are defined, this class really expects the first 3
     values to be explicitly set, and then any remaining args will be properly
@@ -88,7 +90,7 @@ class StoredSizeWindow(gtk.Window, StoredSizeBase):
 
 class StoredSizeDialog(gtk.Dialog, StoredSizeBase):
 
-    """Modified gtk.Dialog with size stored in the preferences singleton.
+    """Modified gtk.Dialog with size stored in the preferences object.
 
     Although defaults are defined, this class really expects the first 3
     values to be explicitly set, and then any remaining args will be properly

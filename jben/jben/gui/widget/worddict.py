@@ -9,6 +9,26 @@
 from __future__ import absolute_import
 
 from .search_frame import SearchFrame
+from jbparse import edict, jmdict
+
+#self.parser = edict.EdictParser(SRC_NAME)
+#"""EDICT: Search for Japanese word/phrase"""
+#query = u"日本"
+#l = [entry for entry in self.parser.search(query)]
+#self.assertTrue(len(l) > 0)
+
+#self.parser = jmdict.JMdictParser(SRC_NAME)
+#
+#"""JMDICT: Search for Japanese word/phrase"""
+#parser = self.parser
+#desired_indices = ["starts_with"]
+#
+#data = self._parse_x_entries(SRC_NAME, 10)
+#parser.cache = data
+#parser.create_indices(data, desired_indices)
+#
+#query = u"仝"
+#l = parser.search(query)
 
 
 class TabWordDict(SearchFrame):

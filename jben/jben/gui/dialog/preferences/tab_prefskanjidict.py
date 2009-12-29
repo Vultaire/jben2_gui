@@ -9,7 +9,7 @@
 from __future__ import absolute_import
 
 import gtk
-from jben.preferences import options
+from jben import global_refs
 
 
 class TabPrefsKanjiDict(gtk.VBox):
@@ -188,64 +188,68 @@ class TabPrefsKanjiDict(gtk.VBox):
     def update_gui(self):
         # This function -does- fudge things a little, but the average user
         # should not notice.
+        prefs = global_refs.prefs
+
         self.chkReadings.set_active(
-            options.get("kdict.render.kunyomi", False))
+            prefs.get("kdict.render.kunyomi", False))
         self.chkMeanings.set_active(
-            options.get("kdict.render.meaning", False))
+            prefs.get("kdict.render.meaning", False))
         self.chkHighImp.set_active(
-            options.get("kdict.render.stroke_count", False))
+            prefs.get("kdict.render.stroke_count", False))
         self.chkMultiRad.set_active(
-            options.get("kdict.render.radical_list", False))
+            prefs.get("kdict.render.radical_list", False))
         self.chkDict.set_active(
-            options.get("kdict.render.dictionaries", False))
+            prefs.get("kdict.render.dictionaries", False))
         self.chkVocabCrossRef.set_active(
-            options.get("kdict.render.vocab_cross_ref", False))
+            prefs.get("kdict.render.vocab_cross_ref", False))
         self.chkLowImp.set_active(
-            options.get("kdict.render.cross_ref", False))
+            prefs.get("kdict.render.cross_ref", False))
         self.chkSodStatic.set_active(
-            options.get("kdict.render.kanjicafe_sodas", False))
+            prefs.get("kdict.render.kanjicafe_sodas", False))
         self.chkSodAnim.set_active(
-            options.get("kdict.render.kanjicafe_sods", False))
+            prefs.get("kdict.render.kanjicafe_sods", False))
 
         # Dicts
         for key, obj in self.dict_buttons:
-            obj.set_active(options.get(key, False))
+            obj.set_active(prefs.get(key, False))
 
     def update_prefs(self):
+        prefs = global_refs.prefs
+
         b = self.chkReadings.get_active()
-        options["kdict.render.kunyomi"] = b
-        options["kdict.render.onyomi"] = b
-        options["kdict.render.nanori"] = b
+        prefs["kdict.render.kunyomi"] = b
+        prefs["kdict.render.onyomi"] = b
+        prefs["kdict.render.nanori"] = b
         b = self.chkMeanings.get_active()
-        options["kdict.render.meaning"] = b
+        prefs["kdict.render.meaning"] = b
         b = self.chkHighImp.get_active()
-        options["kdict.render.stroke_count"] = b
-        options["kdict.render.jlpt_level"] = b
-        options["kdict.render.jouyou_grade"] = b
-        options["kdict.render.frequency"] = b
+        prefs["kdict.render.stroke_count"] = b
+        prefs["kdict.render.jlpt_level"] = b
+        prefs["kdict.render.jouyou_grade"] = b
+        prefs["kdict.render.frequency"] = b
         b = self.chkMultiRad.get_active()
-        options["kdict.render.radical_list"] = b
+        prefs["kdict.render.radical_list"] = b
         b = self.chkDict.get_active()
-        options["kdict.render.dictionaries"] = b
+        prefs["kdict.render.dictionaries"] = b
         b = self.chkVocabCrossRef.get_active()
-        options["kdict.render.vocab_cross_ref"] = b
+        prefs["kdict.render.vocab_cross_ref"] = b
         b = self.chkLowImp.get_active()
-        options["kdict.render.cross_ref"] = b
-        options["kdict.render.jis-208"] = b
-        options["kdict.render.jis-212"] = b
-        options["kdict.render.jis-213"] = b
-        options["kdict.render.nelson_radical"] = b
-        options["kdict.render.kangxi_radical"] = b
-        options["kdict.render.korean"] = b
-        options["kdict.render.korean_roman"] = b
-        options["kdict.render.pinyin_roman"] = b
-        options["kdict.render.radical_name"] = b
-        options["kdict.render.unicode"] = b
+        prefs["kdict.render.cross_ref"] = b
+        prefs["kdict.render.jis-208"] = b
+        prefs["kdict.render.jis-212"] = b
+        prefs["kdict.render.jis-213"] = b
+        prefs["kdict.render.nelson_radical"] = b
+        prefs["kdict.render.kangxi_radical"] = b
+        prefs["kdict.render.korean"] = b
+        prefs["kdict.render.korean_roman"] = b
+        prefs["kdict.render.pinyin_roman"] = b
+        prefs["kdict.render.radical_name"] = b
+        prefs["kdict.render.unicode"] = b
         b = self.chkSodStatic.get_active()
-        options["kdict.render.kanjicafe_sodas"] = b
+        prefs["kdict.render.kanjicafe_sodas"] = b
         b = self.chkSodAnim.get_active()
-        options["kdict.render.kanjicafe_sods"] = b
+        prefs["kdict.render.kanjicafe_sods"] = b
 
         # Dicts
         for key, obj in self.dict_buttons:
-            options[key] = obj.get_active()
+            prefs[key] = obj.get_active()

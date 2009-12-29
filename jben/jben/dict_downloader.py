@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 import urllib2, sys, os, random
-import jben.preferences as p
+from jben.preferences import Preferences
 
 # The following is shamelessly copied from:
 # http://ftp.monash.edu.au/pub/nihongo/.message

@@ -10,15 +10,16 @@ from __future__ import absolute_import
 
 import gtk
 
-from jben.jben_global import *
-from jben.gui.widget.hwpad import WidgetHWPad
-from jben.gui.widget.storedsize import StoredSizeWindow
+from jben import jben_globals
+from ..widget.hwpad import WidgetHWPad
+from ..widget.storedsize import StoredSizeWindow
 
 
 class WindowKanjiHWSearch(StoredSizeWindow):
     def __init__(self, param="gui.kanjihwsearch.size"):
         StoredSizeWindow.__init__(self, param, 200, 230, gtk.WINDOW_TOPLEVEL)
-        self.set_title(_("%s: Kanji Handwriting Pad") % PROGRAM_NAME)
+        self.set_title(_("%s: Kanji Handwriting Pad")
+                       % jben_globals.PROGRAM_NAME)
         self.set_border_width(5)
 
         contents = gtk.VBox(spacing = 5)

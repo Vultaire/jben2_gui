@@ -11,7 +11,7 @@ from __future__ import absolute_import
 import gtk
 import os
 
-from jben.preferences import options
+from jben import global_refs
 
 
 class TabPrefsOther(gtk.VBox):
@@ -21,11 +21,12 @@ class TabPrefsOther(gtk.VBox):
 
         # Not sure what the os.name is under windows; the below is temporary.
         if os.name == "nt":
+            prefs = global_refs.prefs
             # Windows only: "mobile mode"
             self.chkMobile = gtk.CheckButton(
                 _("Mobile mode (settings saved to current directory)"))
             self.chkMobile.set_active(
-                str(options.get("config_save_target")) == "mobile")
+                str(prefs.get("config_save_target")) == "mobile")
             self.chkMobile.connect("toggled", self.on_mobile_toggle)
             self.pack_start(self.chkMobile, expand = False)
 
@@ -35,4 +36,4 @@ class TabPrefsOther(gtk.VBox):
     def update_prefs(self):
         if self.chkMobile.get_active(): s = "mobile"
         else: s = "home"
-        options["config_save_target"] = s
+        global_refs.prefs["config_save_target"] = s

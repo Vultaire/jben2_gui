@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 import sys, os
-import jben.preferences as p
+from jben.preferences import Preferences
 from jben.console import y_or_n
 from jben.dict_downloader import download_dict
 
@@ -55,19 +55,20 @@ def set_dicts(option_key, d_entries):
     """
 
     # Clear previous entries
-    keys = [k for k in p.options if k.find(option_key) == 0]
+    prefs = refs.prefs
+    keys = [k for k in prefs if k.find(option_key) == 0]
     keys.sort()
     for k in keys:
-        #print "%s: %s" % (k, str(p.options[k]))
-        del p.options[k]
+        #print "%s: %s" % (k, str(prefs[k]))
+        del prefs[k]
     # Store new entries
     for i, de in enumerate(d_entries):
         i += 1
         basekey = "%s.%d" % (option_key, i)
         filekey = "%s.filename" % basekey
         encodekey = "%s.encoding" % basekey
-        p.options[filekey] = de.filename
-        p.options[encodekey] = de.encoding
+        prefs[filekey] = de.filename
+        prefs[encodekey] = de.encoding
 
 def set_word_dicts(dicts):
     set_dicts("dict.word", dicts)
@@ -135,24 +136,25 @@ def console_chooser():
     # ...confirm changes?
     print "You've chosen the following settings:"
     print
-    word_keys = [k for k in p.options if k.find("dict.word") == 0]
-    kanji_keys = [k for k in p.options if k.find("dict.kanji") == 0]
+    prefs = refs.prefs
+    word_keys = [k for k in prefs if k.find("dict.word") == 0]
+    kanji_keys = [k for k in prefs if k.find("dict.kanji") == 0]
     keys = word_keys + kanji_keys
     keys.sort()
     for k in keys:
-        print "\t%s: %s" % (k, p.options[k])
+        print "\t%s: %s" % (k, prefs[k])
     print
     choice = y_or_n("Is this okay?", "n")
 
     if choice != 'y':
         return
-    p.save()
+    prefs.save()
 
     # Check existence of dictionary files.  If some are not present,
     # offer to download.
-    dpath = p.get_dict_path()
+    dpath = prefs.get_dict_path()
     fn_keys = [k for k in keys if "filename" in k]
-    files = [p.options[k] for k in fn_keys]
+    files = [prefs[k] for k in fn_keys]
     fnames = [os.path.join(dpath, fname) for fname in files]
     needed_files = [os.path.split(fname)[-1] for fname in fnames
                     if not os.path.exists(fname)]
@@ -172,5 +174,4 @@ def console_chooser():
                 download_dict(f)
 
 if __name__ == "__main__":
-    p.load()
     console_chooser()

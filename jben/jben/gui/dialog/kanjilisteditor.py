@@ -9,7 +9,7 @@
 from __future__ import absolute_import
 
 import gtk
-from jben.gui.widget.storedsize import StoredSizeDialog
+from ..widget.storedsize import StoredSizeDialog
 
 class DialogKanjiListEditor(StoredSizeDialog):
     def __init__(self, parent):

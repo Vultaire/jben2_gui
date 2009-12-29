@@ -11,7 +11,7 @@
 from __future__ import absolute_import
 
 import gtk
-from jben.preferences import options
+from jben import global_refs
 
 
 class TabPrefsKanjiTest(gtk.VBox):
@@ -46,12 +46,13 @@ class TabPrefsKanjiTest(gtk.VBox):
             ("keys.kanjitest.stop", _("Stop drill: "))
             ]
         self.shortcut_ctls = []
+        prefs = global_refs.prefs
         for key, label_str in strings:
             label = gtk.Label(label_str)
             label.set_alignment(0.0, 0.5)
 
             entry = gtk.Entry()
-            keyval = options.get(key)
+            keyval = prefs.get(key)
             if keyval:
                 keyval = int(keyval)
                 uval = gtk.gdk.keyval_to_unicode(keyval)
@@ -109,10 +110,11 @@ class TabPrefsKanjiTest(gtk.VBox):
         return True
 
     def update_prefs(self):
+        prefs = global_refs.prefs
         for key, label, entry in self.shortcut_ctls:
             s = entry.get_text()
             if not s.strip():
-                options.pop(key, None)
+                prefs.pop(key, None)
             else:
                 uval = ord(s.decode())
-                options[key] = str(gtk.gdk.unicode_to_keyval(uval))
+                prefs[key] = str(gtk.gdk.unicode_to_keyval(uval))

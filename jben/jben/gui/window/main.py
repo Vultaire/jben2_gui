@@ -10,14 +10,14 @@ from __future__ import absolute_import
 
 import gtk
 
-from jben.jben_global import *
+from jben import jben_globals
 from .kanjihwsearch import WindowKanjiHWSearch
-from ..tab_worddict import TabWordDict
-from ..tab_kanjidict import TabKanjiDict
-from jben.gui.dialog.vocablisteditor import DialogVocabListEditor
-from jben.gui.dialog.kanjilisteditor import DialogKanjiListEditor
-from jben.gui.dialog.preferences import DialogPreferences
-from jben.gui.widget.storedsize import StoredSizeWindow
+from ..widget.worddict import TabWordDict
+from ..widget.kanjidict import TabKanjiDict
+from ..widget.storedsize import StoredSizeWindow
+from ..dialog.vocablisteditor import DialogVocabListEditor
+from ..dialog.kanjilisteditor import DialogKanjiListEditor
+from ..dialog.preferences import DialogPreferences
 
 class InfoMessage(gtk.MessageDialog):
     def __init__(self, parent=None, title="", message="",
@@ -33,7 +33,7 @@ class WindowMain(StoredSizeWindow):
     def __init__(self, param="gui.main.size"):
         StoredSizeWindow.__init__(self, param, 600, 400, gtk.WINDOW_TOPLEVEL)
         self.connect("destroy", self.destroy)
-        self.set_title(PROGRAM_NAME)
+        self.set_title(jben_globals.PROGRAM_NAME)
 
         self.menu = self.create_menu()
         self.children = self.create_children()
@@ -216,9 +216,13 @@ class WindowMain(StoredSizeWindow):
 
             "See \"Help->License Information...\" for important license "
             "details."
-            ) % (PROGRAM_NAME, VERSION_STR, AUTHOR_NAME, COPYRIGHT_DATE)
+            ) % (jben_globals.PROGRAM_NAME,
+                 jben_globals.VERSION_STR,
+                 jben_globals.AUTHOR_NAME,
+                 jben_globals.COPYRIGHT_DATE)
 
-        im = InfoMessage(self, _("About %s") % PROGRAM_NAME, message)
+        im = InfoMessage(self, _("About %s") % jben_globals.PROGRAM_NAME,
+                         message)
         im.run()
         im.destroy()
 

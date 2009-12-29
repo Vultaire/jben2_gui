@@ -11,11 +11,11 @@ from __future__ import absolute_import
 import gtk
 import os
 
-from jben.gui.widget.storedsize import StoredSizeDialog
-from ..tab_prefskanjidict import TabPrefsKanjiDict
-from ..tab_prefsfonts import TabPrefsFonts
-from ..tab_prefskanjitest import TabPrefsKanjiTest
-from ..tab_prefsother import TabPrefsOther
+from ...widget.storedsize import StoredSizeDialog
+from .tab_prefskanjidict import TabPrefsKanjiDict
+from .tab_prefsfonts import TabPrefsFonts
+from .tab_prefskanjitest import TabPrefsKanjiTest
+from .tab_prefsother import TabPrefsOther
 
 
 class DialogPreferences(StoredSizeDialog):

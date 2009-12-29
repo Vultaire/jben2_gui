@@ -10,7 +10,7 @@ from __future__ import absolute_import
 
 import gtk
 import os
-from jben.preferences import options
+from jben import global_refs
 
 
 class TabPrefsFonts(gtk.VBox):
@@ -64,7 +64,8 @@ class TabPrefsFonts(gtk.VBox):
         self.pack_start(table, expand = False);
 
     def get_font_name(self, key):
-        font_name = options.get(key)
+        prefs = global_refs.prefs
+        font_name = prefs.get(key)
         if not font_name:
             if os.name == "nt":
                 if key == "font.native": return "Tahoma 12"
@@ -110,10 +111,11 @@ class TabPrefsFonts(gtk.VBox):
             self.update_font_control(ctrls, textview.font_name)
 
     def update_prefs(self):
+        prefs = global_refs.prefs
         for key, label, textview, button in self.controls:
             buf = textview.get_buffer()
             s = buf.get_start_iter()
             e = buf.get_end_iter()
             text = textview.get_buffer().get_text(s, e, False)
-            options[key] = text
+            prefs[key] = text
             print "Setting '%s' to '%s'" % (key, text)
