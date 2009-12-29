@@ -53,7 +53,6 @@ class Preferences(dict):
         "mobile" installs), followed by the user's home directory.
 
         """
-        global original_save_target
         loaded = False
 
         if filename:
@@ -118,7 +117,7 @@ class Preferences(dict):
         both files and decide which one to use.
 
         """
-        save_data = __create_config_file_string()
+        save_data = self.__create_config_file_string()
         #print "save_data = [%s]" % save_data
 
         files = set()
@@ -132,7 +131,7 @@ class Preferences(dict):
             mobile_path = os.path.join(
                 "..", jben_globals.CFG_FOLDER, "jben.cfg")
 
-            targets = (self["config_save_target"], original_save_target)
+            targets = (self["config_save_target"], self.original_save_target)
             for target in targets:
                 if target == "unset": target = "home"
                 if target == "mobile" or not home_path:
