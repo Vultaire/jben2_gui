@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from distutils.core import setup
-from jben import jben_global
+from jben import jben_globals
 
 setup(name='jben',
-      version=jben_global.VERSION_STR,
+      version=jben_globals.VERSION_STR,
       description='J-Ben: A Japanese study program (pre-alpha)',
-      author=jben_global.AUTHOR_NAME,
+      author=jben_globals.AUTHOR_NAME,
       author_email='general@vultaire.net',
       url='http://jben.vultaire.net/',
       packages=[

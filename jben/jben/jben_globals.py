@@ -12,7 +12,7 @@ import os
 import gettext
 gettext.install("jben")
 
-VERSION_STR = "1.9"
+VERSION_STR = "1.91"
 """This is the current version of J-Ben."""
 
 # These were "constants" under the C++ interface.
