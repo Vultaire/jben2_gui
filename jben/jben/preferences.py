@@ -14,18 +14,12 @@ from __future__ import absolute_import
 
 import sys, os, re
 from jben import jben_globals
-
-def make_alnum_list(str):
-    # From Chris Hulan's alphanum.py chunkify function, available at
-    # http://www.davekoelle.com/alphanum.html.
-    chunks = re.findall("(\d+|\D+)", str)
-    chunks = [re.match('\d',x) and int(x) or x for x in chunks]
-    return chunks
+from jben.alphanum import make_alphanum_list
 
 
 class Preferences(dict):
 
-    CURRENT_CONFIG_VERSION = make_alnum_list("2.0")
+    CURRENT_CONFIG_VERSION = "2.0"
 
     def __init__(self):
         dict.__init__(self)
@@ -39,8 +33,8 @@ class Preferences(dict):
         self.original_save_target = self["config_save_target"]
 
     def is_outdated(self):
-        version = make_alnum_list(self.get('config_version', "0"))
-        return version < Preferences.CURRENT_CONFIG_VERSION
+        version = make_alphanum_list(self.get('config_version', "0"))
+        return version < make_alphanum_list(Preferences.CURRENT_CONFIG_VERSION)
 
     def load(self, filename=None):
         """Load preferences from a config file.
@@ -228,30 +222,10 @@ class Preferences(dict):
         # Identifiers are of the form "jben_obj.dict_type.file[#]".  Dicts with the
         # same format should share the same dict_type and add a file number.
 
-        self["kdict.kanjidic2.file"] = (jben_globals.JB_DATADIR
-                                        + "/dicts/kanjidic2.xml")
-        self["kdict.kanjidic.file"] = (jben_globals.JB_DATADIR
-                                       + "/dicts/kanjidic")
-        self["kdict.kanjidic.file2"] = (jben_globals.JB_DATADIR
-                                        + "/dicts/kanjd212")
-        self["kdict.kradfile.file"] = (jben_globals.JB_DATADIR
-                                       + "/dicts/kradfile")
-        self["kdict.radkfile.file"] = (jben_globals.JB_DATADIR
-                                       + "/dicts/radkfile")
-        self["wdict.edict.file"] = (jben_globals.JB_DATADIR
-                                    + "/dicts/edict")
-        self["wdict.edict2.file"] = (jben_globals.JB_DATADIR
-                                     + "/dicts/edict2")
+        # NEW FORMAT: simple list of dictionaries for kanji/words
+        self["dictfile.kanji.1.filename"] = "kanjidic.gz"
+        self["dictfile.word.1.filename"] = "edict.gz"
 
-        # J-Ben's internal encoding is UTF-8, however most of Jim Breen's non-XML
-        # dict files are in EUC-JP.  We should allow the program to support
-        # these files.
-        self["wdict.edict.file.encoding"] = "euc-jp"
-        self["wdict.edict2.file.encoding"] = "euc-jp"
-        self["kdict.kanjidic.file.encoding"] = "euc-jp"
-        self["kdict.kanjidic.file2.encoding"] = "euc-jp"
-        self["kdict.kradfile.file.encoding"] = "euc-jp"
-        self["kdict.radkfile.file.encoding"] = "euc-jp"
         # Specify JIS encoding for kanjidic files (jis-208 or jis-212)
         # jis-208 is assumed, so this just means to set it only for kanjd212.
         self["kdict.kanjidic.file2.jispage"] = "jis212"
@@ -387,3 +361,42 @@ class Preferences(dict):
                 break
 
         return target
+
+
+class DictEntry(object):
+
+    """Class for dictionary preference entries."""
+
+    def __init__(self, filename, format=None, encoding=None):
+        self.filename = filename
+        self.format = format if format else self._get_format()
+        self.encoding = encoding if encoding else self._get_encoding()
+
+    def _get_format(self):
+        """Automatic format selection function."""
+        # Automatic format selection based on file name
+        filename = os.path.basename(self.filename).split(".")[0].lower()
+        if filename.startswith("edict2"):
+            # EDICT2 parser is not yet complete in jbparse library.
+            raise NotImplementedError
+        if filename.startswith("edict"): return "edict"
+        if filename.startswith("jmdict"): return "jmdict"
+        if filename.startswith("kanjidic2"): return "kanjidic2"
+        if any(filename.startswith(s) for s in ["kanjidic", "kanjd212"]):
+            return "kanjidic"
+        raise Exception('Could not determine dictionary format based on '
+                        'filename "%s"' % filename)
+
+    def _get_encoding(self):
+        """Automatic encoding selection function."""
+        # Automatic encoding selection based on file name
+        filename = self.filename.split(".")[0].lower()
+        if any([filename.startswith(s) for s in ["jmdict", "kanjidic2"]]):
+            return "utf-8"
+        if any([filename.startswith(s)
+                  for s in ["edict", "kanjidic", "kanjd212"]]):
+            return "euc-jp"
+        # Default encoding...  I need to check what other
+        # EDICT-style dictionaries are using nowadays.  My
+        # strong preference is to do everything as UTF-8.
+        return "utf-8"

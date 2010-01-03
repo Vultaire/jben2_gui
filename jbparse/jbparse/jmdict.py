@@ -315,7 +315,7 @@ class ExpatParserNoEntityExp(ExpatParser):
     def dummy_handler(self, *args, **kwargs):
         pass
 
-class JMdictParser(object):
+class Parser(object):
 
     def __init__(self, filename, use_cache=True, encoding="utf-8"):
         """Initializer for JMdictParser.
@@ -326,6 +326,8 @@ class JMdictParser(object):
         searches.
 
         """
+        if not os.path.exists(filename):
+            raise Exception("Dictionary file does not exist.")
         self.filename = filename
         self.encoding = encoding
         self.cache = None
@@ -499,7 +501,7 @@ if __name__ == "__main__":
         print _(u"Please specify a dictionary file.")
         exit(-1)
     try:
-        kp = JMdictParser(sys.argv[1])
+        kp = Parser(sys.argv[1])
     except Exception, e:
         print _(u"Could not create JMdictParser: %s") % unicode(e)
         exit(-1)

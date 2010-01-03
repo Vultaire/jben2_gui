@@ -135,4 +135,6 @@ def console_iface():
         download_dict(fname)
 
 if __name__ == "__main__":
+    global p
+    p = Preferences()
     console_iface()

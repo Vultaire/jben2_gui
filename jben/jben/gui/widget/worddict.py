@@ -40,16 +40,17 @@ class TabWordDict(SearchFrame):
     def on_search_clicked(self, widget):
         # For now, searching is disabled.
         print "TabWordDict.on_search_clicked"
-        self.output.get_buffer().set_text(_("No search has been entered."))
+        query = self.queryentry.get_text().strip()
+        if not query:
+            print "WordDict: empty search, resetting output buffer"
+            self.output.get_buffer().set_text(_("No kanji have been selected."))
+            return
 
     def on_back_clicked(self, widget):
         print "TabWordDict.on_back_clicked"
-        pass
 
     def on_forward_clicked(self, widget):
         print "TabWordDict.on_forward_clicked"
-        pass
 
     def on_random_clicked(self, widget):
         print "TabWordDict.on_random_clicked"
-        pass

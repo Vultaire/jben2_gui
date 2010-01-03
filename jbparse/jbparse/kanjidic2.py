@@ -365,7 +365,7 @@ class KD2SAXHandler(xml.sax.handler.ContentHandler):
                     print u"EXCEPTION occurred:", \
                           unicode(e.__class__.__str__), unicode(e)
 
-class Kanjidic2Parser(object):
+class Parser(object):
 
     def __init__(self, filename, use_cache=True, encoding="utf-8"):
         """Initializer for Kanjidic2Parser.
@@ -376,6 +376,8 @@ class Kanjidic2Parser(object):
         searches.
 
         """
+        if not os.path.exists(filename):
+            raise Exception("Dictionary file does not exist.")
         self.filename = filename
         self.encoding = encoding
         self.cache = None
@@ -422,7 +424,7 @@ if __name__ == "__main__":
         print _(u"Please specify a dictionary file.")
         exit(-1)
     try:
-        kp = Kanjidic2Parser(sys.argv[1])
+        kp = Parser(sys.argv[1])
     except Exception, e:
         print _(u"Could not create Kanjidic2Parser: %s") % unicode(e)
         exit(-1)

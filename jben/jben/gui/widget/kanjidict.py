@@ -10,6 +10,7 @@ from __future__ import absolute_import
 
 from .search_frame import SearchFrame
 from jbparse import kanjidic, kanjidic2
+from jben import global_refs
 
 #self.parser = kanjidic.KanjidicParser(SRC_NAME)
 #query = u"食"
@@ -25,18 +26,22 @@ class TabKanjiDict(SearchFrame):
         self.indexlabel.set_text(_("of 0 kanji"))
 
     def on_search_clicked(self, widget):
-        # For now, searching is disabled.
         print "TabKanjiDict.on_search_clicked"
-        self.output.get_buffer().set_text(_("No kanji have been selected."))
+        query = self.queryentry.get_text().strip()
+        if not query:
+            print "KanjiDict: empty search, resetting output buffer"
+            self.output.get_buffer().set_text(_("No kanji have been selected."))
+            return
+        kdict = global_refs.dictmgr.get_kanji_dict()
+        results = kdict.search(query)
+        print results
+        self.output.get_buffer().set_text(results)
 
     def on_back_clicked(self, widget):
         print "TabKanjiDict.on_back_clicked"
-        pass
 
     def on_forward_clicked(self, widget):
         print "TabKanjiDict.on_forward_clicked"
-        pass
 
     def on_random_clicked(self, widget):
         print "TabKanjiDict.on_random_clicked"
-        pass

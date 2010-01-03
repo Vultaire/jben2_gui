@@ -3,51 +3,26 @@
 from __future__ import absolute_import
 
 import sys, os
-from jben.preferences import Preferences
+from jben.preferences import Preferences, DictEntry
 from jben.console import y_or_n
 from jben.dict_downloader import download_dict
-
-
-class DictEntry(object):
-
-    """Class for dictionary preference entries."""
-
-    def __init__(self, filename, encoding=None):
-        self.filename = filename
-        if encoding is not None:
-            self.encoding = encoding
-        else:
-            self._auto_encode()
-
-    def _auto_encode(self):
-        """Automatic encoding selection function."""
-        # Automatic encoding selection based on file name
-        fn = self.filename.split(".")[0].lower()
-        if any([fn.find(s) == 0 for s in ["jmdict", "kanjidic2"]]):
-            self.encoding = "utf-8"
-        elif any([fn.find(s) == 0 for s in ["edict", "kanjidic", "kanjd212"]]):
-            self.encoding = "euc-jp"
-        else:
-            # Default encoding...  I need to check what other
-            # EDICT-style dictionaries are using nowadays.  My
-            # strong preference is to do everything as UTF-8.
-            self.encoding = "utf-8"
 
 
 def set_dicts(option_key, d_entries):
 
     """Updates preferences with selected dictionary objects.
 
-    Given a preference key (dict.kanji for example) and a list of
+    Given a preference key (dictfile.kanji for example) and a list of
     dictionary entry objects, create appropriate keys.
 
-    For example, with dict.kanji as the key and a list of [kanjidic,
-    kanjd212] entry objects, the following keys may be created:
+    For example, with dictfile.kanji as the key and a list of
+    [kanjidic, kanjd212] entry objects, the following keys may be
+    created:
 
-    dict.kanji.1.file: kanjidic.gz
-    dict.kanji.1.encoding: euc-jp
-    dict.kanji.2.file: kanjd212.gz
-    dict.kanji.2.encoding: euc-jp
+    dictfile.kanji.1.file: kanjidic.gz
+    dictfile.kanji.1.encoding: euc-jp
+    dictfile.kanji.2.file: kanjd212.gz
+    dictfile.kanji.2.encoding: euc-jp
 
     On update, any existing entries which start with the specified
     option key will be dropped.
@@ -71,10 +46,10 @@ def set_dicts(option_key, d_entries):
         prefs[encodekey] = de.encoding
 
 def set_word_dicts(dicts):
-    set_dicts("dict.word", dicts)
+    set_dicts("dictfile.word", dicts)
 
 def set_kanji_dicts(dicts):
-    set_dicts("dict.kanji", dicts)
+    set_dicts("dictfile.kanji", dicts)
 
 
 

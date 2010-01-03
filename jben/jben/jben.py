@@ -19,6 +19,7 @@ import gtk
 
 from jben.gui.window.main import WindowMain
 from jben.preferences import Preferences
+from jben.dict import DictManager
 from jben import global_refs
 
 from os import path
@@ -30,6 +31,7 @@ class JBen(object):
     def __init__(self):
         # Init globals
         global_refs.prefs = Preferences()
+        global_refs.dictmgr = DictManager()
         # Init app object vars
         self.setup_global_icons()
 

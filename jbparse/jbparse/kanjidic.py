@@ -38,7 +38,7 @@ modules in your own programs.
 
 from __future__ import absolute_import
 
-import re, gzip, gettext
+import os, re, gzip, gettext
 gettext.install('pyjben', unicode=True)
 
 from .kanjidic_common \
@@ -435,9 +435,11 @@ class ParserState(object):
     def __init__(self):
         self.t_class = 0
 
-class KanjidicParser(object):
+class Parser(object):
 
     def __init__(self, filename, use_cache=True, encoding="EUC-JP"):
+        if not os.path.exists(filename):
+            raise Exception("Dictionary file does not exist.")
         self.filename = filename
         self.encoding = encoding
         self.use_cache = use_cache
@@ -482,13 +484,13 @@ class KanjidicParser(object):
         return results
 
 if __name__ == "__main__":
-    import sys, os
+    import sys
 
     if len(sys.argv) < 2:
         print _(u"Please specify a dictionary file.")
         exit(-1)
     try:
-        kp = KanjidicParser(sys.argv[1])
+        kp = Parser(sys.argv[1])
     except Exception, e:
         print _(u"Could not create KanjidicParser: %s") % unicode(e)
         exit(-1)

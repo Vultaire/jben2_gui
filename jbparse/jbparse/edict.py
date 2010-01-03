@@ -301,9 +301,11 @@ class EdictEntry(object):
         """Dummy string dumper"""
         return unicode(self.__repr__())
 
-class EdictParser(object):
+class Parser(object):
 
     def __init__(self, filename, use_cache=True, encoding="EUC-JP"):
+        if not os.path.exists(filename):
+            raise Exception("Dictionary file does not exist.")
         self.filename = filename
         self.encoding = encoding
         self.use_cache = use_cache
@@ -374,7 +376,7 @@ if __name__ == "__main__":
         print _(u"Please specify a dictionary file.")
         exit(-1)
     try:
-        kp = EdictParser(sys.argv[1])
+        kp = Parser(sys.argv[1])
     except Exception, e:
         print _(u"Could not create EdictParser: %s") % unicode(e)
         exit(-1)

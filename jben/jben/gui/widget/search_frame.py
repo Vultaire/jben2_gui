@@ -17,6 +17,7 @@ class SearchFrame(gtk.VBox):
         # Top box: "Enter kanji:" [________]  [ Search ]
         self.querylabel = gtk.Label(_("Enter query:"))
         self.queryentry = gtk.Entry()
+        self.queryentry.connect("activate", self.on_search_clicked)
 
         self.searchbutton = gtk.Button(_("_Search"))
         self.searchbutton.connect("clicked", self.on_search_clicked)
@@ -68,17 +69,13 @@ class SearchFrame(gtk.VBox):
         self.pack_start(bottombox, expand = False)
 
     def on_search_clicked(self, widget):
-        # For now, searching is disabled.
         print "SearchFrame.on_search_clicked"
 
     def on_back_clicked(self, widget):
         print "SearchFrame.on_back_clicked"
-        pass
 
     def on_forward_clicked(self, widget):
         print "SearchFrame.on_forward_clicked"
-        pass
 
     def on_random_clicked(self, widget):
         print "SearchFrame.on_random_clicked"
-        pass
