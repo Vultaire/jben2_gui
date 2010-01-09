@@ -4,5 +4,7 @@ gtk-redist
 #*#
 jben/build
 jben/dist
+jben/MANIFEST*
 jbparse/build
 jbparse/dist
+jbparse/MANIFEST*
