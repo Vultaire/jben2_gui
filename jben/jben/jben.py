@@ -10,9 +10,6 @@
 
 from __future__ import absolute_import
 
-import gettext
-gettext.install("jben")
-
 import pygtk
 pygtk.require("2.0")
 import gtk
