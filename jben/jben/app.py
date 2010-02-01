@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 
-
 from jben.preferences import Preferences
 from jben.dict import DictManager
 from jben import global_refs
@@ -15,8 +14,11 @@ class Application(object):
         if interface not in dir(mod):
             raise Exception("Interface %s does not exist." % interface)
         self.interface = getattr(mod, interface).Interface(self)
-        global_refs.prefs = Preferences()
-        global_refs.dictmgr = DictManager()
+        self.prefs = Preferences()
+        self.dictmgr = DictManager(self)
+        global_refs.app = self
 
     def run(self):
-        return self.interface.run()
+        result = self.interface.run()
+        self.prefs.save()
+        return result

@@ -7,7 +7,7 @@ pygtk.require("2.0")
 import gtk
 import os
 
-from .window.main import WindowMain
+from .window.main import Main as WindowMain
 
 
 class Interface(object):

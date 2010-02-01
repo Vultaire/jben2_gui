@@ -32,7 +32,7 @@ class TabKanjiDict(SearchFrame):
             print "KanjiDict: empty search, resetting output buffer"
             self.output.get_buffer().set_text(_("No kanji have been selected."))
             return
-        kdict = global_refs.dictmgr.get_kanji_dict()
+        kdict = global_refs.app.dictmgr.get_kanji_dict()
         results = kdict.search(query)
         print results
         self.output.get_buffer().set_text(results)

@@ -21,7 +21,7 @@ from ..dialog.kanjilisteditor import DialogKanjiListEditor
 from ..dialog.preferences import DialogPreferences
 
 
-class WindowMain(StoredSizeWindow):
+class Main(StoredSizeWindow):
     """The main GUI of J-Ben."""
 
     def __init__(self, param="gui.main.size"):

@@ -46,7 +46,7 @@ class TabPrefsKanjiTest(gtk.VBox):
             ("keys.kanjitest.stop", _("Stop drill: "))
             ]
         self.shortcut_ctls = []
-        prefs = global_refs.prefs
+        prefs = global_refs.app.prefs
         for key, label_str in strings:
             label = gtk.Label(label_str)
             label.set_alignment(0.0, 0.5)
@@ -110,7 +110,7 @@ class TabPrefsKanjiTest(gtk.VBox):
         return True
 
     def update_prefs(self):
-        prefs = global_refs.prefs
+        prefs = global_refs.app.prefs
         for key, label, entry in self.shortcut_ctls:
             s = entry.get_text()
             if not s.strip():

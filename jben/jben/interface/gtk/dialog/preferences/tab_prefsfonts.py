@@ -64,7 +64,7 @@ class TabPrefsFonts(gtk.VBox):
         self.pack_start(table, expand = False);
 
     def get_font_name(self, key):
-        prefs = global_refs.prefs
+        prefs = global_refs.app.prefs
         font_name = prefs.get(key)
         if not font_name:
             if os.name == "nt":
@@ -111,7 +111,7 @@ class TabPrefsFonts(gtk.VBox):
             self.update_font_control(ctrls, textview.font_name)
 
     def update_prefs(self):
-        prefs = global_refs.prefs
+        prefs = global_refs.app.prefs
         for key, label, textview, button in self.controls:
             buf = textview.get_buffer()
             s = buf.get_start_iter()

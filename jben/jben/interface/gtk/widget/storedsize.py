@@ -28,7 +28,7 @@ class StoredSizeBase(object):
 
     def __init__(self, param, width=-1, height=-1):
         self.param_name = param
-        prefs = global_refs.prefs
+        prefs = global_refs.app.prefs
         pref = None
         if param:
             pref = prefs.get(param)
@@ -43,7 +43,7 @@ class StoredSizeBase(object):
         self.maximized = False
 
     def delete_event(self, widget, event, data=None):
-        prefs = global_refs.prefs
+        prefs = global_refs.app.prefs
         prefs[self.param_name] = "%dx%d" % self.stored_size
         return False
 

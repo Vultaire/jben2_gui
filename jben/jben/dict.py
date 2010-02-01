@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 
 from jben.preferences import Preferences, DictEntry
-from jben import global_refs
 from jbparse import kanjidic, kanjidic2, edict, edict2, jmdict
 
 
@@ -12,14 +11,15 @@ class DictManager(object):
 
     """Dictionary manager class."""
 
-    def __init__(self):
+    def __init__(self, app):
+        self.app = app
         self.kdictcache = {}
         self.wdictcache = {}
         self.kdicts = None
         self.wdicts = None
 
     def get_dicts(self, key):
-        prefs = global_refs.prefs
+        prefs = self.app.prefs
         dict_keys = (k for k in prefs if k.startswith("%s." % key))
         # Indices are the 3rd element in the keys... grab all
         # unique indices

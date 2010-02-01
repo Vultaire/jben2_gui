@@ -188,7 +188,7 @@ class TabPrefsKanjiDict(gtk.VBox):
     def update_gui(self):
         # This function -does- fudge things a little, but the average user
         # should not notice.
-        prefs = global_refs.prefs
+        prefs = global_refs.app.prefs
 
         self.chkReadings.set_active(
             prefs.get("kdict.render.kunyomi", False))
@@ -214,7 +214,7 @@ class TabPrefsKanjiDict(gtk.VBox):
             obj.set_active(prefs.get(key, False))
 
     def update_prefs(self):
-        prefs = global_refs.prefs
+        prefs = global_refs.app.prefs
 
         b = self.chkReadings.get_active()
         prefs["kdict.render.kunyomi"] = b
