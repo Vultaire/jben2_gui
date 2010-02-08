@@ -28,5 +28,12 @@ class Interface(object):
 
     def run(self):
         jben_win = WindowMain()
+        jben_win.set_sensitive(False)
         jben_win.show_all()
+
+        # Schedule dictionary check and enabling of main window
+        # sometime after gtk.main starts...
+        # *** TO DO ***
+
+        # Main loop
         gtk.main()
