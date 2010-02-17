@@ -31,8 +31,8 @@ class Interface(object):
         jben_win.set_sensitive(False)
         jben_win.show_all()
 
-        wdict_avial, kdict_avail = self.app.check_dicts()
-        if not all(wdict_avail, kdict_avail):
+        wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
+        if not all((wdict_avail, kdict_avail)):
             # Schedule dictionary check and enabling of main window
             # sometime after gtk.main starts...
             # *** TO DO ***

@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 
 
+import os
 from jben.preferences import Preferences, DictEntry
 from jbparse import kanjidic, kanjidic2, edict, edict2, jmdict
 
@@ -56,3 +57,22 @@ class DictManager(object):
         self.wdictcache.clear()
         self.kdicts = None
         self.wdicts = None
+
+    def check_dicts(self):
+        """Checks for a supposedly valid word and character dictionary.
+
+        Returns a two-item tuple representing whether a word or
+        character dictionary were found, respectively.
+
+        """
+        wdict, kdict = False, False
+        if self.check_dict_dir():
+            wdict = self.get_word_dict()
+            kdict = self.get_kanji_dict()
+        return (wdict, kdict)
+
+    def check_dict_dir(self):
+        dict_dir = os.path.join(self.app.get_data_dir(), "dicts")
+        if os.path.exists(dict_dir) and os.access(path, os.W_OK):
+            return True
+        return False
