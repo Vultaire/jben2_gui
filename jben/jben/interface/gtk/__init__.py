@@ -27,16 +27,7 @@ class Interface(object):
         gtk.window_set_default_icon_list(*icons)
 
     def run(self):
-        jben_win = WindowMain()
+        jben_win = WindowMain(self.app)
         jben_win.set_sensitive(False)
         jben_win.show_all()
-
-        wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
-        if not all((wdict_avail, kdict_avail)):
-            # Schedule dictionary check and enabling of main window
-            # sometime after gtk.main starts...
-            # *** TO DO ***
-            pass
-
-        # Main loop
         gtk.main()

@@ -24,9 +24,11 @@ from ..dialog.preferences import DialogPreferences
 class Main(StoredSizeWindow):
     """The main GUI of J-Ben."""
 
-    def __init__(self, param="gui.main.size"):
+    def __init__(self, app, param="gui.main.size"):
         StoredSizeWindow.__init__(self, param, 600, 400, gtk.WINDOW_TOPLEVEL)
+        self.app = app
         self.connect("destroy", self.destroy)
+        self.connect("show", self.show)
         self.set_title(jben_globals.PROGRAM_NAME)
 
         self.menu = self.create_menu()
@@ -38,7 +40,19 @@ class Main(StoredSizeWindow):
 
         self.add(layout)
 
-    def destroy(self, widget, data = None):
+    def show(self, widget):
+        wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
+        if not all((wdict_avail, kdict_avail)):
+            show_message(self, _("Dictionaries not found"),
+                         _("Could not find some needed dictionary files.  "
+                           "The relevant tabs will be disabled."))
+        if wdict_avail:
+            self.children.get_nth_page(0).set_sensitive(True)
+        if kdict_avail:
+            self.children.get_nth_page(1).set_sensitive(True)
+        self.set_sensitive(True)
+
+    def destroy(self, widget):
         gtk.main_quit()
 
     def create_menu(self):
@@ -116,6 +130,8 @@ class Main(StoredSizeWindow):
         tabs = gtk.Notebook()
         worddict = TabWordDict()
         kanjidict = TabKanjiDict()
+        for obj in (worddict, kanjidict):
+            obj.set_sensitive(False)
         tabs.append_page(worddict, gtk.Label(_("Word Dictionary")))
         tabs.append_page(kanjidict, gtk.Label(_("Kanji Dictionary")))
         return tabs
