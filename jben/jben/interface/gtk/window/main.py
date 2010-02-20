@@ -27,20 +27,11 @@ class Main(StoredSizeWindow):
     def __init__(self, app, param="gui.main.size"):
         StoredSizeWindow.__init__(self, param, 600, 400, gtk.WINDOW_TOPLEVEL)
         self.app = app
-        self.connect("destroy", self.destroy)
-        self.connect("show", self.show)
-        self.set_title(jben_globals.PROGRAM_NAME)
+        self.connect("show", self.on_show)
+        self.connect("destroy", self.on_destroy)
+        self._layout_window()
 
-        self.menu = self.create_menu()
-        self.children = self.create_children()
-
-        layout = gtk.VBox(spacing = 5)
-        layout.pack_start(self.menu, expand = False)
-        layout.pack_start(self.children)
-
-        self.add(layout)
-
-    def show(self, widget):
+    def on_show(self, widget):
         wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
         if not all((wdict_avail, kdict_avail)):
             show_message(self, _("Dictionaries not found"),
@@ -52,89 +43,8 @@ class Main(StoredSizeWindow):
             self.children.get_nth_page(1).set_sensitive(True)
         self.set_sensitive(True)
 
-    def destroy(self, widget):
+    def on_destroy(self, widget):
         gtk.main_quit()
-
-    def create_menu(self):
-        ag = gtk.ActionGroup("jben.ag")
-        ag.add_actions(
-            [("MenuFile", None, _("_File"), None, None, None),
-
-             ("MenuFileQuit", gtk.STOCK_QUIT, None,
-              None, None, self.on_menu_file_quit),
-
-             ("MenuEdit", None, _("_Edit"),
-              None, None, None),
-
-             ("MenuEditVocab", None, _("_Vocab Study List"),
-              None, None, self.on_menu_edit_vocab),
-
-             ("MenuEditKanji", None, _("_Kanji Study List"),
-              None, None, self.on_menu_edit_kanji),
-
-             ("MenuEditPrefs", gtk.STOCK_PREFERENCES, None,
-              None, None, self.on_menu_edit_prefs),
-
-             ("MenuPractice", None, _("_Practice"), None, None, None),
-
-             ("MenuPracticeKanji", None, _("_Kanji"),
-              None, None, self.on_menu_practice_kanji),
-
-             ("MenuTools", None, _("_Tools"), None, None, None),
-
-             ("MenuToolsHand", None, _("_Handwriting Recognition for Kanji"),
-              None, None, self.on_menu_tools_hand),
-
-             ("MenuToolsKanjiSearch", None, _("_Kanji Search"),
-              None, None, self.on_menu_tools_kanji_search),
-
-             ("MenuHelp", None, _("_Help"), None, None, None),
-
-             ("MenuHelpAbout", gtk.STOCK_ABOUT,
-              None, None, None, self.on_menu_help_about),
-
-             ("MenuHelpLicense", None, _("_License Information..."),
-              None, None, self.on_menu_help_license)])
-
-        uim = gtk.UIManager()
-        uim.insert_action_group(ag, -1)
-        uim.add_ui_from_string(
-            "<ui>"
-            "  <menubar name='MenuBar'>"
-            "    <menu action='MenuFile'>"
-            "      <menuitem action='MenuFileQuit'/>"
-            "    </menu>"
-            "    <menu action='MenuEdit'>"
-            "      <menuitem action='MenuEditVocab'/>"
-            "      <menuitem action='MenuEditKanji'/>"
-            "      <separator/>"
-            "      <menuitem action='MenuEditPrefs'/>"
-            "    </menu>"
-            "    <menu action='MenuPractice'>"
-            "      <menuitem action='MenuPracticeKanji'/>"
-            "    </menu>"
-            "    <menu action='MenuTools'>"
-            "      <menuitem action='MenuToolsHand'/>"
-            "      <menuitem action='MenuToolsKanjiSearch'/>"
-            "    </menu>"
-            "    <menu action='MenuHelp'>"
-            "      <menuitem action='MenuHelpAbout'/>"
-            "      <menuitem action='MenuHelpLicense'/>"
-            "    </menu>"
-            "  </menubar>"
-            "</ui>")
-        self.add_accel_group(uim.get_accel_group())
-        return uim.get_widget("/MenuBar")
-
-    def create_children(self):
-        tabs = gtk.Notebook()
-        worddict = TabWordDict()
-        kanjidict = TabKanjiDict()
-        for obj in (worddict, kanjidict):
-            obj.set_sensitive(False)
-        tabs.append_page(worddict, gtk.Label(_("Word Dictionary")))
-        tabs.append_page(kanjidict, gtk.Label(_("Kanji Dictionary")))
-        return tabs
 
     def on_menu_file_quit(self, widget):
         if not self.delete_event(None, None):
@@ -257,3 +167,93 @@ class Main(StoredSizeWindow):
             )
 
         show_message(self, _("License Information"), message)
+
+    def _layout_window(self)
+        self.set_title(jben_globals.PROGRAM_NAME)
+        self.menu = self._create_menu()
+        self.children = self._create_children()
+        layout = gtk.VBox(spacing = 5)
+        layout.pack_start(self.menu, expand = False)
+        layout.pack_start(self.children)
+        self.add(layout)
+
+    def _create_menu(self):
+        ag = gtk.ActionGroup("jben.ag")
+        ag.add_actions(
+            [("MenuFile", None, _("_File"), None, None, None),
+
+             ("MenuFileQuit", gtk.STOCK_QUIT, None,
+              None, None, self.on_menu_file_quit),
+
+             ("MenuEdit", None, _("_Edit"),
+              None, None, None),
+
+             ("MenuEditVocab", None, _("_Vocab Study List"),
+              None, None, self.on_menu_edit_vocab),
+
+             ("MenuEditKanji", None, _("_Kanji Study List"),
+              None, None, self.on_menu_edit_kanji),
+
+             ("MenuEditPrefs", gtk.STOCK_PREFERENCES, None,
+              None, None, self.on_menu_edit_prefs),
+
+             ("MenuPractice", None, _("_Practice"), None, None, None),
+
+             ("MenuPracticeKanji", None, _("_Kanji"),
+              None, None, self.on_menu_practice_kanji),
+
+             ("MenuTools", None, _("_Tools"), None, None, None),
+
+             ("MenuToolsHand", None, _("_Handwriting Recognition for Kanji"),
+              None, None, self.on_menu_tools_hand),
+
+             ("MenuToolsKanjiSearch", None, _("_Kanji Search"),
+              None, None, self.on_menu_tools_kanji_search),
+
+             ("MenuHelp", None, _("_Help"), None, None, None),
+
+             ("MenuHelpAbout", gtk.STOCK_ABOUT,
+              None, None, None, self.on_menu_help_about),
+
+             ("MenuHelpLicense", None, _("_License Information..."),
+              None, None, self.on_menu_help_license)])
+
+        uim = gtk.UIManager()
+        uim.insert_action_group(ag, -1)
+        uim.add_ui_from_string(
+            "<ui>"
+            "  <menubar name='MenuBar'>"
+            "    <menu action='MenuFile'>"
+            "      <menuitem action='MenuFileQuit'/>"
+            "    </menu>"
+            "    <menu action='MenuEdit'>"
+            "      <menuitem action='MenuEditVocab'/>"
+            "      <menuitem action='MenuEditKanji'/>"
+            "      <separator/>"
+            "      <menuitem action='MenuEditPrefs'/>"
+            "    </menu>"
+            "    <menu action='MenuPractice'>"
+            "      <menuitem action='MenuPracticeKanji'/>"
+            "    </menu>"
+            "    <menu action='MenuTools'>"
+            "      <menuitem action='MenuToolsHand'/>"
+            "      <menuitem action='MenuToolsKanjiSearch'/>"
+            "    </menu>"
+            "    <menu action='MenuHelp'>"
+            "      <menuitem action='MenuHelpAbout'/>"
+            "      <menuitem action='MenuHelpLicense'/>"
+            "    </menu>"
+            "  </menubar>"
+            "</ui>")
+        self.add_accel_group(uim.get_accel_group())
+        return uim.get_widget("/MenuBar")
+
+    def _create_children(self):
+        tabs = gtk.Notebook()
+        worddict = TabWordDict()
+        kanjidict = TabKanjiDict()
+        for obj in (worddict, kanjidict):
+            obj.set_sensitive(False)
+        tabs.append_page(worddict, gtk.Label(_("Word Dictionary")))
+        tabs.append_page(kanjidict, gtk.Label(_("Kanji Dictionary")))
+        return tabs
