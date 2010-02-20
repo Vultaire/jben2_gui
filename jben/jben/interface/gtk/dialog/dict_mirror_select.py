@@ -31,5 +31,11 @@ class MirrorSelect(StoredSizeDialog):
     def get_mirror(self):
         return self.server_list.get_active_text()
 
-    def on_cancel(self, widget):
-        self.response(None)
+    def run(self):
+        """Single-time run command; hides GTK boilerplate and gets result."""
+        result = None
+        resp = gtk.Dialog.run(self)
+        if resp == gtk.RESPONSE_OK:
+            result = self.get_mirror()
+        self.destroy()
+        return result

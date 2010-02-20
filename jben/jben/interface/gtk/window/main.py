@@ -44,11 +44,8 @@ class Main(StoredSizeWindow):
                   "Do you wish to download them from the Internet?"),
                 default_button="yes")
             if do_download:
-                dialog = MirrorSelect(self)
-                ms_result = dialog.run()
-                dialog.destroy()
-                if ms_result == gtk.RESPONSE_OK:
-                    mirror = dialog.get_mirror()
+                mirror = MirrorSelect(self).run()
+                if mirror:
                     dialog = DictDownload(self, mirror)
                     dl_result = dialog.run()
                     dialog.destroy()
