@@ -25,8 +25,30 @@ class MirrorSelect(StoredSizeDialog):
             self.server_list.append_text(row)
         self.server_list.set_active(0)
         self.server_list.show()
+        wframe = gtk.Frame(_("Word dictionaries"))
+        cframe = gtk.Frame(_("Character dictionaries"))
+        edict_btn = gtk.RadioButton(group=None,
+                                    label=_("EDICT (Recommended)"))
+        kanjidic_btn = gtk.RadioButton(group=None,
+                                       label=_("KANJIDIC (Recommended)"))
+        kanjidic2_btn = gtk.RadioButton(group=kanjidic_btn,
+                                        label=_("KANJIDIC 2"))
+        edict_btn.set_active(True)
+        kanjidic_btn.set_active(True)
+        d = {wframe: [edict_btn],
+             cframe: [kanjidic_btn, kanjidic2_btn]}
+        for frame in d:
+            box = gtk.VBox(spacing=5)
+            for obj in d[frame]:
+                box.pack_start(obj, expand=False)
+            frame.add(box)
+        hbox = gtk.HBox(spacing=5)
+        for obj in (wframe, cframe):
+            hbox.pack_start(obj)
+        hbox.show_all()
         layout = self.get_content_area()
-        layout.pack_start(self.server_list, expand=False)
+        for obj in (self.server_list, hbox):
+            layout.pack_start(obj, expand=False)
 
     def get_mirror(self):
         return self.server_list.get_active_text()
