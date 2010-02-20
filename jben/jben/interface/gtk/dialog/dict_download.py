@@ -15,13 +15,20 @@ class DictDownload(StoredSizeDialog):
             self, "gui.dialog.dict_download.size", -1, -1,
             title=_("Download dictionaries"),
             parent=parent,
-            flags=gtk.DIALOG_MODAL,
-            buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK)
+            flags=gtk.DIALOG_MODAL
             )
         self._layout()
+        self.connect("show", self.on_show)
+
+    def on_show(self, widget):
+        # *** TODO TO DO TODO ***
+
+        # After everything's finished...
+        self.ok_btn.set_sensitive(True)
 
     def _layout(self):
-        pass
+        self.ok_btn = self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+        self.ok_btn.set_sensitive(False)
 
     def run(self):
         """Single-time run command; hides GTK boilerplate."""
