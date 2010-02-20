@@ -10,7 +10,7 @@ class DictDownload(StoredSizeDialog):
 
     """Downloads dictionaries from a specified mirror."""
 
-    def __init__(self, parent, mirror):
+    def __init__(self, parent, mirror, files):
         StoredSizeDialog.__init__(
             self, "gui.dialog.dict_download.size", -1, -1,
             title=_("Download dictionaries"),

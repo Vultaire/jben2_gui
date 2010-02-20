@@ -20,7 +20,7 @@ from ..widget.yesnodialog import show_message_yn
 from ..dialog.vocablisteditor import DialogVocabListEditor
 from ..dialog.kanjilisteditor import DialogKanjiListEditor
 from ..dialog.preferences import DialogPreferences
-from ..dialog.dict_mirror_select import MirrorSelect
+from ..dialog.dict_download_select import DictDownloadSelect
 from ..dialog.dict_download import DictDownload
 
 
@@ -44,9 +44,9 @@ class Main(StoredSizeWindow):
                   "Do you wish to download them from the Internet?"),
                 default_button="yes")
             if do_download:
-                mirror = MirrorSelect(self).run()
+                mirror, files = DictDownloadSelect(self).run()
                 if mirror:
-                    dialog = DictDownload(self, mirror)
+                    dialog = DictDownload(self, mirror, files)
                     dl_result = dialog.run()
                     dialog.destroy()
                 else:
