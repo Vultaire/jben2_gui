@@ -20,6 +20,7 @@ from ..widget.yesnodialog import show_message_yn
 from ..dialog.vocablisteditor import DialogVocabListEditor
 from ..dialog.kanjilisteditor import DialogKanjiListEditor
 from ..dialog.preferences import DialogPreferences
+from ..dialog.dict_mirror_select import MirrorSelect
 from ..dialog.dict_download import DictDownload
 
 
@@ -40,11 +41,18 @@ class Main(StoredSizeWindow):
             do_download = show_message_yn(
                 self, _("Dictionaries not found"),
                 _("Could not find some needed dictionary files.  "
-                  "Do you wish to download them from the Internet?"))
+                  "Do you wish to download them from the Internet?"),
+                default_button="yes")
             if do_download:
-                dialog = DictDownload(self)
-                dl_result = dialog.run()
+                dialog = MirrorSelect(self)
+                ms_result = dialog.run()
                 dialog.destroy()
+                if ms_result:
+                    dialog = DictDownload(self, ms_result)
+                    dl_result = dialog.run()
+                    dialog.destroy()
+                else:
+                    do_download = False
             if (not do_download) or (dl_result == gtk.RESPONSE_CANCEL):
                 show_message(self, _("Not downloading dictionaries"),
                              _("Not downloading dictionaries.  "
@@ -196,7 +204,7 @@ class Main(StoredSizeWindow):
         self.menu = self._create_menu()
         self.children = self._create_children()
         layout = gtk.VBox(spacing = 5)
-        layout.pack_start(self.menu, expand = False)
+        layout.pack_start(self.menu, expand=False)
         layout.pack_start(self.children)
         self.add(layout)
 
