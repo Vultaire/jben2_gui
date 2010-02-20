@@ -38,6 +38,7 @@ class Main(StoredSizeWindow):
         wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
         if not all((wdict_avail, kdict_avail)):
             # Ask if we should download dictionaries from the internet.
+            downloaded = False
             do_download = show_message_yn(
                 self, _("Dictionaries not found"),
                 _("Could not find some needed dictionary files.  "
@@ -46,26 +47,18 @@ class Main(StoredSizeWindow):
             if do_download:
                 mirror, files = DictDownloadSelect(self).run()
                 if mirror:
-                    dialog = DictDownload(self, mirror, files)
-                    dl_result = dialog.run()
-                    dialog.destroy()
-                else:
-                    do_download = False
-            if (not do_download) or (dl_result == gtk.RESPONSE_CANCEL):
+                    downloaded = DictDownload(self, mirror, files).run()
+            else:
                 show_message(self, _("Not downloading dictionaries"),
                              _("Not downloading dictionaries.  "
                                "Some features may be disabled."))
-            elif dl_result == gtk.RESPONSE_OK:
+            if downloaded:
                 wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
-                if not all((wdict_avail, kdict_avail)):
-                    show_message(
-                        self, _("Could not download all dictionaries"),
-                        _("Could not download all needed files.  "
-                          "Some features may be disabled."))
-            else:
-                show_message(self, _("Unhandled dialog result"),
-                             _("Unhandled dialog result: <%s>") %
-                             str(dl_result))
+            if do_download and not all((wdict_avail, kdict_avail)):
+                show_message(
+                    self, _("Could not download all dictionaries"),
+                    _("Could not download all needed files.  "
+                      "Some features may be disabled."))
         if wdict_avail:
             self.children.get_nth_page(0).set_sensitive(True)
         if kdict_avail:

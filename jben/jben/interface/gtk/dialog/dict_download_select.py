@@ -14,6 +14,7 @@ class DictDownloadSelect(StoredSizeDialog):
             self, "gui.dialog.dict_mirror_select.size", -1, -1,
             title=_("Select download site"),
             parent=parent,
+            flags=gtk.DIALOG_MODAL,
             buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                      gtk.STOCK_OK, gtk.RESPONSE_OK)
             )
