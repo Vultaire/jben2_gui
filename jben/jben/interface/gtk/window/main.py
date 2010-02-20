@@ -16,9 +16,11 @@ from ..widget.worddict import TabWordDict
 from ..widget.kanjidict import TabKanjiDict
 from ..widget.storedsize import StoredSizeWindow
 from ..widget.infomessage import show_message
+from ..widget.yesnodialog import show_message_yn
 from ..dialog.vocablisteditor import DialogVocabListEditor
 from ..dialog.kanjilisteditor import DialogKanjiListEditor
 from ..dialog.preferences import DialogPreferences
+from ..dialog.dict_download import DictDownload
 
 
 class Main(StoredSizeWindow):
@@ -34,9 +36,30 @@ class Main(StoredSizeWindow):
     def on_show(self, widget):
         wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
         if not all((wdict_avail, kdict_avail)):
-            show_message(self, _("Dictionaries not found"),
-                         _("Could not find some needed dictionary files.  "
-                           "The relevant tabs will be disabled."))
+            # Ask if we should download dictionaries from the internet.
+            do_download = show_message_yn(
+                self, _("Dictionaries not found"),
+                _("Could not find some needed dictionary files.  "
+                  "Do you wish to download them from the Internet?"))
+            if do_download:
+                dialog = DictDownload(self)
+                dl_result = dialog.run()
+                dialog.destroy()
+            if (not do_download) or (dl_result == gtk.RESPONSE_CANCEL):
+                show_message(self, _("Not downloading dictionaries"),
+                             _("Not downloading dictionaries.  "
+                               "Some features may be disabled."))
+            elif dl_result == gtk.RESPONSE_OK:
+                wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
+                if not all((wdict_avail, kdict_avail)):
+                    show_message(
+                        self, _("Could not download all dictionaries"),
+                        _("Could not download all needed files.  "
+                          "Some features may be disabled."))
+            else:
+                show_message(self, _("Unhandled dialog result"),
+                             _("Unhandled dialog result: <%s>") %
+                             str(dl_result))
         if wdict_avail:
             self.children.get_nth_page(0).set_sensitive(True)
         if kdict_avail:
@@ -168,7 +191,7 @@ class Main(StoredSizeWindow):
 
         show_message(self, _("License Information"), message)
 
-    def _layout_window(self)
+    def _layout_window(self):
         self.set_title(jben_globals.PROGRAM_NAME)
         self.menu = self._create_menu()
         self.children = self._create_children()
