@@ -47,8 +47,9 @@ class Main(StoredSizeWindow):
                 dialog = MirrorSelect(self)
                 ms_result = dialog.run()
                 dialog.destroy()
-                if ms_result:
-                    dialog = DictDownload(self, ms_result)
+                if ms_result == gtk.RESPONSE_OK:
+                    mirror = dialog.get_mirror()
+                    dialog = DictDownload(self, mirror)
                     dl_result = dialog.run()
                     dialog.destroy()
                 else:
