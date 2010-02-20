@@ -1,51 +1,62 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import with_statement
+
 import threading, Queue, urllib2
 import sys
 
 
 class DownloadThread(threading.Thread):
 
+    """Thread object for downloading files.
+
+    Takes a url string and output file name as required parameters.
+
+    """
+
     CONNECTING, DOWNLOADING, DONE, ERROR = range(4)
     ABORT = 1
 
-    def __init__(self, url, chunk_size=16384, timeout=None):
+    def __init__(self, url, fname, chunk_size=16384, timeout=None):
         threading.Thread.__init__(self)
         self.out_queue = Queue.Queue(0)
         self.in_queue = Queue.Queue(0)
         self.url = url
+        self.fname = fname
         self.chunk_size = chunk_size
         self.timeout = timeout
 
     def run(self):
         try:
-            data = []
-            progress = 0
-            self.out_queue.put((0, self.CONNECTING))
-            if not (self.timeout is None):
-                resp = urllib2.urlopen(self.url, timeout=self.timeout)
-            else:
-                resp = urllib2.urlopen(self.url)
-            while True:
-                try:
-                    event = self.in_queue.get(block=False)
-                except Queue.Empty:
-                    event = None
-                if event == self.ABORT:
-                    raise Exception("Aborted by parent thread")
-                self.out_queue.put((progress, self.DOWNLOADING))
-                d = resp.read(self.chunk_size)
-                if not d:
-                    break
-                progress += len(d)
-            self.out_queue.put((progress, self.DONE))
+            with open(self.fname, "wb") as ofile:
+                progress = 0
+                self.out_queue.put((0, self.CONNECTING))
+                if not (self.timeout is None):
+                    resp = urllib2.urlopen(self.url, timeout=self.timeout)
+                else:
+                    resp = urllib2.urlopen(self.url)
+                while True:
+                    try:
+                        event = self.in_queue.get(block=False)
+                    except Queue.Empty:
+                        event = None
+                    if event == self.ABORT:
+                        raise Exception("Aborted by parent thread")
+                    self.out_queue.put((progress, self.DOWNLOADING))
+                    d = resp.read(self.chunk_size)
+                    if not d:
+                        break
+                    ofile.write(d)
+                    progress += len(d)
+                self.out_queue.put((progress, self.DONE))
         except Exception, e:
             self.out_queue.put((e, self.ERROR))
 
 
 def main():
-    assert len(sys.argv) == 2, "Please specify a URL to download."
-    dt = DownloadThread(sys.argv[1], timeout=5)
+    assert len(sys.argv) >= 2, "Please specify a URL to download."
+    assert len(sys.argv) >= 3, "Please specify a file name to save to."
+    dt = DownloadThread(sys.argv[1], sys.argv[2], timeout=5)
     print "Starting thread..."
     dt.start()
     try:
