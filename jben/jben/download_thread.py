@@ -30,7 +30,7 @@ class DownloadThread(threading.Thread):
         try:
             with open(self.fname, "wb") as ofile:
                 progress = 0
-                self.out_queue.put((0, self.CONNECTING))
+                self.out_queue.put((self.CONNECTING, 0))
                 if not (self.timeout is None):
                     resp = urllib2.urlopen(self.url, timeout=self.timeout)
                 else:
@@ -42,15 +42,15 @@ class DownloadThread(threading.Thread):
                         event = None
                     if event == self.ABORT:
                         raise Exception("Aborted by parent thread")
-                    self.out_queue.put((progress, self.DOWNLOADING))
+                    self.out_queue.put((self.DOWNLOADING, progress))
                     d = resp.read(self.chunk_size)
                     if not d:
                         break
                     ofile.write(d)
                     progress += len(d)
-                self.out_queue.put((progress, self.DONE))
+                self.out_queue.put((self.DONE, progress))
         except Exception, e:
-            self.out_queue.put((e, self.ERROR))
+            self.out_queue.put((self.ERROR, e))
 
 
 def main():
@@ -61,7 +61,7 @@ def main():
     dt.start()
     try:
         while True:
-            (progress, status) = dt.out_queue.get(block=True)
+            (status, progress) = dt.out_queue.get(block=True)
             if status == dt.CONNECTING:
                 print "Connecting..."
             elif status == dt.DOWNLOADING:
