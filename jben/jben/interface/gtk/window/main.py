@@ -47,7 +47,8 @@ class Main(StoredSizeWindow):
             if do_download:
                 mirror, files = DictDownloadSelect(self).run()
                 if mirror:
-                    downloaded = DictDownload(self, mirror, files).run()
+                    DictDownload(self, mirror, files).run()
+                    downloaded = True   # Well, at least we tried to...
             else:
                 show_message(self, _("Not downloading dictionaries"),
                              _("Not downloading dictionaries.  "

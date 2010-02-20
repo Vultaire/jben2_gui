@@ -23,16 +23,7 @@ class DictDownload(StoredSizeDialog):
     def _layout(self):
         pass
 
-    def get_files_downloaded(self):
-        return []
-
     def run(self):
-        """Single-time run command; hides GTK boilerplate and gets result.
-
-        Returns two items: a mirror, and a list of dictionaries to download.
-
-        """
+        """Single-time run command; hides GTK boilerplate."""
         gtk.Dialog.run(self)
-        files = self.get_files_downloaded()
         self.destroy()
-        return True if files else False
