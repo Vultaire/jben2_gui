@@ -12,6 +12,41 @@ class DownloadThread(threading.Thread):
 
     Takes a url string and output file name as required parameters.
 
+    This object communicates via two Queues.  in_queue takes messages
+    from other threads, while out_queue reports this thread's status
+    to external observers.
+
+    *Please note that in_queue takes single items in, while out_queue
+    takes two item tuples.*
+
+    in_queue supports the following messages:
+
+    - ABORT: tells the download thread to gracefully terminate at the
+      next available opportunity.
+
+    out_queue supports the following messages:
+
+    - CONNECTING: Sent just before the thread calls urllib2 to
+      establish a connection.  Sent as the two-item tuple (CONNECTING,
+      0).
+
+    - CONNECTED: Sent once a connection has been established and
+      header info has been retrieved.  Sent as the tuple (CONNECTED,
+      <content-length>).  If no content-length header was observed, it
+      will be sent as (CONNECTED, 0).
+
+    - DOWNLOADING: Sent at each iteration through the download loop.
+      Sent as (DOWNLOADING, <progress>), where progress is how many
+      bytes have been received so far.
+
+    - DONE: Sent when the download loop finishes successfully.  Sent
+      as (DONE, <progress>), where progress is how many bytes were
+      received.  This could be double-checked against the
+      content-length parameter if desired.
+
+    - ERROR: Sent if an exception occurs.  Sent as (ERROR,
+      <exception>), where exception is the exception object caught.
+
     """
 
     # out_queue messages
@@ -37,13 +72,10 @@ class DownloadThread(threading.Thread):
                     resp = urllib2.urlopen(self.url, timeout=self.timeout)
                 else:
                     resp = urllib2.urlopen(self.url)
-                # ****************
                 info = resp.info()
                 size_headers = info.getheaders("content-length")
                 file_size = size_headers[0] if size_headers else None
-                print "FILE SIZE for %s:" % self.url, file_size
                 self.out_queue.put((self.CONNECTED, file_size))
-                # ****************
                 while True:
                     try:
                         event = self.in_queue.get(block=False)
