@@ -47,6 +47,18 @@ class DownloadThread(threading.Thread):
     - ERROR: Sent if an exception occurs.  Sent as (ERROR,
       <exception>), where exception is the exception object caught.
 
+    Additionally, the following parameters are safe to be read from
+    other threads:
+
+    realurl: Set while connecting.  After the CONNECTED message is
+    received, this should contain the real URL retrieved, in case a
+    redirect occurred.
+
+    filesize: Also set while connecting.  After CONNECTED is received,
+    this should have the file's file size.  Note that not all requests
+    will contain this information, but for general download content it
+    should usually work.
+
     """
 
     # out_queue messages
@@ -59,6 +71,8 @@ class DownloadThread(threading.Thread):
         self.out_queue = Queue.Queue(0)
         self.in_queue = Queue.Queue(0)
         self.url = url
+        self.realurl = None
+        self.filesize = None
         self.fname = fname
         self.chunk_size = chunk_size
         self.timeout = timeout
@@ -72,10 +86,11 @@ class DownloadThread(threading.Thread):
                     resp = urllib2.urlopen(self.url, timeout=self.timeout)
                 else:
                     resp = urllib2.urlopen(self.url)
+                self.realurl = resp.geturl()
                 info = resp.info()
                 size_headers = info.getheaders("content-length")
-                file_size = size_headers[0] if size_headers else None
-                self.out_queue.put((self.CONNECTED, file_size))
+                self.file_size = int(size_headers[0]) if size_headers else None
+                self.out_queue.put((self.CONNECTED, self.file_size))
                 while True:
                     try:
                         event = self.in_queue.get(block=False)
@@ -94,6 +109,9 @@ class DownloadThread(threading.Thread):
             self.out_queue.put((self.ERROR, e))
 
 
+# This module can be executed independently via:
+#   python -m jben.download_thread <url> <outfile>
+
 def main():
     assert len(sys.argv) >= 2, "Please specify a URL to download."
     assert len(sys.argv) >= 3, "Please specify a file name to save to."
@@ -101,12 +119,24 @@ def main():
     print "Starting thread..."
     dt.start()
     try:
+        fsize = None
         while True:
             (status, progress) = dt.out_queue.get(block=True)
             if status == dt.CONNECTING:
                 print "Connecting..."
+            elif status == dt.CONNECTED:
+                fsize = progress
+                if fsize:
+                    print "Connected; file size: %d" % fsize
+                else:
+                    print "Connected; unknown file size"
             elif status == dt.DOWNLOADING:
-                print "Downloading: %d bytes received" % progress
+                if fsize:
+                    pct = (100 * progress / fsize) if progress else 0
+                    print "Downloading: %d bytes received (%d%%)" % \
+                          (progress, pct)
+                else:
+                    print "Downloading: %d bytes received" % progress
             elif status == dt.DONE:
                 break
             elif status == dt.ERROR:
@@ -116,7 +146,11 @@ def main():
         print "Keyboard interrupt received; aborting."
         dt.in_queue.put(dt.ABORT)
     dt.join()
-    print "Done!  %d bytes received!" % progress
+    if fsize:
+        pct = (100 * progress / fsize) if progress else 0
+        print "Done!  %d of %d bytes received! (%d%%)" % (progress, fsize, pct)
+    else:
+        print "Done!  %d bytes received!" % progress
 
 if __name__ == "__main__":
     main()

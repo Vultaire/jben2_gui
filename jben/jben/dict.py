@@ -72,7 +72,10 @@ class DictManager(object):
         return (wdict, kdict)
 
     def check_dict_dir(self):
-        dict_dir = os.path.join(self.app.get_data_dir(), "dicts")
+        dict_dir = self.get_dict_dir()
         if os.path.exists(dict_dir) and os.access(path, os.W_OK):
             return True
         return False
+
+    def get_dict_dir(self):
+        return os.path.join(self.app.get_data_dir(), "dicts")
