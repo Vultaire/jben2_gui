@@ -14,7 +14,9 @@ class DownloadThread(threading.Thread):
 
     """
 
-    CONNECTING, DOWNLOADING, DONE, ERROR = range(4)
+    # out_queue messages
+    CONNECTING, CONNECTED, DOWNLOADING, DONE, ERROR = range(5)
+    # in_queue messages
     ABORT = 1
 
     def __init__(self, url, fname, chunk_size=16384, timeout=None):
@@ -35,6 +37,13 @@ class DownloadThread(threading.Thread):
                     resp = urllib2.urlopen(self.url, timeout=self.timeout)
                 else:
                     resp = urllib2.urlopen(self.url)
+                # ****************
+                info = resp.info()
+                size_headers = info.getheaders("content-length")
+                file_size = size_headers[0] if size_headers else None
+                print "FILE SIZE for %s:" % self.url, file_size
+                self.out_queue.put((self.CONNECTED, file_size))
+                # ****************
                 while True:
                     try:
                         event = self.in_queue.get(block=False)

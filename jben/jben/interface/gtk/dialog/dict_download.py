@@ -2,8 +2,9 @@
 
 from __future__ import absolute_import
 
-import gtk
+import gtk, gobject
 from ..widget.storedsize import StoredSizeDialog
+from jben.download_thread import DownloadThread
 
 
 class DictDownload(StoredSizeDialog):
@@ -19,10 +20,14 @@ class DictDownload(StoredSizeDialog):
             )
         self._layout()
         self.connect("show", self.on_show)
+        self.urls = ["/".join((mirror, f)) for f in files]
 
     def on_show(self, widget):
         # *** TODO TO DO TODO ***
+        # Temporarily: just finish
+        self.on_finished()
 
+    def on_finished(self):
         # After everything's finished...
         self.ok_btn.set_sensitive(True)
 
