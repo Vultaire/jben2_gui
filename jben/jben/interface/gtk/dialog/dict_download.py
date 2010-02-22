@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-import Queue
+import os, Queue, urllib2
 import gtk, gobject
 from ..widget.storedsize import StoredSizeDialog
 from jben.download_thread import DownloadThread
@@ -12,13 +12,14 @@ class DictDownload(StoredSizeDialog):
 
     """Downloads dictionaries from a specified mirror."""
 
-    def __init__(self, parent, mirror, files):
+    def __init__(self, app, parent, mirror, files):
         StoredSizeDialog.__init__(
             self, "gui.dialog.dict_download.size", -1, -1,
             title=_("Download dictionaries"),
             parent=parent,
             flags=gtk.DIALOG_MODAL
             )
+        self.app = app
         self._layout()
         self.connect("show", self.on_show)
         self.urls = ["/".join((mirror, f)) for f in files]
@@ -39,17 +40,20 @@ class DictDownload(StoredSizeDialog):
     def _do_new_thread(self):
         try:
             url = self.urls.pop()
+            print "Starting new thread for download:", url
             fname = url.rsplit('/', 1)[-1]
             out_fname = os.path.join(self.app.dictmgr.get_dict_dir(), fname)
             dt = DownloadThread(url, out_fname, timeout=5)
+            dt.start()
             gobject.timeout_add(250, self.on_thread_poll, dt)
-        except:
+        except IndexError:
+            print "URL queue empty, finishing up"
             self._finish()
 
     def on_thread_poll(self, dt):
         try:
             while True:
-                (message, status) = dt.out_queue.get()
+                (message, status) = dt.out_queue.get(block=False)
                 if message == dt.CONNECTING:
                     print "Connecting..."
                 elif message == dt.CONNECTED:
@@ -64,18 +68,16 @@ class DictDownload(StoredSizeDialog):
                         print "Downloading: %d bytes received" % status
                     pass
                 elif message == dt.DONE:
-                    # Update output...
                     print "Download complete."
-                    # Call to create a new thread
                     self._do_new_thread()
-                    # Return False to terminate this thread
                     return False
                 elif message == dt.ERROR:
-                    # Update output...
-                    print "Error occurred during download:", status
-                    # Call to create a new thread
+                    if type(status) is urllib2.URLError:
+                        print "Error opening %s: %s" % \
+                              (dt.realurl or dt.url, status.reason)
+                    else:
+                        print "Error occurred during download:", status
                     self._do_new_thread()
-                    # Return False to terminate this thread
                     return False
                 else:
                     raise Exception("Unknown thread message: (%s, %s)" %

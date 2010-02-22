@@ -79,18 +79,21 @@ class DownloadThread(threading.Thread):
 
     def run(self):
         try:
+            progress = 0
+            self.out_queue.put((self.CONNECTING, 0))
+            if not (self.timeout is None):
+                resp = urllib2.urlopen(self.url, timeout=self.timeout)
+            else:
+                resp = urllib2.urlopen(self.url)
+            self.realurl = resp.geturl()
+            info = resp.info()
+            size_headers = info.getheaders("content-length")
+            self.file_size = int(size_headers[0]) if size_headers else None
+            self.out_queue.put((self.CONNECTED, self.file_size))
+            dirname = os.path.dirname(self.fname)
+            if not os.path.exists(dirname):
+                os.mkdir(dirname)
             with open(self.fname, "wb") as ofile:
-                progress = 0
-                self.out_queue.put((self.CONNECTING, 0))
-                if not (self.timeout is None):
-                    resp = urllib2.urlopen(self.url, timeout=self.timeout)
-                else:
-                    resp = urllib2.urlopen(self.url)
-                self.realurl = resp.geturl()
-                info = resp.info()
-                size_headers = info.getheaders("content-length")
-                self.file_size = int(size_headers[0]) if size_headers else None
-                self.out_queue.put((self.CONNECTED, self.file_size))
                 while True:
                     try:
                         event = self.in_queue.get(block=False)

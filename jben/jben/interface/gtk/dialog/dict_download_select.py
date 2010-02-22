@@ -9,7 +9,7 @@ from jben.dict_downloader import static_mirror_list
 
 class DictDownloadSelect(StoredSizeDialog):
 
-    def __init__(self, parent):
+    def __init__(self, app, parent):
         StoredSizeDialog.__init__(
             self, "gui.dialog.dict_mirror_select.size", -1, -1,
             title=_("Select download site"),
@@ -18,6 +18,7 @@ class DictDownloadSelect(StoredSizeDialog):
             buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                      gtk.STOCK_OK, gtk.RESPONSE_OK)
             )
+        self.app = app
         self._layout()
 
     def _layout(self):

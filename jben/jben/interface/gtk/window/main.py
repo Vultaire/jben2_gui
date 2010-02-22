@@ -45,9 +45,9 @@ class Main(StoredSizeWindow):
                   "Do you wish to download them from the Internet?"),
                 default_button="yes")
             if do_download:
-                mirror, files = DictDownloadSelect(self).run()
+                mirror, files = DictDownloadSelect(self.app, self).run()
                 if mirror:
-                    DictDownload(self, mirror, files).run()
+                    DictDownload(self.app, self, mirror, files).run()
                     downloaded = True   # Well, at least we tried to...
             else:
                 show_message(self, _("Not downloading dictionaries"),
