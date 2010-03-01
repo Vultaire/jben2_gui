@@ -28,7 +28,7 @@ class Application(object):
         """Configures the "data directory" for J-Ben.
 
         The installed directory will be used if permissions allow.
-        Otherwise, the user's home directory will be used.
+        Otherwise, the user's local settings directory will be used.
 
         """
         dirs_d = {
@@ -37,7 +37,7 @@ class Application(object):
                       "/usr/share/jben"],
             }
         dirs = dirs_d[os.name]
-        dirs.append(self.get_home_dir())
+        dirs.append(self.get_settings_dir())
 
         for d in dirs:
             if os.path.exists(d) and os.access(d, os.W_OK):
