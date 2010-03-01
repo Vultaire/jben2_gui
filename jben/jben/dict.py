@@ -73,7 +73,7 @@ class DictManager(object):
 
     def check_dict_dir(self):
         dict_dir = self.get_dict_dir()
-        if os.path.exists(dict_dir) and os.access(path, os.W_OK):
+        if os.path.exists(dict_dir) and os.access(dict_dir, os.W_OK):
             return True
         return False
 

@@ -66,7 +66,6 @@ class DictDownload(StoredSizeDialog):
                               (status, pct)
                     else:
                         print "Downloading: %d bytes received" % status
-                    pass
                 elif message == dt.DONE:
                     print "Download complete."
                     self._do_new_thread()

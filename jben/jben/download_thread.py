@@ -3,7 +3,7 @@
 from __future__ import with_statement
 
 import threading, Queue, urllib2
-import sys
+import os, sys
 
 
 class DownloadThread(threading.Thread):
@@ -91,7 +91,7 @@ class DownloadThread(threading.Thread):
             self.file_size = int(size_headers[0]) if size_headers else None
             self.out_queue.put((self.CONNECTED, self.file_size))
             dirname = os.path.dirname(self.fname)
-            if not os.path.exists(dirname):
+            if dirname and not os.path.exists(dirname):
                 os.mkdir(dirname)
             with open(self.fname, "wb") as ofile:
                 while True:

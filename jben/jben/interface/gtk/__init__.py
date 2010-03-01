@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 import pygtk
 pygtk.require("2.0")
-import gtk
+import gtk, gobject
 import os
 
 from .window.main import Main as WindowMain
@@ -30,4 +30,5 @@ class Interface(object):
         jben_win = WindowMain(self.app)
         jben_win.set_sensitive(False)
         jben_win.show_all()
+        gobject.threads_init()
         gtk.main()
