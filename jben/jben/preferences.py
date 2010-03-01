@@ -106,9 +106,9 @@ class DictEntry(object):
 
     """Class for dictionary preference entries."""
 
-    def __init__(self, filename, format=None, encoding=None):
+    def __init__(self, filename, fmt=None, encoding=None):
         self.filename = filename
-        self.format = format if format else self._get_format()
+        self.format = fmt if fmt else self._get_format()
         self.encoding = encoding if encoding else self._get_encoding()
 
     def _get_format(self):

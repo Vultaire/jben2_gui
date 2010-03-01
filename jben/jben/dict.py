@@ -30,7 +30,7 @@ class DictManager(object):
         for i in indices:
             de = DictEntry(
                 prefs.get("%s.%d.filename" % (key, i)),
-                prefs.get("%s.%d.encoding" % (key, i)))
+                encoding=prefs.get("%s.%d.encoding" % (key, i)))
             if de.filename:
                 dictentry_d[i] = de
         dictfiles = (dictentry_d[i].filename
@@ -44,13 +44,58 @@ class DictManager(object):
         # In the future we may support dict iteration.  For now let's
         # keep it simple!
         if not self.kdicts:
-            self.kdicts = self.get_dicts("dictfile.kanji")
+            key = "dictfile.kanji"
+            if not self._cfg_has_keys(key):
+                print "Could not find kanji dict keys!"
+                self._create_keys(key)
+            self.kdicts = self.get_dicts(key)
         return self.kdicts[0] if self.kdicts else None
 
     def get_word_dict(self):
         if not self.wdicts:
-            self.wdicts = self.get_dicts("dictfile.word")
+            key = "dictfile.word"
+            if not self._cfg_has_keys(key):
+                print "Could not find word dict keys!"
+                self._create_keys(key)
+            self.wdicts = self.get_dicts(key)
         return self.wdicts[0] if self.wdicts else None
+
+    def _cfg_has_keys(self, key):
+        prefs = self.app.prefs
+        dict_keys = [k for k in prefs if k.startswith("%s." % key)]
+        return True if dict_keys else False
+
+    def _create_keys(self, key):
+        """Automatically create dict key names based on existing files."""
+        dd = self.app.dictmgr.get_dict_dir()
+        files = os.listdir(dd)
+        if "kanji" in key:
+            ts = self._get_kanji_tuples(files)
+        elif "word" in key:
+            ts = self._get_word_tuples(files)
+        prefs = self.app.prefs
+        for i, (fname, encoding) in enumerate(ts):
+            print i+1, fname, encoding
+            prefs["%s.%d.filename" % (key, i+1)] = fname
+            prefs["%s.%d.encoding" % (key, i+1)] = encoding
+
+    def _get_kanji_tuples(self, files):
+        d = {
+            "kanjidic.gz": "EUC-JP",
+            "kanjidic2.xml.gz": "UTF-8",
+            }
+        ts = [(f, d[f]) for f in files if f in d]
+        return ts
+
+    def _get_word_tuples(self, files):
+        d = {
+            "edict.gz": "EUC-JP",
+            "edict2.gz": "EUC-JP",
+            "jmdict.gz": "UTF-8",
+            "jmdict_e.gz": "UTF-8",
+            }
+        ts = [(f, d[f]) for f in files if f in d]
+        return ts
 
     def reset_cache(self):
         self.kdictcache.clear()
