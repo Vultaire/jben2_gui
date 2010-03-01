@@ -111,6 +111,9 @@ class DownloadThread(threading.Thread):
         except Exception, e:
             self.out_queue.put((self.ERROR, e))
 
+    def abort(self):
+        self.in_queue.put(self.ABORT)
+
 
 # This module can be executed independently via:
 #   python -m jben.download_thread <url> <outfile>
@@ -147,7 +150,7 @@ def main():
                 raise progress
     except KeyboardInterrupt, e:
         print "Keyboard interrupt received; aborting."
-        dt.in_queue.put(dt.ABORT)
+        dt.abort()
     dt.join()
     if fsize:
         pct = (100 * progress / fsize) if progress else 0

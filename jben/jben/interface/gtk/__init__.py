@@ -27,8 +27,8 @@ class Interface(object):
         gtk.window_set_default_icon_list(*icons)
 
     def run(self):
+        gobject.threads_init()  # Must occur before any GUI stuff, it seems
         jben_win = WindowMain(self.app)
         jben_win.set_sensitive(False)
         jben_win.show_all()
-        gobject.threads_init()
         gtk.main()

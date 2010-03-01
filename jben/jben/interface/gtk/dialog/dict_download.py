@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-import os, Queue, urllib2
+import sys, os, Queue, urllib2
 import gtk, gobject
 from ..widget.storedsize import StoredSizeDialog
 from jben.download_thread import DownloadThread
@@ -22,11 +22,24 @@ class DictDownload(StoredSizeDialog):
         self.app = app
         self._layout()
         self.connect("show", self.on_show)
+        self.connect("destroy", self.on_destroy)
         self.urls = ["/".join((mirror, f)) for f in files]
         self.handled_urls = []
+        self.dt = None
+        self.timeout_src = None
 
     def on_show(self, widget):
         self._do_new_thread()
+
+    def on_destroy(self, widget):
+        print "on_destroy called"
+        self.set_sensitive(False)
+        if self.timeout_src:
+            if not gobject.source_remove(self.timeout_src):
+                print >> sys.stderr, "WARNING: Could not remove timeout"
+        if self.dt:
+            self.dt.abort()
+            self.dt.join()
 
     def run(self):
         """Single-time run command; hides GTK boilerplate."""
@@ -37,15 +50,24 @@ class DictDownload(StoredSizeDialog):
         self.ok_btn = self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
         self.ok_btn.set_sensitive(False)
 
+    def _add_progress_bar(self):
+        layout = self.get_content_area()
+        self.cur_prog_bar = gtk.ProgressBar()
+        self.cur_prog_bar.set_pulse_step(0.01)
+        layout.pack_start(self.cur_prog_bar, expand=False)
+        layout.show_all()
+
     def _do_new_thread(self):
         try:
             url = self.urls.pop()
             print "Starting new thread for download:", url
             fname = url.rsplit('/', 1)[-1]
             out_fname = os.path.join(self.app.dictmgr.get_dict_dir(), fname)
-            dt = DownloadThread(url, out_fname, timeout=5)
-            dt.start()
-            gobject.timeout_add(250, self.on_thread_poll, dt)
+            self.dt = DownloadThread(url, out_fname, timeout=5)
+            self.dt.start()
+            self._add_progress_bar()
+            self.timeout_src = gobject.timeout_add(10, self.on_thread_poll,
+                                                   self.dt)
         except IndexError:
             print "URL queue empty, finishing up"
             self._finish()
@@ -55,27 +77,34 @@ class DictDownload(StoredSizeDialog):
             while True:
                 (message, status) = dt.out_queue.get(block=False)
                 if message == dt.CONNECTING:
-                    print "Connecting..."
+                    self.cur_prog_bar.set_text("Connecting...")
                 elif message == dt.CONNECTED:
-                    print "Connected.  Url: %s, file size: %d" % \
-                          (dt.realurl, dt.filesize or 0)
+                    self.cur_prog_bar.set_text(dt.realurl)
                 elif message == dt.DOWNLOADING:
                     if dt.filesize:
-                        pct = (100 * status / dt.filesize) if status else 0
-                        print "Downloading: %d bytes received (%d%%)" % \
-                              (status, pct)
+                        frct = status / float(dt.filesize)
+                        pct = (100 * frct) if status else 0
+                        out_str = "%s: %d bytes (%f)%%" % (
+                            dt.realurl, status, pct)
+                        self.cur_prog_bar.set_text(out_str)
+                        self.cur_prog_bar.set_fraction(max(frct, 1.0))
                     else:
-                        print "Downloading: %d bytes received" % status
+                        out_str = "%s: %d bytes" % (dt.realurl, status)
+                        self.cur_prog_bar.set_text(out_str)
+                        self.cur_prog_bar.pulse()
                 elif message == dt.DONE:
-                    print "Download complete."
+                    self.cur_prog_bar.set_text("Download complete")
+                    self.cur_prog_bar.set_fraction(1.0)
                     self._do_new_thread()
                     return False
                 elif message == dt.ERROR:
                     if type(status) is urllib2.URLError:
-                        print "Error opening %s: %s" % \
-                              (dt.realurl or dt.url, status.reason)
+                        err_str = "Error opening %s: %s" % \
+                                  (dt.realurl or dt.url, status.reason)
                     else:
-                        print "Error occurred during download:", status
+                        err_str = "Error occurred during download: %s" % \
+                                  str(status)
+                    self.cur_prog_bar.set_text(err_str)
                     self._do_new_thread()
                     return False
                 else:
