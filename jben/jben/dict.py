@@ -46,7 +46,6 @@ class DictManager(object):
         if not self.kdicts:
             key = "dictfile.kanji"
             if not self._cfg_has_keys(key):
-                print "Could not find kanji dict keys!"
                 self._create_keys(key)
             self.kdicts = self.get_dicts(key)
         return self.kdicts[0] if self.kdicts else None
@@ -55,7 +54,6 @@ class DictManager(object):
         if not self.wdicts:
             key = "dictfile.word"
             if not self._cfg_has_keys(key):
-                print "Could not find word dict keys!"
                 self._create_keys(key)
             self.wdicts = self.get_dicts(key)
         return self.wdicts[0] if self.wdicts else None
@@ -75,8 +73,7 @@ class DictManager(object):
             ts = self._get_word_tuples(files)
         prefs = self.app.prefs
         for i, (fname, encoding) in enumerate(ts):
-            print i+1, fname, encoding
-            prefs["%s.%d.filename" % (key, i+1)] = fname
+            prefs["%s.%d.filename" % (key, i+1)] = os.path.join(dd, fname)
             prefs["%s.%d.encoding" % (key, i+1)] = encoding
 
     def _get_kanji_tuples(self, files):

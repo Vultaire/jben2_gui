@@ -37,7 +37,7 @@ be using JMdict instead.
 
 """
 
-import re, gzip, gettext
+import os, re, gzip, gettext
 gettext.install('pyjben', unicode=True)
 
 
