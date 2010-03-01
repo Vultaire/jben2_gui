@@ -15,7 +15,7 @@ class Application(object):
         if interface not in dir(mod):
             raise Exception(_("Interface %s does not exist.") % interface)
         self.interface = getattr(mod, interface).Interface(self)
-        self.prefs = Preferences()
+        self.prefs = Preferences(self)
         self.dictmgr = DictManager(self)
         global_refs.app = self
 
