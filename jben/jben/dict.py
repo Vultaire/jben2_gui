@@ -19,7 +19,7 @@ class DictManager(object):
         self.kdicts = None
         self.wdicts = None
 
-    def get_dicts(self, key):
+    def _get_dicts(self, key):
         prefs = self.app.prefs
         dict_keys = (k for k in prefs if k.startswith("%s." % key))
         # Indices are the 3rd element in the keys... grab all
@@ -47,7 +47,7 @@ class DictManager(object):
             key = "dictfile.kanji"
             if not self._cfg_has_keys(key):
                 self._create_keys(key)
-            self.kdicts = self.get_dicts(key)
+            self.kdicts = self._get_dicts(key)
         return self.kdicts[0] if self.kdicts else None
 
     def get_word_dict(self):
@@ -55,7 +55,7 @@ class DictManager(object):
             key = "dictfile.word"
             if not self._cfg_has_keys(key):
                 self._create_keys(key)
-            self.wdicts = self.get_dicts(key)
+            self.wdicts = self._get_dicts(key)
         return self.wdicts[0] if self.wdicts else None
 
     def _cfg_has_keys(self, key):
@@ -100,7 +100,7 @@ class DictManager(object):
         self.kdicts = None
         self.wdicts = None
 
-    def check_dicts(self):
+    def get_dicts(self):
         """Checks for a supposedly valid word and character dictionary.
 
         Returns a two-item tuple representing whether a word or

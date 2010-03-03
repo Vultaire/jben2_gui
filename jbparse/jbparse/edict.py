@@ -223,7 +223,7 @@ class EdictEntry(object):
             self.furigana = pieces[1].strip()[:-1]
 
         # Get native language data
-        self.glosses = ndata.split(u'/')
+        self.glosses = [g for g in ndata.split(u'/') if g]
 
 # EDICT FORMAT:
 #    KANJI [KANA] /(general information) gloss/gloss/.../

@@ -10,17 +10,25 @@ import gtk
 
 
 class SearchFrame(gtk.VBox):
+
     def __init__(self):
         gtk.VBox.__init__(self, spacing = 5)
+        self.dict = None
+        self._layout()
+        self.queryentry.connect("activate", self.on_search_clicked)
+        self.searchbutton.connect("clicked", self.on_search_clicked)
+        self.backbutton.connect("clicked", self.on_back_clicked)
+        self.forwardbutton.connect("clicked", self.on_forward_clicked)
+        self.randombutton.connect("clicked", self.on_random_clicked)
+
+    def _layout(self):
         self.set_border_width(5)
 
         # Top box: "Enter kanji:" [________]  [ Search ]
         self.querylabel = gtk.Label(_("Enter query:"))
         self.queryentry = gtk.Entry()
-        self.queryentry.connect("activate", self.on_search_clicked)
 
         self.searchbutton = gtk.Button(_("_Search"))
-        self.searchbutton.connect("clicked", self.on_search_clicked)
         btnbox = gtk.HButtonBox()
         btnbox.set_spacing(5)
         btnbox.set_layout(gtk.BUTTONBOX_START)
@@ -45,11 +53,8 @@ class SearchFrame(gtk.VBox):
 
         # Bottom box: [__Back__] [Forward_] [_Random_]    [#  ] "of # kanji"
         self.backbutton = gtk.Button(stock = gtk.STOCK_GO_BACK)
-        self.backbutton.connect("clicked", self.on_back_clicked)
         self.forwardbutton = gtk.Button(stock = gtk.STOCK_GO_FORWARD)
-        self.forwardbutton.connect("clicked", self.on_forward_clicked)
         self.randombutton = gtk.Button(_("_Random"))
-        self.randombutton.connect("clicked", self.on_random_clicked)
         self.indexentry = gtk.Entry()
         self.indexentry.set_width_chars(5)
         self.indexentry.set_max_length(5)
@@ -69,13 +74,29 @@ class SearchFrame(gtk.VBox):
         self.pack_start(bottombox, expand = False)
 
     def on_search_clicked(self, widget):
-        print "SearchFrame.on_search_clicked"
+        query = self.queryentry.get_text().strip()
+        if not query:
+            self.output.get_buffer().set_text(
+                _("No query has been entered."))
+            return
+        if not self.dict:
+            self.output.get_buffer().set_text(
+                _("ERROR: Could not connect to database parser."))
+            return
+        results = self.dict.search(query)
+        out_str = u"\n".join(k.to_string() for k in results)
+        if not out_str:
+            out_str = _(u"No entries found.")
+        self.output.get_buffer().set_text(out_str)
 
     def on_back_clicked(self, widget):
-        print "SearchFrame.on_back_clicked"
+        print "%s.on_back_clicked" % str(self)
 
     def on_forward_clicked(self, widget):
-        print "SearchFrame.on_forward_clicked"
+        print "%s.on_forward_clicked" % str(self)
 
     def on_random_clicked(self, widget):
-        print "SearchFrame.on_random_clicked"
+        print "%s.on_random_clicked" % str(self)
+
+    def set_dict(self, d):
+        self.dict = d

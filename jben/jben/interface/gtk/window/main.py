@@ -35,8 +35,8 @@ class Main(StoredSizeWindow):
         self._layout_window()
 
     def on_show(self, widget):
-        wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
-        if not all((wdict_avail, kdict_avail)):
+        wdict, kdict = self.app.dictmgr.get_dicts()
+        if not all((wdict, kdict)):
             # Ask if we should download dictionaries from the internet.
             downloaded = False
             do_download = show_message_yn(
@@ -54,16 +54,18 @@ class Main(StoredSizeWindow):
                              _("Not downloading dictionaries.  "
                                "Some features may be disabled."))
             if downloaded:
-                wdict_avail, kdict_avail = self.app.dictmgr.check_dicts()
-            if do_download and not all((wdict_avail, kdict_avail)):
+                wdict, kdict = self.app.dictmgr.get_dicts()
+            if do_download and not all((wdict, kdict)):
                 show_message(
                     self, _("Could not download all dictionaries"),
                     _("Could not download all needed files.  "
                       "Some features may be disabled."))
-        if wdict_avail:
-            self.children.get_nth_page(0).set_sensitive(True)
-        if kdict_avail:
-            self.children.get_nth_page(1).set_sensitive(True)
+        if wdict:
+            self.worddict.set_dict(wdict)
+            self.worddict.set_sensitive(True)
+        if kdict:
+            self.kanjidict.set_dict(kdict)
+            self.kanjidict.set_sensitive(True)
         self.set_sensitive(True)
 
     def on_destroy(self, widget):
@@ -194,10 +196,10 @@ class Main(StoredSizeWindow):
     def _layout_window(self):
         self.set_title(jben_globals.PROGRAM_NAME)
         self.menu = self._create_menu()
-        self.children = self._create_children()
+        children = self._create_children()
         layout = gtk.VBox(spacing = 5)
         layout.pack_start(self.menu, expand=False)
-        layout.pack_start(self.children)
+        layout.pack_start(children)
         self.add(layout)
 
     def _create_menu(self):
@@ -273,10 +275,10 @@ class Main(StoredSizeWindow):
 
     def _create_children(self):
         tabs = gtk.Notebook()
-        worddict = TabWordDict()
-        kanjidict = TabKanjiDict()
-        for obj in (worddict, kanjidict):
+        self.worddict = TabWordDict()
+        self.kanjidict = TabKanjiDict()
+        for obj in (self.worddict, self.kanjidict):
             obj.set_sensitive(False)
-        tabs.append_page(worddict, gtk.Label(_("Word Dictionary")))
-        tabs.append_page(kanjidict, gtk.Label(_("Kanji Dictionary")))
+        tabs.append_page(self.worddict, gtk.Label(_("Word Dictionary")))
+        tabs.append_page(self.kanjidict, gtk.Label(_("Kanji Dictionary")))
         return tabs
