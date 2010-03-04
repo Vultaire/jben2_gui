@@ -1,4 +1,4 @@
-x#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Project: J-Ben, Python front-end
