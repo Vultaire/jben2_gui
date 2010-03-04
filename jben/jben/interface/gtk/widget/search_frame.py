@@ -74,7 +74,7 @@ class SearchFrame(gtk.VBox):
         self.pack_start(bottombox, expand = False)
 
     def on_search_clicked(self, widget):
-        query = self.queryentry.get_text().strip()
+        query = self.queryentry.get_text().decode("utf-8").strip()
         if not query:
             self.output.get_buffer().set_text(
                 _("No query has been entered."))
@@ -85,7 +85,7 @@ class SearchFrame(gtk.VBox):
             return
         self.disable_gui()
         results = self.dict.search(query)
-        out_str = u"\n".join(k.to_string() for k in results)
+        out_str = u"\n\n".join(k.to_string() for k in results)
         if not out_str:
             out_str = _(u"No entries found.")
         self.output.get_buffer().set_text(out_str)

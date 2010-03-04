@@ -13,7 +13,7 @@ SRC_NAME = "/".join((SRC_DIR, SRC_NAME))
 class KanjidicTest(unittest.TestCase):
 
     def setUp(self):
-        self.parser = kanjidic.KanjidicParser(SRC_NAME)
+        self.parser = kanjidic.Parser(SRC_NAME)
 
     def test_single_kanji_search(self):
         """KANJIDIC: Search for single kanji"""
@@ -67,7 +67,7 @@ class KanjidicTest(unittest.TestCase):
 
     def test_no_cache(self):
         """KANJIDIC: Check that parser works without caching."""
-        self.parser = kanjidic.KanjidicParser(SRC_NAME, use_cache=False)
+        self.parser = kanjidic.Parser(SRC_NAME, use_cache=False)
 
         self.assertFalse(self.parser.cache)
         t = time.time()
