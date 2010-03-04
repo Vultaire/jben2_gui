@@ -83,11 +83,22 @@ class SearchFrame(gtk.VBox):
             self.output.get_buffer().set_text(
                 _("ERROR: Could not connect to database parser."))
             return
+        self.disable_gui()
         results = self.dict.search(query)
         out_str = u"\n".join(k.to_string() for k in results)
         if not out_str:
             out_str = _(u"No entries found.")
         self.output.get_buffer().set_text(out_str)
+        self.enable_gui()
+
+    def disable_gui(self):
+        self.set_sensitive(False)
+        rect = self.get_allocation()
+        self.get_window().invalidate_rect(self.get_allocation(), True)
+        gtk.gdk.window_process_all_updates()
+
+    def enable_gui(self):
+        self.set_sensitive(True)
 
     def on_back_clicked(self, widget):
         print "%s.on_back_clicked" % str(self)
