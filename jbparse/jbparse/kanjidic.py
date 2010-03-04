@@ -350,18 +350,18 @@ class KanjidicEntry(object):
             # now, just display.
             for k, v in self.dcodes.iteritems():
                 if k == "MP": continue
-                k = kanjidic2_key_to_str(
+                dictname = kanjidic2_key_to_str(
                     kanjidic_key_to_kanjidic2(k))
                 if k == "MN":
-                    lines.append(_(u"%s: %s") % (k, v))
-                else:
                     vp = self.dcodes.get("MP")
                     if vp:
                         vol, page = vp.split('.', 1)
                         lines.append(_(u"%s: Index %s, Volume %s, Page %s")
-                                     % (k, v, vol, page))
+                                     % (dictname, v, vol, page))
                     else:
-                        lines.append(_(u"%s: %s") % (k, v))
+                        lines.append(_(u"%s: %s") % (dictname, v))
+                else:
+                    lines.append(_(u"%s: %s") % (dictname, v))
 
         if self.radname:
             lines.append(_(u"Radical name: %s") % self.radname)
