@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(name='jbparse',
-      version='0.1',
+      version='0.2',
       description='J-Ben parsing library',
       author='Paul Goins',
       author_email='general@vultaire.net',

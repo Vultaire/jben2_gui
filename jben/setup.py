@@ -25,7 +25,7 @@ setup(name='jben',
       classifiers=[
           'Environment :: Win32 (MS Windows)',
           'Environment :: X11 Applications :: GTK',
-          'Development Status :: 2 - Pre-Alpha',
+          'Development Status :: 3 - Alpha',
           'Intended Audience :: Developers',
           'License :: OSI Approved :: GNU General Public License (GPL)',
           'Natural Language :: English',
