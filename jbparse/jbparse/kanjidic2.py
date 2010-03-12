@@ -32,7 +32,7 @@
 
 from __future__ import absolute_import
 
-import gzip, gettext
+import os, gzip, gettext
 from xml.etree.cElementTree import ElementTree
 gettext.install('pyjben', unicode=True)
 
@@ -190,14 +190,11 @@ class Parser(object):
     def create_indices(self):
         if self.indexed:
             return
-        print "Creating indices..."
         self.indexed = True
-
         self.by_kanji = {}
         for char in self.characters:
             literal = char.xml.find("literal").text.strip()
             self.by_kanji[literal] = char
-        print "Done creating indices!"
 
 
 def encode_or_else(s):
@@ -217,7 +214,7 @@ def encode_or_else(s):
 
 
 if __name__ == "__main__":
-    import sys, os
+    import sys
 
     try:
         dfname, args = sys.argv[1], sys.argv[2:]

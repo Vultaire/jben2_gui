@@ -13,7 +13,7 @@ SRC_NAME = "/".join((SRC_DIR, SRC_NAME))
 class Kanjidic2Test(unittest.TestCase):
 
     def setUp(self):
-        self.parser = kanjidic2.Kanjidic2Parser(SRC_NAME)
+        self.parser = kanjidic2.Parser(SRC_NAME)
 
     def test_single_kanji_search(self):
         """KANJIDIC2: Search for single kanji"""
@@ -37,39 +37,6 @@ class Kanjidic2Test(unittest.TestCase):
         self.assertEqual(len(l), 4)
         for char in u"天気散歩":
             self.assertTrue(char in [entry.literal for entry in l])
-
-    def test_caching(self):
-        """KANJIDIC2: Check that caching is working"""
-        self.assertFalse(self.parser.cache)
-        t = time.time()
-        self.test_single_kanji_search()
-        first_t = time.time() - t
-
-        self.assertTrue(self.parser.cache)
-        t = time.time()
-        self.test_single_kanji_search()
-        second_t = time.time() - t
-
-        print "\n\tFirst query time:  %f" % first_t
-        print "\tSecond query time: %f" % second_t
-        self.assertTrue(second_t <= first_t)
-
-    def test_no_cache(self):
-        """KANJIDIC2: Check that parser works without caching."""
-        self.parser = kanjidic2.Kanjidic2Parser(SRC_NAME, use_cache=False)
-
-        self.assertFalse(self.parser.cache)
-        t = time.time()
-        self.test_single_kanji_search()
-        first_t = time.time() - t
-
-        self.assertFalse(self.parser.cache)
-        t = time.time()
-        self.test_single_kanji_search()
-        second_t = time.time() - t
-
-        print "\n\tFirst query time:  %f" % first_t
-        print "\tSecond query time: %f" % second_t
 
     def tearDown(self):
         self.parser = None
