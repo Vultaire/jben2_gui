@@ -8,3 +8,4 @@ jben/MANIFEST*
 jbparse/build
 jbparse/dist
 jbparse/MANIFEST*
+*\.egg-info
