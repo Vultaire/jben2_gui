@@ -42,7 +42,7 @@ def jstring_convert(us):
     return u"%s(%s)" % tuple(parts)
 
 def kanjidic2_key_to_str(dkey):
-    """Converts KANJIDIC2 dictionary keys to KANJIDIC2.
+    """Converts KANJIDIC2 dictionary keys to dictionary names.
 
     If unable to find a KANJIDIC2 key, returns the original key.
 

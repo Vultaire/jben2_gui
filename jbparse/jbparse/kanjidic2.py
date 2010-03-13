@@ -42,7 +42,7 @@ from .kanjidic_common \
 def jis_kuten_to_hex(kuten):
     """Kuten string to hex conversion"""
     pieces = map(int, kuten.split(u'-'))
-    print "DEBUG: kuten: %s, pieces: %s" % (kuten, str(pieces))
+    print u"DEBUG: kuten: %s, pieces: %s" % (kuten, str(pieces))
     return ((pieces[0] + 0x20) << 8) + (pieces[1] + 0x20)
 
 
@@ -54,7 +54,7 @@ class Kanjidic2Node(object):
 
     def _get_literal(self):
         literal = self.xml.find("literal").text.strip()
-        assert len(literal) == 1, "Literal has more than one character!"
+        assert len(literal) == 1, u"Literal has more than one character!"
         return literal
 
     def _get_grade(self):
@@ -76,28 +76,27 @@ class Kanjidic2Node(object):
         o = self.xml.find("misc/jlpt")
         return int(o.text)
 
-    def _get_nanori(self):
+    def _get_nanori_nodes(self):
         nodes = self.xml.findall("reading_meaning/nanori")
-        if not nodes:
-            return None
-        nanori = [o.text for o in nodes]
-        return nanori
+        return nodes or None
 
     def _get_attrdict(self, path, attr_name):
         """Helper: stores elements on path in dict, keyed by attribute."""
         d = {}
         nodes = self.xml.findall(path)
-        attrs = set(o.attrib.get(attr_name) for o in nodes)
-        for attr in attrs:
-            d[attr] = [o.text for o in nodes
-                       if o.attrib.get(attr_name) == attr]
+        #attrs = set(o.attrib.get(attr_name) for o in nodes)
+        for o in nodes:
+            d.setdefault(o.attrib.get(attr_name), []).append(o)
+        #for attr in attrs:
+        #    d[attr] = [o for o in nodes
+        #               if o.attrib.get(attr_name) == attr]
         return d
 
-    def _get_readings(self):
+    def _get_reading_nodes(self):
         """Returns dictionary of reading lists, keyed by type."""
         return self._get_attrdict("reading_meaning/rmgroup/reading", "r_type")
 
-    def _get_meanings(self):
+    def _get_meaning_nodes(self):
         """Returns dictionary of gloss lists, keyed by language prefix."""
         meaning_d = self._get_attrdict(
             "reading_meaning/rmgroup/meaning", "m_lang")
@@ -106,39 +105,101 @@ class Kanjidic2Node(object):
             del meaning_d[None]
         return meaning_d
 
+    def _get_dictcodes(self):
+        return self._get_attrdict("dic_number/dic_ref", "dr_type")
+
+    def _get_querycodes(self):
+        return self._get_attrdict("query_code/q_code", "qc_type")
+
     def __unicode__(self):
-        readings = self._get_readings()
-        meanings = self._get_meanings()
-        nanori = self._get_nanori()
+
+        def xml2text(o):
+            return o.text
+
+        def mapdict(fn, d):
+            result = {}
+            for k, v in d.iteritems():
+                result[k] = map(fn, v)
+            return result
+
+        readings = mapdict(xml2text, self._get_reading_nodes())
+        meanings = mapdict(xml2text, self._get_meaning_nodes())
+        nanori = map(xml2text, self._get_nanori_nodes())
         grade = self._get_grade()
         jlpt = self._get_jlpt()
         freq = self._get_freq()
+        dicts = self._get_dictcodes()
+        qcodes = self._get_querycodes()
 
         pieces = []
+
+        pieces.append(u"=" * 70)
+
         pieces.append(u"Literal: %s" % self.literal)
 
-        pieces.append(u"On-yomi: %s" % u"、".join(readings['ja_on']))
-        pieces.append(u"Kun-yomi: %s" % u"、".join(readings['ja_kun']))
-        pieces.append(u"Nanori: %s" % u"、".join(nanori))
+        pieces.append(u"-" * 70)
+        pieces.append(u"Readings:")
 
-        pieces.append(u"Korean (Hangul): %s" %
+        pieces.append(u"  On-yomi: %s" % u"、".join(readings['ja_on']))
+        pieces.append(u"  Kun-yomi: %s" % u"、".join(readings['ja_kun']))
+        pieces.append(u"  Nanori: %s" % u"、".join(nanori))
+        pieces.append(u"  Korean (Hangul): %s" %
                       u", ".join(readings['korean_h']))
-        pieces.append(u"Korean (Romanized): %s" %
+        pieces.append(u"  Korean (Romanized): %s" %
                       u", ".join(readings['korean_r']))
-        pieces.append(u"Pinyin: %s" % u", ".join(readings['pinyin']))
+        pieces.append(u"  Pinyin: %s" % u", ".join(readings['pinyin']))
+
+        pieces.append(u"-" * 70)
 
         for lang in sorted(meanings):
             pieces.append(u"Meanings (%s): %s" %
-                          (lang, "; ".join(meanings[lang])))
+                          (lang, u"; ".join(meanings[lang])))
+
+        pieces.append(u"-" * 70)
+        pieces.append(u"Miscellaneous:")
 
         if jlpt:
-            pieces.append(u"JLPT grade level: %d" % jlpt)
+            pieces.append(u"  JLPT grade level: %d" % jlpt)
         if grade:
-            pieces.append(u"Jouyou grade level: %d" % grade)
+            pieces.append(u"  Jouyou grade level: %d" % grade)
         if freq:
-            pieces.append(u"Newspaper frequency: %d" % freq)
+            pieces.append(u"  Newspaper frequency: %d" % freq)
+
+        pieces.append(u"-" * 70)
+        pieces.append(u"Dictionary codes:")
+
+        for dcode in sorted(dicts):
+            nodes = dicts[dcode]
+            assert len(nodes) == 1, (
+                u"Character %s: Multiple (%d) entries found for "
+                u"dict code %s" %
+                (self._get_literal(), len(nodes), dcode))
+            o = nodes[0]
+            dname = kanjidic2_key_to_str(dcode)
+            if dcode == "moro":
+                s = u"Index %s, volume %s, page %s" % \
+                    (o.text, o.attrib['m_vol'], o.attrib['m_page'])
+            else:
+                s = o.text
+            pieces.append(u"  %s: %s" % (dname, s))
+
+        pieces.append(u"-" * 70)
+        pieces.append(u"Query codes:")
+
+        for qcode in sorted(qcodes):
+            nodes = qcodes[qcode]
+            if qcode == "skip":
+                # SKIP has miscodes; do later
+                continue
+            s = u", ".join(o.text for o in nodes)
+            qname = qcode_to_desc(qcode)
+            pieces.append(u"  %s: %s" % (qname, s))
+
+        pieces.append(u"-" * 70)
 
         pieces.append(u"Unicode value: %04X" % ord(self.literal))
+
+        pieces.append(u"=" * 70)
 
         return u"\n".join(pieces)
 
@@ -176,9 +237,9 @@ class Parser(object):
     def get_header(self):
         d = {}
         for o in self.header.getchildren():
-            cdata = "".join((o.text, o.tail)).strip()
+            cdata = u"".join((o.text, o.tail)).strip()
             d[o.tag] = cdata
-        return "\n".join("%s: %s" % (k, d[k]) for k in sorted(d))
+        return u"\n".join(u"%s: %s" % (k, d[k]) for k in sorted(d))
 
     def search(self, query):
         self.create_indices()
@@ -234,11 +295,11 @@ if __name__ == "__main__":
     else:
         charset = "utf-8"
 
-    print "HEADER"
-    print "======"
+    print u"HEADER"
+    print u"======"
     print p.get_header()
     print
-    print "%d characters found" % len(p.characters)
+    print u"%d characters found" % len(p.characters)
 
     for i, kanji in enumerate(p.search("".join(args).decode(charset))):
         kstr = encode_or_else(unicode(kanji))
