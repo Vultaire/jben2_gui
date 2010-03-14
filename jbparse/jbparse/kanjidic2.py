@@ -242,10 +242,19 @@ class Kanjidic2Node(object):
                 pieces.append(_(u"%s: %s") % (qname, s))
         return pieces
 
+    def get_codepoints(self):
+        pieces = []
+        d = self._get_attrdict("codepoint/cp_value", "cp_type")
+        for key in sorted(d):
+            nodes = d[key]
+            for o in nodes:
+                pieces.append(u"%s: %s" % (key.upper(), o.text))
+        return pieces
+
     def __unicode__(self):
 
-        def indent_strs(strs):
-            return [u"  %s" % s for s in strs]
+        def indent_strs(strs, amount=2):
+            return [u"%s%s" % (u" " * amount, s) for s in strs]
 
         pieces = []
 
@@ -296,8 +305,9 @@ class Kanjidic2Node(object):
         #rad_strs = self.get_rad_info()
 
         # CODEPOINT node info
-        #cp_strs = indent_strs(self.get_codepoints())
-        pieces.append(_(u"  Unicode value: %04X") % ord(self.literal))
+        pieces.append(_(u"  Codepoints:"))
+        cp_strs = indent_strs(self.get_codepoints(), amount=4)
+        pieces.extend(cp_strs)
 
         # MISC node children
         #variant_strs = self.get_variants()   # AKA cross refs
