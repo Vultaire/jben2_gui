@@ -119,10 +119,15 @@ class Kanjidic2Node(object):
 
     def _get_reading_nodes(self):
         """Returns dictionary of reading lists, keyed by type."""
+        # NEEDS AN UPDATE: Just noticed, rmgroup allows
+        # readings/meanings to be meaningfully grouped together.  We
+        # -can- dump everything together, but we -should- handle the
+        # groups.
         return self._get_attrdict("reading_meaning/rmgroup/reading", "r_type")
 
     def _get_meaning_nodes(self):
         """Returns dictionary of gloss lists, keyed by language prefix."""
+        # NEEDS AN UPDATE: See _get_reading_nodes.
         meaning_d = self._get_attrdict(
             "reading_meaning/rmgroup/meaning", "m_lang")
         if None in meaning_d:
@@ -238,6 +243,10 @@ class Kanjidic2Node(object):
         return pieces
 
     def __unicode__(self):
+
+        def indent_strs(strs):
+            return [u"  %s" % s for s in strs]
+
         pieces = []
 
         pieces.append(u"=" * 70)
@@ -245,14 +254,12 @@ class Kanjidic2Node(object):
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Readings:"))
-        r_strs = [u"  %s" % s for s in
-                  self.get_readings(
-                      ("ja_on", "ja_kun", "nanori",
-                       "korean_h", "korean_r", "pinyin"))]
+        r_strs = indent_strs(self.get_readings(
+            ("ja_on", "ja_kun", "nanori", "korean_h", "korean_r", "pinyin")))
         pieces.extend(r_strs)
         pieces.append(u"-" * 70)
 
-        m_strs = [u"  %s" % s for s in self.get_meanings()]
+        m_strs = indent_strs(self.get_meanings())
         pieces.extend(m_strs)
         pieces.append(u"-" * 70)
 
@@ -274,20 +281,27 @@ class Kanjidic2Node(object):
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Dictionary codes:"))
-        d_strs = [u"  %s" % s for s in self.get_dict_codes([], all=True)]
+        d_strs = indent_strs(self.get_dict_codes([], all=True))
         pieces.extend(d_strs)
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Query codes:"))
-        qc_strs = [u"  %s" % s for s in self.get_query_codes([], all=True)]
+        qc_strs = indent_strs(self.get_query_codes([], all=True))
         pieces.extend(qc_strs)
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Other information:"))
-        #cp_strs = self.get_codepoints()
+
+        # RADICAL node info
         #rad_strs = self.get_rad_info()
-        #variant_strs = self.get_variants()
+
+        # CODEPOINT node info
+        #cp_strs = indent_strs(self.get_codepoints())
         pieces.append(_(u"  Unicode value: %04X") % ord(self.literal))
+
+        # MISC node children
+        #variant_strs = self.get_variants()   # AKA cross refs
+        #radname_strs = self.get_radical_name()  # "T2" KANJIDIC code
 
         pieces.append(u"=" * 70)
 
