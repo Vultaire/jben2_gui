@@ -242,6 +242,15 @@ class Kanjidic2Node(object):
                 pieces.append(_(u"%s: %s") % (qname, s))
         return pieces
 
+    def get_radicals(self):
+        pieces = []
+        d = self._get_attrdict("radical/rad_value", "rad_type")
+        for key in sorted(d):
+            nodes = d[key]
+            for o in nodes:
+                pieces.append(u"%s: %s" % (key, o.text))
+        return pieces
+
     def get_codepoints(self):
         pieces = []
         d = self._get_attrdict("codepoint/cp_value", "cp_type")
@@ -251,10 +260,19 @@ class Kanjidic2Node(object):
                 pieces.append(u"%s: %s" % (key.upper(), o.text))
         return pieces
 
+    def _get_radical_name_nodes(self):
+        return self.xml.findall("misc/rad_name")
+
+    def get_radical_names(self):
+        """Get radical names.  Returned as a single string."""
+        names = [o.text for o in self._get_radical_name_nodes()]
+        return u"、".join(names) if names else None
+
     def __unicode__(self):
 
         def indent_strs(strs, amount=2):
-            return [u"%s%s" % (u" " * amount, s) for s in strs]
+            if strs:
+                return [u"%s%s" % (u" " * amount, s) for s in strs]
 
         pieces = []
 
@@ -300,18 +318,19 @@ class Kanjidic2Node(object):
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Other information:"))
-
-        # RADICAL node info
-        #rad_strs = self.get_rad_info()
-
-        # CODEPOINT node info
+        pieces.append(_(u"  Radicals:"))
+        rad_strs = indent_strs(self.get_radicals(), amount=4)
+        pieces.extend(rad_strs)
         pieces.append(_(u"  Codepoints:"))
         cp_strs = indent_strs(self.get_codepoints(), amount=4)
         pieces.extend(cp_strs)
 
         # MISC node children
         #variant_strs = self.get_variants()   # AKA cross refs
-        #radname_strs = self.get_radical_name()  # "T2" KANJIDIC code
+        radnames = self.get_radical_names()
+        if radnames:
+            pieces.append(u"    %s: %s" %
+                          (_(u"Radical names"), radnames))
 
         pieces.append(u"=" * 70)
 
