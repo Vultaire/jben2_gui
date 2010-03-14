@@ -260,6 +260,15 @@ class Kanjidic2Node(object):
                 pieces.append(u"%s: %s" % (key.upper(), o.text))
         return pieces
 
+    def get_variants(self):
+        pieces = []
+        d = self._get_attrdict("misc/variant", "var_type")
+        for key in sorted(d):
+            nodes = d[key]
+            for o in nodes:
+                pieces.append(u"%s: %s" % (key.upper(), o.text))
+        return pieces
+
     def _get_radical_name_nodes(self):
         return self.xml.findall("misc/rad_name")
 
@@ -318,19 +327,24 @@ class Kanjidic2Node(object):
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Other information:"))
+
         pieces.append(_(u"  Radicals:"))
         rad_strs = indent_strs(self.get_radicals(), amount=4)
         pieces.extend(rad_strs)
-        pieces.append(_(u"  Codepoints:"))
-        cp_strs = indent_strs(self.get_codepoints(), amount=4)
-        pieces.extend(cp_strs)
 
-        # MISC node children
-        #variant_strs = self.get_variants()   # AKA cross refs
         radnames = self.get_radical_names()
         if radnames:
             pieces.append(u"    %s: %s" %
                           (_(u"Radical names"), radnames))
+
+        pieces.append(_(u"  Codepoints:"))
+        cp_strs = indent_strs(self.get_codepoints(), amount=4)
+        pieces.extend(cp_strs)
+
+        variant_strs = indent_strs(self.get_variants(), amount=4)
+        if variant_strs:
+            pieces.append(_(u"  Variants:"))
+            pieces.extend(variant_strs)
 
         pieces.append(u"=" * 70)
 
