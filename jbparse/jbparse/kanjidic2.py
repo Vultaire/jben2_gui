@@ -32,7 +32,7 @@
 
 from __future__ import absolute_import
 
-import os, gzip, gettext
+import os, gzip, gettext, warnings
 from xml.etree.cElementTree import ElementTree
 gettext.install('pyjben', unicode=True)
 
@@ -42,7 +42,6 @@ from .kanjidic_common \
 def jis_kuten_to_hex(kuten):
     """Kuten string to hex conversion"""
     pieces = map(int, kuten.split(u'-'))
-    print u"DEBUG: kuten: %s, pieces: %s" % (kuten, str(pieces))
     return ((pieces[0] + 0x20) << 8) + (pieces[1] + 0x20)
 
 
@@ -54,7 +53,7 @@ class Kanjidic2Node(object):
 
     def _get_literal(self):
         literal = self.xml.find("literal").text.strip()
-        assert len(literal) == 1, u"Literal has more than one character!"
+        assert len(literal) == 1, _(u"Literal has more than one character!")
         return literal
 
     def _get_grade(self):
@@ -67,9 +66,9 @@ class Kanjidic2Node(object):
         o = self.xml.findall("misc/freq")
         if not o:
             return None
-        assert len(o) == 1, (
-            u"Character %s: Expected 1 freq entry, found %d" %
-            (self._get_literal(), len(o)))
+        assert len(o) == 1, _(
+            u"Character %s: Expected 1 freq entry, found %d") % \
+            (self._get_literal(), len(o))
         return int(o[0].text)
 
     def _get_jlpt(self):
@@ -135,56 +134,56 @@ class Kanjidic2Node(object):
 
         pieces.append(u"=" * 70)
 
-        pieces.append(u"Literal: %s" % self.literal)
+        pieces.append(_(u"Literal: %s") % self.literal)
 
         pieces.append(u"-" * 70)
-        pieces.append(u"Readings:")
+        pieces.append(_(u"Readings:"))
 
-        pieces.append(u"  On-yomi: %s" % u"、".join(readings['ja_on']))
-        pieces.append(u"  Kun-yomi: %s" % u"、".join(readings['ja_kun']))
-        pieces.append(u"  Nanori: %s" % u"、".join(nanori))
-        pieces.append(u"  Korean (Hangul): %s" %
+        pieces.append(_(u"  On-yomi: %s") % u"、".join(readings['ja_on']))
+        pieces.append(_(u"  Kun-yomi: %s") % u"、".join(readings['ja_kun']))
+        pieces.append(_(u"  Nanori: %s") % u"、".join(nanori))
+        pieces.append(_(u"  Korean (Hangul): %s") %
                       u", ".join(readings['korean_h']))
-        pieces.append(u"  Korean (Romanized): %s" %
+        pieces.append(_(u"  Korean (Romanized): %s") %
                       u", ".join(readings['korean_r']))
-        pieces.append(u"  Pinyin: %s" % u", ".join(readings['pinyin']))
+        pieces.append(_(u"  Pinyin: %s") % u", ".join(readings['pinyin']))
 
         pieces.append(u"-" * 70)
 
         for lang in sorted(meanings):
-            pieces.append(u"Meanings (%s): %s" %
+            pieces.append(_(u"Meanings (%s): %s") %
                           (lang, u"; ".join(meanings[lang])))
 
         pieces.append(u"-" * 70)
-        pieces.append(u"Miscellaneous:")
+        pieces.append(_(u"Miscellaneous:"))
 
         if jlpt:
-            pieces.append(u"  JLPT grade level: %d" % jlpt)
+            pieces.append(_(u"  JLPT grade level: %d") % jlpt)
         if grade:
-            pieces.append(u"  Jouyou grade level: %d" % grade)
+            pieces.append(_(u"  Jouyou grade level: %d") % grade)
         if freq:
-            pieces.append(u"  Newspaper frequency: %d" % freq)
+            pieces.append(_(u"  Newspaper frequency: %d") % freq)
 
         pieces.append(u"-" * 70)
-        pieces.append(u"Dictionary codes:")
+        pieces.append(_(u"Dictionary codes:"))
 
         for dcode in sorted(dicts):
             nodes = dicts[dcode]
-            assert len(nodes) == 1, (
+            assert len(nodes) == 1, _(
                 u"Character %s: Multiple (%d) entries found for "
-                u"dict code %s" %
-                (self._get_literal(), len(nodes), dcode))
+                u"dict code %s") % \
+                (self._get_literal(), len(nodes), dcode)
             o = nodes[0]
             dname = kanjidic2_key_to_str(dcode)
             if dcode == "moro":
-                s = u"Index %s, volume %s, page %s" % \
+                s = _(u"Index %s, volume %s, page %s") % \
                     (o.text, o.attrib['m_vol'], o.attrib['m_page'])
             else:
                 s = o.text
-            pieces.append(u"  %s: %s" % (dname, s))
+            pieces.append(_(u"  %s: %s") % (dname, s))
 
         pieces.append(u"-" * 70)
-        pieces.append(u"Query codes:")
+        pieces.append(_(u"Query codes:"))
 
         for qcode in sorted(qcodes):
             nodes = qcodes[qcode]
@@ -193,11 +192,11 @@ class Kanjidic2Node(object):
                 continue
             s = u", ".join(o.text for o in nodes)
             qname = qcode_to_desc(qcode)
-            pieces.append(u"  %s: %s" % (qname, s))
+            pieces.append(_(u"  %s: %s") % (qname, s))
 
         pieces.append(u"-" * 70)
 
-        pieces.append(u"Unicode value: %04X" % ord(self.literal))
+        pieces.append(_(u"Unicode value: %04X") % ord(self.literal))
 
         pieces.append(u"=" * 70)
 
@@ -216,11 +215,22 @@ class Parser(object):
 
         """
         if not os.path.exists(filename):
-            raise Exception("Dictionary file does not exist.")
+            raise Exception(u_("Dictionary file does not exist."))
         self.filename = filename
         self.encoding = encoding
         self.indexed = False
         self.header, self.characters = self.load_via_etree()
+        self._check_version()
+
+    def _check_version(self):
+        version = int(self.header.find('file_version').text)
+        assert version >= 4, _(
+            u"This parser won't work with versions of KANJIDIC2 "
+            u"older than version 4.")
+        if version > 3:
+            s = _(u"Parser version is for version 4, detected version is %d"
+                  ) % version
+            warnings.warn(s)
 
     def load_via_etree(self):
         if len(self.filename) >= 3 and self.filename[-3:] == ".gz":
