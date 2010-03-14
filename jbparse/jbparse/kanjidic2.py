@@ -187,12 +187,21 @@ class Kanjidic2Node(object):
 
         for qcode in sorted(qcodes):
             nodes = qcodes[qcode]
-            if qcode == "skip":
-                # SKIP has miscodes; do later
-                continue
-            s = u", ".join(o.text for o in nodes)
             qname = qcode_to_desc(qcode)
-            pieces.append(_(u"  %s: %s") % (qname, s))
+            if qcode == "skip":
+                d = {}
+                for o in nodes:
+                    d.setdefault(o.attrib.get("skip_misclass"), []).append(o)
+                for misclass in sorted(d):
+                    if misclass:
+                        outname = "%s miscode (%s)" % (qname, misclass)
+                    else:
+                        outname = qname
+                    s = u", ".join(o.text for o in d[misclass])
+                    pieces.append(_(u"  %s: %s") % (outname, s))
+            else:
+                s = u", ".join(o.text for o in nodes)
+                pieces.append(_(u"  %s: %s") % (qname, s))
 
         pieces.append(u"-" * 70)
 
