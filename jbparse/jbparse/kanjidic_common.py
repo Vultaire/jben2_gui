@@ -33,12 +33,12 @@ This module is not intended to be used by itself.
 
 """
 
-def jstring_convert(us):
+def jstring_convert(s):
     """Convert's from Jim Breen's -x.xx- notation to 〜x(xx)〜 notation."""
-    if us[0] == u'-' or us[-1] == u'-':
-        us = us.replace(u'-', u'〜')
-    parts = us.split('.', 1)
-    if len(parts) == 1: return us
+    s = s.replace(u'-', u'〜')
+    parts = s.split(u'.', 1)
+    if len(parts) == 1:
+        return s
     return u"%s(%s)" % tuple(parts)
 
 def kanjidic2_key_to_str(dkey):

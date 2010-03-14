@@ -167,6 +167,7 @@ class Kanjidic2Node(object):
             "pinyin": _(u"Pinyin"),
             }
         romanized = ("korean_r", "pinyin")
+        j_readings = ("ja_on", "ja_kun")
         readings = mapdict(xml2text, self._get_reading_nodes())
         pieces = []
         for rt in rtypes:
@@ -177,8 +178,11 @@ class Kanjidic2Node(object):
             elif rt in d:
                 if rt not in readings:
                     continue
+                r_list = readings[rt]
+                if rt in j_readings:
+                    r_list = map(jstring_convert, r_list)
                 separator = u", " if rt in romanized else u"、"
-                reading_str = separator.join(readings[rt])
+                reading_str = separator.join(r_list)
                 pieces.append(_(u"%s: %s") % (d[rt], reading_str))
         return pieces
 
