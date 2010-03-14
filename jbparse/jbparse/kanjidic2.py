@@ -437,7 +437,12 @@ def encode_or_else(s):
 
 
 if __name__ == "__main__":
-    import sys
+    import sys, locale
+    # This is horrid, but it seems like in Python 2.x there doesn't
+    # exist an alternative accepted method that's transparent to the
+    # typical end user...
+    reload(sys)
+    sys.setdefaultencoding(locale.getpreferredencoding())
 
     try:
         dfname, args = sys.argv[1], sys.argv[2:]
