@@ -123,7 +123,7 @@ class Kanjidic2Node(object):
 
         readings = mapdict(xml2text, self._get_reading_nodes())
         meanings = mapdict(xml2text, self._get_meaning_nodes())
-        nanori = map(xml2text, self._get_nanori_nodes())
+        nanori = map(xml2text, self._get_nanori_nodes() or [])
         grade = self._get_grade()
         jlpt = self._get_jlpt()
         freq = self._get_freq()
