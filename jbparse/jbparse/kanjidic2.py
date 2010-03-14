@@ -122,7 +122,7 @@ class Kanjidic2Node(object):
     def get_nanori(self):
         nanori = map(xml2text, self._get_nanori_nodes() or [])
         if nanori:
-            return _(u"  %s: %s") % (_(u"Nanori"), u"、".join(nanori))
+            return _(u"%s: %s") % (_(u"Nanori"), u"、".join(nanori))
 
     def get_readings(self, rtypes):
         """Gets readings as text strings.
@@ -157,7 +157,7 @@ class Kanjidic2Node(object):
                     continue
                 separator = u", " if rt in romanized else u"、"
                 reading_str = separator.join(readings[rt])
-                pieces.append(_(u"  %s: %s") % (d[rt], reading_str))
+                pieces.append(_(u"%s: %s") % (d[rt], reading_str))
         return pieces
 
     def get_meanings(self):
@@ -193,7 +193,7 @@ class Kanjidic2Node(object):
                     (o.text, o.attrib['m_vol'], o.attrib['m_page'])
             else:
                 s = o.text
-            pieces.append(_(u"  %s: %s") % (dname, s))
+            pieces.append(_(u"%s: %s") % (dname, s))
         return pieces
 
     def get_query_codes(self, keys, all=False):
@@ -214,10 +214,10 @@ class Kanjidic2Node(object):
                     else:
                         outname = qname
                     s = u", ".join(o.text for o in d[misclass])
-                    pieces.append(_(u"  %s: %s") % (outname, s))
+                    pieces.append(_(u"%s: %s") % (outname, s))
             else:
                 s = u", ".join(o.text for o in nodes)
-                pieces.append(_(u"  %s: %s") % (qname, s))
+                pieces.append(_(u"%s: %s") % (qname, s))
         return pieces
 
     def __unicode__(self):
@@ -228,11 +228,15 @@ class Kanjidic2Node(object):
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Readings:"))
-        pieces.extend(self.get_readings(
-            ("ja_on", "ja_kun", "nanori", "korean_h", "korean_r", "pinyin")))
+        r_strs = [u"  %s" % s for s in
+                  self.get_readings(
+                      ("ja_on", "ja_kun", "nanori",
+                       "korean_h", "korean_r", "pinyin"))]
+        pieces.extend(r_strs)
         pieces.append(u"-" * 70)
 
-        pieces.extend(self.get_meanings())
+        m_strs = [u"  %s" % s for s in self.get_meanings()]
+        pieces.extend(m_strs)
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Miscellaneous:"))
@@ -248,11 +252,13 @@ class Kanjidic2Node(object):
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Dictionary codes:"))
-        pieces.extend(self.get_dict_codes([], all=True))
+        d_strs = [u"  %s" % s for s in self.get_dict_codes([], all=True)]
+        pieces.extend(d_strs)
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Query codes:"))
-        pieces.extend(self.get_query_codes([], all=True))
+        qc_strs = [u"  %s" % s for s in self.get_query_codes([], all=True)]
+        pieces.extend(qc_strs)
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Unicode value: %04X") % ord(self.literal))
