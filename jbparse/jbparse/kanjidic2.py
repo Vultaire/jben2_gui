@@ -44,6 +44,15 @@ def jis_kuten_to_hex(kuten):
     pieces = map(int, kuten.split(u'-'))
     return ((pieces[0] + 0x20) << 8) + (pieces[1] + 0x20)
 
+def xml2text(o):
+    return o.text
+
+def mapdict(fn, d):
+    result = {}
+    for k, v in d.iteritems():
+        result[k] = map(fn, v)
+    return result
+
 
 class Kanjidic2Node(object):
 
@@ -56,11 +65,11 @@ class Kanjidic2Node(object):
         assert len(literal) == 1, _(u"Literal has more than one character!")
         return literal
 
-    def _get_grade(self):
+    def get_grade(self):
         o = self.xml.find("misc/grade")
         return int(o.text)
 
-    def _get_freq(self):
+    def get_freq(self):
         # By the spec, it seems like multiple freqs are possible??
         # So... let's get all entries and assert.
         o = self.xml.findall("misc/freq")
@@ -71,7 +80,7 @@ class Kanjidic2Node(object):
             (self._get_literal(), len(o))
         return int(o[0].text)
 
-    def _get_jlpt(self):
+    def get_jlpt(self):
         o = self.xml.find("misc/jlpt")
         return int(o.text)
 
@@ -110,64 +119,68 @@ class Kanjidic2Node(object):
     def _get_querycodes(self):
         return self._get_attrdict("query_code/q_code", "qc_type")
 
-    def __unicode__(self):
-
-        def xml2text(o):
-            return o.text
-
-        def mapdict(fn, d):
-            result = {}
-            for k, v in d.iteritems():
-                result[k] = map(fn, v)
-            return result
-
-        readings = mapdict(xml2text, self._get_reading_nodes())
-        meanings = mapdict(xml2text, self._get_meaning_nodes())
+    def get_nanori(self):
         nanori = map(xml2text, self._get_nanori_nodes() or [])
-        grade = self._get_grade()
-        jlpt = self._get_jlpt()
-        freq = self._get_freq()
-        dicts = self._get_dictcodes()
-        qcodes = self._get_querycodes()
+        if nanori:
+            return _(u"  %s: %s") % (_(u"Nanori"), u"、".join(nanori))
 
+    def get_readings(self, rtypes):
+        """Gets readings as text strings.
+
+        Takes in any number of reading keys, and returns a list
+        containing user-friendly output strings.
+
+        Valid keys include: ja_on, ja_kun, korean_h, korean_r, pinyin,
+        and nanori.
+
+        Note: Nanori is also handled independently, as it is stored
+        differently than the other readings.
+
+        """
+        d = {
+            "ja_on": _(u"On-yomi"),
+            "ja_kun": _(u"Kun-yomi"),
+            "korean_h": _(u"Korean (Hangul)"),
+            "korean_r": _(u"Korean (Romanized)"),
+            "pinyin": _(u"Pinyin"),
+            }
+        romanized = ("korean_r", "pinyin")
+        readings = mapdict(xml2text, self._get_reading_nodes())
         pieces = []
+        for rt in rtypes:
+            if rt == "nanori":
+                s = self.get_nanori()
+                if s:
+                    pieces.append(s)
+            elif rt in d:
+                if rt not in readings:
+                    continue
+                separator = u", " if rt in romanized else u"、"
+                reading_str = separator.join(readings[rt])
+                pieces.append(_(u"  %s: %s") % (d[rt], reading_str))
+        return pieces
 
-        pieces.append(u"=" * 70)
-
-        pieces.append(_(u"Literal: %s") % self.literal)
-
-        pieces.append(u"-" * 70)
-        pieces.append(_(u"Readings:"))
-
-        pieces.append(_(u"  On-yomi: %s") % u"、".join(readings['ja_on']))
-        pieces.append(_(u"  Kun-yomi: %s") % u"、".join(readings['ja_kun']))
-        pieces.append(_(u"  Nanori: %s") % u"、".join(nanori))
-        pieces.append(_(u"  Korean (Hangul): %s") %
-                      u", ".join(readings['korean_h']))
-        pieces.append(_(u"  Korean (Romanized): %s") %
-                      u", ".join(readings['korean_r']))
-        pieces.append(_(u"  Pinyin: %s") % u", ".join(readings['pinyin']))
-
-        pieces.append(u"-" * 70)
-
+    def get_meanings(self):
+        meanings = mapdict(xml2text, self._get_meaning_nodes())
+        pieces = []
         for lang in sorted(meanings):
             pieces.append(_(u"Meanings (%s): %s") %
                           (lang, u"; ".join(meanings[lang])))
+        return pieces
 
-        pieces.append(u"-" * 70)
-        pieces.append(_(u"Miscellaneous:"))
+    def get_dict_codes(self, keys, all=False):
+        """Gets dictionary codes as strings for display to the user.
 
-        if jlpt:
-            pieces.append(_(u"  JLPT grade level: %d") % jlpt)
-        if grade:
-            pieces.append(_(u"  Jouyou grade level: %d") % grade)
-        if freq:
-            pieces.append(_(u"  Newspaper frequency: %d") % freq)
+        Accepts a list of dictionary keys.  To get all keys, set the
+        all keyword to true.  (The keys parameter will be ignored in
+        this case.)
 
-        pieces.append(u"-" * 70)
-        pieces.append(_(u"Dictionary codes:"))
-
+        """
+        pieces = []
+        dicts = self._get_dictcodes()
         for dcode in sorted(dicts):
+            if (not all) and dcode not in keys:
+                continue
             nodes = dicts[dcode]
             assert len(nodes) == 1, _(
                 u"Character %s: Multiple (%d) entries found for "
@@ -181,11 +194,14 @@ class Kanjidic2Node(object):
             else:
                 s = o.text
             pieces.append(_(u"  %s: %s") % (dname, s))
+        return pieces
 
-        pieces.append(u"-" * 70)
-        pieces.append(_(u"Query codes:"))
-
+    def get_query_codes(self, keys, all=False):
+        pieces = []
+        qcodes = self._get_querycodes()
         for qcode in sorted(qcodes):
+            if (not all) and qcode not in keys:
+                continue
             nodes = qcodes[qcode]
             qname = qcode_to_desc(qcode)
             if qcode == "skip":
@@ -194,7 +210,7 @@ class Kanjidic2Node(object):
                     d.setdefault(o.attrib.get("skip_misclass"), []).append(o)
                 for misclass in sorted(d):
                     if misclass:
-                        outname = "%s miscode (%s)" % (qname, misclass)
+                        outname = _(u"%s miscode (%s)") % (qname, misclass)
                     else:
                         outname = qname
                     s = u", ".join(o.text for o in d[misclass])
@@ -202,7 +218,41 @@ class Kanjidic2Node(object):
             else:
                 s = u", ".join(o.text for o in nodes)
                 pieces.append(_(u"  %s: %s") % (qname, s))
+        return pieces
 
+    def __unicode__(self):
+        pieces = []
+
+        pieces.append(u"=" * 70)
+        pieces.append(_(u"Literal: %s") % self.literal)
+        pieces.append(u"-" * 70)
+
+        pieces.append(_(u"Readings:"))
+        pieces.extend(self.get_readings(
+            ("ja_on", "ja_kun", "nanori", "korean_h", "korean_r", "pinyin")))
+        pieces.append(u"-" * 70)
+
+        pieces.extend(self.get_meanings())
+        pieces.append(u"-" * 70)
+
+        pieces.append(_(u"Miscellaneous:"))
+        jlpt = self.get_jlpt()
+        if jlpt:
+            pieces.append(_(u"  JLPT grade level: %d") % jlpt)
+        grade = self.get_grade()
+        if self.get_grade():
+            pieces.append(_(u"  Jouyou grade level: %d") % grade)
+        freq = self.get_freq()
+        if self.get_freq():
+            pieces.append(_(u"  Newspaper frequency: %d") % freq)
+        pieces.append(u"-" * 70)
+
+        pieces.append(_(u"Dictionary codes:"))
+        pieces.extend(self.get_dict_codes([], all=True))
+        pieces.append(u"-" * 70)
+
+        pieces.append(_(u"Query codes:"))
+        pieces.extend(self.get_query_codes([], all=True))
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Unicode value: %04X") % ord(self.literal))
