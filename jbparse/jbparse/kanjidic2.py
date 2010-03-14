@@ -67,7 +67,7 @@ class Kanjidic2Node(object):
 
     def get_grade(self):
         o = self.xml.find("misc/grade")
-        return int(o.text)
+        return int(o.text) if o else None
 
     def get_freq(self):
         # By the spec, it seems like multiple freqs are possible??
@@ -82,7 +82,24 @@ class Kanjidic2Node(object):
 
     def get_jlpt(self):
         o = self.xml.find("misc/jlpt")
-        return int(o.text)
+        return int(o.text) if o else None
+
+    def get_strokes(self):
+        """Gets stroke count.
+
+        Returns a tuple of (stroke_count, miscounts), where miscounts
+        is either None or a list of common miscounts for the
+        character.
+
+        """
+        nodes = self.xml.findall("misc/stroke_count")
+        scnode, misnodes = nodes[0], nodes[1:]
+        sc = int(nodes[0].text)
+        if misnodes:
+            miss = map(int, [o.text for o in misnodes])
+        else:
+            miss = None
+        return (sc, miss)
 
     def _get_nanori_nodes(self):
         nodes = self.xml.findall("reading_meaning/nanori")
@@ -249,6 +266,11 @@ class Kanjidic2Node(object):
         freq = self.get_freq()
         if self.get_freq():
             pieces.append(_(u"  Newspaper frequency: %d") % freq)
+        strokes, misstrokes = self.get_strokes()
+        pieces.append(_(u"  Stroke count: %d") % strokes)
+        if misstrokes:
+            pieces.append(_(u"  Common stroke miscounts: %s") %
+                          ", ".join(map(str, misstrokes)))
         pieces.append(u"-" * 70)
 
         pieces.append(_(u"Dictionary codes:"))
@@ -261,7 +283,11 @@ class Kanjidic2Node(object):
         pieces.extend(qc_strs)
         pieces.append(u"-" * 70)
 
-        pieces.append(_(u"Unicode value: %04X") % ord(self.literal))
+        pieces.append(_(u"Other information:"))
+        #cp_strs = self.get_codepoints()
+        #rad_strs = self.get_rad_info()
+        #variant_strs = self.get_variants()
+        pieces.append(_(u"  Unicode value: %04X") % ord(self.literal))
 
         pieces.append(u"=" * 70)
 
