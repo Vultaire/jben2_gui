@@ -36,6 +36,9 @@ import os, gzip, gettext, warnings
 from xml.etree.cElementTree import ElementTree
 gettext.install('pyjben', unicode=True)
 
+# NOTE: This seems not to work on Python 2.5!
+# Reason: difference in how modules are handled for modules called
+# directly.
 from .kanjidic_common \
      import jstring_convert, kanjidic2_key_to_str, qcode_to_desc
 
@@ -52,6 +55,93 @@ def mapdict(fn, d):
     for k, v in d.iteritems():
         result[k] = map(fn, v)
     return result
+
+def xml_get_attrdict(xml_node, path, attr_name):
+    """Helper: stores elements on path in dict, keyed by attribute."""
+    d = {}
+    nodes = xml_node.findall(path)
+    #attrs = set(o.attrib.get(attr_name) for o in nodes)
+    for o in nodes:
+        d.setdefault(o.attrib.get(attr_name), []).append(o)
+    #for attr in attrs:
+    #    d[attr] = [o for o in nodes
+    #               if o.attrib.get(attr_name) == attr]
+    return d
+
+
+class Kanjidic2SenseNode(object):
+
+    def __init__(self, xml_node):
+        self.xml = xml_node
+
+    def _get_reading_nodes(self):
+        """Returns dictionary of reading lists, keyed by type."""
+        # NEEDS AN UPDATE: Just noticed, rmgroup allows
+        # readings/meanings to be meaningfully grouped together.  We
+        # -can- dump everything together, but we -should- handle the
+        # groups.
+        return xml_get_attrdict(
+            self.xml, "reading", "r_type")
+
+    def _get_meaning_nodes(self):
+        """Returns dictionary of gloss lists, keyed by language prefix."""
+        # NEEDS AN UPDATE: See _get_reading_nodes.
+        meaning_d = xml_get_attrdict(
+            self.xml, "meaning", "m_lang")
+        if None in meaning_d:
+            meaning_d['en'] = meaning_d[None]
+            del meaning_d[None]
+        return meaning_d
+
+    def get_readings(self, rtypes):
+        """Gets readings as text strings.
+
+        Takes in any number of reading keys, and returns a list
+        containing user-friendly output strings.
+
+        Valid keys include: ja_on, ja_kun, korean_h, korean_r, pinyin,
+        and nanori.
+
+        Note: Nanori is also handled independently, as it is stored
+        differently than the other readings.
+
+        """
+        d = {
+            "ja_on": _(u"On-yomi"),
+            "ja_kun": _(u"Kun-yomi"),
+            "korean_h": _(u"Korean (Hangul)"),
+            "korean_r": _(u"Korean (Romanized)"),
+            "pinyin": _(u"Pinyin"),
+            }
+        romanized = ("korean_r", "pinyin")
+        j_readings = ("ja_on", "ja_kun")
+        readings = mapdict(xml2text, self._get_reading_nodes())
+        pieces = []
+        for rt in rtypes:
+            if rt == "nanori":
+                s = self.get_nanori()
+                if s:
+                    pieces.append(s)
+            elif rt in d:
+                if rt not in readings:
+                    continue
+                r_list = readings[rt]
+                if rt in j_readings:
+                    r_list = map(jstring_convert, r_list)
+                separator = u", " if rt in romanized else u"、"
+                reading_str = separator.join(r_list)
+                pieces.append(_(u"%s: %s") % (d[rt], reading_str))
+        if pieces:
+            pieces.insert(0, _(u"Readings:"))
+        return pieces
+
+    def get_meanings(self):
+        meanings = mapdict(xml2text, self._get_meaning_nodes())
+        pieces = []
+        for lang in sorted(meanings):
+            pieces.append(_(u"Meanings (%s): %s") %
+                          (lang, u"; ".join(meanings[lang])))
+        return pieces
 
 
 class Kanjidic2Node(object):
@@ -105,94 +195,30 @@ class Kanjidic2Node(object):
         nodes = self.xml.findall("reading_meaning/nanori")
         return nodes or None
 
-    def _get_attrdict(self, path, attr_name):
-        """Helper: stores elements on path in dict, keyed by attribute."""
-        d = {}
-        nodes = self.xml.findall(path)
-        #attrs = set(o.attrib.get(attr_name) for o in nodes)
-        for o in nodes:
-            d.setdefault(o.attrib.get(attr_name), []).append(o)
-        #for attr in attrs:
-        #    d[attr] = [o for o in nodes
-        #               if o.attrib.get(attr_name) == attr]
-        return d
+    def _get_sense_nodes(self):
+        """Gets rmgroup nodes.
 
-    def _get_reading_nodes(self):
-        """Returns dictionary of reading lists, keyed by type."""
-        # NEEDS AN UPDATE: Just noticed, rmgroup allows
-        # readings/meanings to be meaningfully grouped together.  We
-        # -can- dump everything together, but we -should- handle the
-        # groups.
-        return self._get_attrdict("reading_meaning/rmgroup/reading", "r_type")
+        Returns a list of Kanjidic2SenseNodes.  These nodes can be
+        queried for readings and meanings.
 
-    def _get_meaning_nodes(self):
-        """Returns dictionary of gloss lists, keyed by language prefix."""
-        # NEEDS AN UPDATE: See _get_reading_nodes.
-        meaning_d = self._get_attrdict(
-            "reading_meaning/rmgroup/meaning", "m_lang")
-        if None in meaning_d:
-            meaning_d['en'] = meaning_d[None]
-            del meaning_d[None]
-        return meaning_d
+        Explanation: each rmgroup represents a different "sense" of
+        the kanji.
+
+        """
+        nodes = self.xml.findall("reading_meaning/rmgroup")
+        nodes = [Kanjidic2SenseNode(o) for o in nodes]
+        return nodes or None
 
     def _get_dictcodes(self):
-        return self._get_attrdict("dic_number/dic_ref", "dr_type")
+        return xml_get_attrdict(self.xml, "dic_number/dic_ref", "dr_type")
 
     def _get_querycodes(self):
-        return self._get_attrdict("query_code/q_code", "qc_type")
+        return xml_get_attrdict(self.xml, "query_code/q_code", "qc_type")
 
     def get_nanori(self):
         nanori = map(xml2text, self._get_nanori_nodes() or [])
         if nanori:
             return _(u"%s: %s") % (_(u"Nanori"), u"、".join(nanori))
-
-    def get_readings(self, rtypes):
-        """Gets readings as text strings.
-
-        Takes in any number of reading keys, and returns a list
-        containing user-friendly output strings.
-
-        Valid keys include: ja_on, ja_kun, korean_h, korean_r, pinyin,
-        and nanori.
-
-        Note: Nanori is also handled independently, as it is stored
-        differently than the other readings.
-
-        """
-        d = {
-            "ja_on": _(u"On-yomi"),
-            "ja_kun": _(u"Kun-yomi"),
-            "korean_h": _(u"Korean (Hangul)"),
-            "korean_r": _(u"Korean (Romanized)"),
-            "pinyin": _(u"Pinyin"),
-            }
-        romanized = ("korean_r", "pinyin")
-        j_readings = ("ja_on", "ja_kun")
-        readings = mapdict(xml2text, self._get_reading_nodes())
-        pieces = []
-        for rt in rtypes:
-            if rt == "nanori":
-                s = self.get_nanori()
-                if s:
-                    pieces.append(s)
-            elif rt in d:
-                if rt not in readings:
-                    continue
-                r_list = readings[rt]
-                if rt in j_readings:
-                    r_list = map(jstring_convert, r_list)
-                separator = u", " if rt in romanized else u"、"
-                reading_str = separator.join(r_list)
-                pieces.append(_(u"%s: %s") % (d[rt], reading_str))
-        return pieces
-
-    def get_meanings(self):
-        meanings = mapdict(xml2text, self._get_meaning_nodes())
-        pieces = []
-        for lang in sorted(meanings):
-            pieces.append(_(u"Meanings (%s): %s") %
-                          (lang, u"; ".join(meanings[lang])))
-        return pieces
 
     def get_dict_codes(self, keys, all=False):
         """Gets dictionary codes as strings for display to the user.
@@ -248,7 +274,7 @@ class Kanjidic2Node(object):
 
     def get_radicals(self):
         pieces = []
-        d = self._get_attrdict("radical/rad_value", "rad_type")
+        d = xml_get_attrdict(self.xml, "radical/rad_value", "rad_type")
         for key in sorted(d):
             nodes = d[key]
             for o in nodes:
@@ -257,7 +283,7 @@ class Kanjidic2Node(object):
 
     def get_codepoints(self):
         pieces = []
-        d = self._get_attrdict("codepoint/cp_value", "cp_type")
+        d = xml_get_attrdict(self.xml, "codepoint/cp_value", "cp_type")
         for key in sorted(d):
             nodes = d[key]
             for o in nodes:
@@ -266,7 +292,7 @@ class Kanjidic2Node(object):
 
     def get_variants(self):
         pieces = []
-        d = self._get_attrdict("misc/variant", "var_type")
+        d = xml_get_attrdict(self.xml, "misc/variant", "var_type")
         for key in sorted(d):
             nodes = d[key]
             for o in nodes:
@@ -291,17 +317,22 @@ class Kanjidic2Node(object):
 
         pieces.append(u"=" * 70)
         pieces.append(_(u"Literal: %s") % self.literal)
+
+        sense_nodes = self._get_sense_nodes()
+        for i, sense in enumerate(sense_nodes):
+            pieces.append(u"-" * 70)
+            if len(sense_nodes) > 0:
+                pieces.append(_(u"Sense %d:") % i)
+            r_strs = indent_strs(sense.get_readings(
+                    ("ja_on", "ja_kun", "korean_h", "korean_r", "pinyin")))
+            pieces.extend(r_strs)
+            pieces.append(u"-" * 70)
+            m_strs = indent_strs(sense.get_meanings())
+            pieces.extend(m_strs)
+
         pieces.append(u"-" * 70)
 
-        pieces.append(_(u"Readings:"))
-        r_strs = indent_strs(self.get_readings(
-            ("ja_on", "ja_kun", "nanori", "korean_h", "korean_r", "pinyin")))
-        pieces.extend(r_strs)
-        pieces.append(u"-" * 70)
-
-        m_strs = indent_strs(self.get_meanings())
-        pieces.extend(m_strs)
-        pieces.append(u"-" * 70)
+        #"nanori", 
 
         pieces.append(_(u"Miscellaneous:"))
         jlpt = self.get_jlpt()
