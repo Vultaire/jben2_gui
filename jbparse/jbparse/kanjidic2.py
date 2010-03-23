@@ -36,9 +36,8 @@ import os, gzip, gettext, warnings
 from xml.etree.cElementTree import ElementTree
 gettext.install('pyjben', unicode=True)
 
-# NOTE: This seems not to work on Python 2.5!
-# Reason: difference in how modules are handled for modules called
-# directly.
+# NOTE: This seems not to work on Python 2.5 if this module is
+# directly called.
 from .kanjidic_common \
      import jstring_convert, kanjidic2_key_to_str, qcode_to_desc
 
@@ -157,22 +156,17 @@ class Kanjidic2Node(object):
 
     def get_grade(self):
         o = self.xml.find("misc/grade")
-        return int(o.text) if o else None
+        # Apparently ElementTree nodes resolve as false in "if o"
+        # checks...  Hence the more explicit check.
+        return int(o.text) if o is not None else None
 
     def get_freq(self):
-        # By the spec, it seems like multiple freqs are possible??
-        # So... let's get all entries and assert.
-        o = self.xml.findall("misc/freq")
-        if not o:
-            return None
-        assert len(o) == 1, _(
-            u"Character %s: Expected 1 freq entry, found %d") % \
-            (self._get_literal(), len(o))
-        return int(o[0].text)
+        o = self.xml.find("misc/freq")
+        return int(o.text) if o is not None else None
 
     def get_jlpt(self):
         o = self.xml.find("misc/jlpt")
-        return int(o.text) if o else None
+        return int(o.text) if o is not None else None
 
     def get_strokes(self):
         """Gets stroke count.
@@ -272,27 +266,36 @@ class Kanjidic2Node(object):
                 pieces.append(_(u"%s: %s") % (qname, s))
         return pieces
 
+    def _get_radical_nodes(self):
+        return xml_get_attrdict(self.xml, "radical/rad_value", "rad_type")
+
     def get_radicals(self):
         pieces = []
-        d = xml_get_attrdict(self.xml, "radical/rad_value", "rad_type")
+        d = self._get_radical_nodes()
         for key in sorted(d):
             nodes = d[key]
             for o in nodes:
                 pieces.append(u"%s: %s" % (key, o.text))
         return pieces
 
+    def _get_codepoint_nodes(self):
+        return xml_get_attrdict(self.xml, "codepoint/cp_value", "cp_type")
+
     def get_codepoints(self):
         pieces = []
-        d = xml_get_attrdict(self.xml, "codepoint/cp_value", "cp_type")
+        d = self._get_codepoint_nodes()
         for key in sorted(d):
             nodes = d[key]
             for o in nodes:
                 pieces.append(u"%s: %s" % (key.upper(), o.text))
         return pieces
 
+    def _get_variant_nodes(self):
+        return xml_get_attrdict(self.xml, "misc/variant", "var_type")
+
     def get_variants(self):
         pieces = []
-        d = xml_get_attrdict(self.xml, "misc/variant", "var_type")
+        d = slef._get_variant_nodes()
         for key in sorted(d):
             nodes = d[key]
             for o in nodes:
@@ -410,7 +413,7 @@ class Parser(object):
         assert version >= 4, _(
             u"This parser won't work with versions of KANJIDIC2 "
             u"older than version 4.")
-        if version > 3:
+        if version > 4:
             s = _(u"Parser version is for version 4, detected version is %d"
                   ) % version
             warnings.warn(s)
