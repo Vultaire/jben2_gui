@@ -21,7 +21,7 @@ setup(name='jben',
         'jben.interface.gtk.window',
         ],
       package_data={'jben': ['images/*.xpm']},
-      requires=['jbparse'],
+      install_requires=['jbparse'],
       classifiers=[
           'Environment :: Win32 (MS Windows)',
           'Environment :: X11 Applications :: GTK',
