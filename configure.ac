@@ -2,7 +2,11 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([J-Ben], [1.9.2], [general at vultaire dot net])
+AC_INIT([J-Ben],
+        [1.9.2],
+        [general at vultaire dot net],
+        [jben],
+        [http://jben.vultaire.net/])
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_SRCDIR([kpengine/jstroke.h])
 AC_CONFIG_HEADERS([config.h])

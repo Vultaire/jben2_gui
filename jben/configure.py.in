@@ -1,4 +1,15 @@
 """Script for accessing variables from configure."""
 
-version = """@PACKAGE_VERSION@"""
-prefix = """@prefix@"""
+package_name = """@PACKAGE_NAME@"""
+package_version = """@PACKAGE_VERSION@"""
+package_string = """@PACKAGE_STRING@"""
+package_bugreport = """@PACKAGE_BUGREPORT@"""
+package_url = """@PACKAGE_URL@"""
+
+# Installation path variables
+# WANTED: A simple way to fully expand these variables automatically.
+prefix = """@prefix@"""             # Default: /usr/local
+datarootdir = """@datarootdir@"""   # Default: $(prefix)/share
+datadir = """@datadir@"""           # Default: $(datarootdir)
+
+# REMINDER: kpengine data will be stored in @datadir@/jben/kpengine/.
