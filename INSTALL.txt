@@ -1,0 +1,18 @@
+STUB.  This still needs to be fleshed out...
+
+
+Installation of J-Ben:
+
+        python setup.py install
+
+Installation of jben_kpengine:
+
+
+        Compiling: ./configure && make
+        Installing: Not yet standardized.
+                Windows: place kpengine folder at same level as jben package.
+                Unix: not yet integrated; source hacking required
+
+Running the program:
+
+        python -m jben.main
