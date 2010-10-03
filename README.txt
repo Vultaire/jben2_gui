@@ -6,13 +6,8 @@ This program should be considered "alpha" status and is not intended
 for everyday use.
 
 
-Installation:
-
-        python setup.py install
-
-Running the program:
-
-        python -m jben.main
+For installation, see INSTALL.txt.
+For license information, see COPYING.txt.
 
 
 Summary of current status:
