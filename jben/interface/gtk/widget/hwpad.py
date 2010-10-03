@@ -154,8 +154,8 @@ class WidgetHWPad(gtk.DrawingArea):
         #return
 
         if os.name == "nt":
-            exe_name = "../deploy_jben/bin/jben_kpengine.exe"
-            data_dir = "../deploy_jben/kpengine_data"
+            exe_name = "kpengine/jben_kpengine.exe"
+            data_dir = "kpengine/data"
         else:
             exe_name = "/home/vultaire/tmp/jben/bin/linux/release/kpengine/jben_kpengine"
             data_dir = "/home/vultaire/code/projects/jben/src/kpengine"
