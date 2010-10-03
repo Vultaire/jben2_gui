@@ -1,0 +1,17 @@
+J-Ben uses autoconf and automake for building the bundled "kpengine"
+application.  This document is intended for those who are not familiar
+with using the autotools directly.
+
+If the bundled application does not contain a "configure" script (for
+example, if pulled directly from git), the following should create the
+needed files:
+
+    autoreconf -i
+
+Afterwards: "./configure && make" as usual.
+
+
+Tested on Windows with:
+
+- autoconf 2.67
+- automake 1.11.1
