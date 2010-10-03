@@ -12,4 +12,16 @@ prefix = """@prefix@"""             # Default: /usr/local
 datarootdir = """@datarootdir@"""   # Default: $(prefix)/share
 datadir = """@datadir@"""           # Default: $(datarootdir)
 
+# If defaults are not overridden, we need to merge the variables here
+# appropriately.
+def shell_replace(s, name, value):
+    """Naive shell replacement."""
+    key = "${%s}" % name
+    if key in s:
+        return s.replace(key, value)
+    return s
+
+datarootdir = shell_replace(datarootdir, "prefix", prefix)
+datadir = shell_replace(datadir, "datarootdir", datarootdir)
+
 # REMINDER: kpengine data will be stored in @datadir@/jben/kpengine/.
