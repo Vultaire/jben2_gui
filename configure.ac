@@ -26,5 +26,6 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([strdup strtol])
 
 AC_CONFIG_FILES([Makefile
-                 kpengine/Makefile])
+                 kpengine/Makefile
+                 jben/configure.py])
 AC_OUTPUT

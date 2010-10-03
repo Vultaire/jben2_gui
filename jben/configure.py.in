@@ -1,0 +1,4 @@
+"""Script for accessing variables from configure."""
+
+version = """@PACKAGE_VERSION@"""
+prefix = """@prefix@"""
