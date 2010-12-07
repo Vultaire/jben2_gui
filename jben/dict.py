@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 
 import os
-from jben.preferences import Preferences, DictEntry
 from jben import configure
 import jblite.kd2, jblite.jmdict
 

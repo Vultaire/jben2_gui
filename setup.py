@@ -21,7 +21,7 @@ setup(name='jben',
         'jben.interface.gtk.window',
         ],
       package_data={'jben': ['images/*.xpm']},
-      install_requires=['jbparse', 'PyGTK'],
+      install_requires=['jblite', 'PyGTK'],
       classifiers=[
           'Environment :: Win32 (MS Windows)',
           'Environment :: X11 Applications :: GTK',
