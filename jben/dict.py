@@ -32,17 +32,19 @@ class DictManager(object):
             # Try to create the database.
             kd2_xml_path = os.path.join(datadir, "kanjidic2.xml.gz")
             if os.path.exists(kd2_xml_path):
+                print "Creating KANJIDIC2 SQLite database; please wait..."
                 self.kd2 = jblite.kd2.Database(kd2_path,
                                                init_from_file=kd2_xml_path)
             else:
                 self.kd2 = None
 
-        jm_path = os.path.join(datadir, "jmdict.db")
-        if os.path.exists(jm_path):
-            self.jmdict = jblite.jmdict.Database(jm_path)
+        jmdict_path = os.path.join(datadir, "jmdict.db")
+        if os.path.exists(jmdict_path):
+            self.jmdict = jblite.jmdict.Database(jmdict_path)
         else:
             jmdict_xml_path = os.path.join(datadir, "JMdict.gz")
             if os.path.exists(jmdict_xml_path):
+                print "Creating JMdict SQLite database; please wait..."
                 self.jmdict = jblite.jmdict.Database(
                     jmdict_path, init_from_file=jmdict_xml_path)
             else:
