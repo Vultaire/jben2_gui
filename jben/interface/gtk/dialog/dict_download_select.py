@@ -7,7 +7,7 @@ from ..widget.storedsize import StoredSizeDialog
 from jben.dict_downloader import static_mirror_list
 
 
-class MirrorSelect(StoredSizeDialog):
+class DictMirrorSelect(StoredSizeDialog):
 
     def __init__(self, app, parent):
         StoredSizeDialog.__init__(
