@@ -85,15 +85,15 @@ class SearchFrame(gtk.VBox):
             return
         self.disable_gui()
         results = self.search(query)
-        out_str = u"\n\n".join(unicode(result) for result in results)
-        if not out_str:
+        if results != None:
+            out_str = u"\n\n".join(unicode(result) for result in results)
+        else:
             out_str = _(u"No entries found.")
         self.output.get_buffer().set_text(out_str)
         self.enable_gui()
 
     def search(self, query):
         """Default search implementation."""
-        print u"SEARCHING: %s" % query
         return self.dict.search(query)
 
     def disable_gui(self):
