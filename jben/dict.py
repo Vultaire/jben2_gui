@@ -41,7 +41,7 @@ class DictManager(object):
         if os.path.exists(jm_path):
             self.jmdict = jblite.jmdict.Database(jm_path)
         else:
-            jmdict_xml_path = os.path.join(datadir, "jmdict.gz")
+            jmdict_xml_path = os.path.join(datadir, "JMdict.gz")
             if os.path.exists(jmdict_xml_path):
                 self.jmdict = jblite.jmdict.Database(
                     jmdict_path, init_from_file=jmdict_xml_path)
