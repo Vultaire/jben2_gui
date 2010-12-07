@@ -92,7 +92,7 @@ class Preferences(dict):
             if v != '':
                 config_strs.append("%s\t%s" % (k, str(v)))
             else:
-                print _('Warning: dropping empty setting "%s"!' % k)
+                print _('Warning: dropping empty setting "%s"!') % k
 
         # Append kanji and vocab lists
         # ...

@@ -35,8 +35,8 @@ class Main(StoredSizeWindow):
         self._layout_window()
 
     def on_show(self, widget):
-        wdict, kdict = self.app.dictmgr.get_dicts()
-        if not all((wdict, kdict)):
+        dictmgr = self.app.dictmgr
+        if not dictmgr.all_dicts_found():
             # Ask if we should download dictionaries from the internet.
             downloaded = False
             do_download = show_message_yn(
@@ -45,26 +45,27 @@ class Main(StoredSizeWindow):
                   "Do you wish to download them from the Internet?"),
                 default_button="yes")
             if do_download:
+                # Code is a little unclear here...
                 mirror, files = DictDownloadSelect(self.app, self).run()
                 if mirror:
                     DictDownload(self.app, self, mirror, files).run()
-                    downloaded = True   # Well, at least we tried to...
+                    downloaded = True
+                # Post-DL...
+                dictmgr.find_databases()  # try to reload DBs
+                if not dictmgr.all_dicts_found():
+                    show_message(
+                        self, _("Could not download all dictionaries"),
+                        _("Could not download all needed files.  "
+                          "Some features may be disabled."))
             else:
                 show_message(self, _("Not downloading dictionaries"),
                              _("Not downloading dictionaries.  "
                                "Some features may be disabled."))
-            if downloaded:
-                wdict, kdict = self.app.dictmgr.get_dicts()
-            if do_download and not all((wdict, kdict)):
-                show_message(
-                    self, _("Could not download all dictionaries"),
-                    _("Could not download all needed files.  "
-                      "Some features may be disabled."))
-        if wdict:
-            self.worddict.set_dict(wdict)
+        if dictmgr.jmdict_found():
+            self.worddict.set_dict(dictmgr.jmdict)
             self.worddict.set_sensitive(True)
-        if kdict:
-            self.kanjidict.set_dict(kdict)
+        if dictmgr.kd2_found():
+            self.kanjidict.set_dict(dictmgr.kd2)
             self.kanjidict.set_sensitive(True)
         self.set_sensitive(True)
 

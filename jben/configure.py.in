@@ -25,3 +25,13 @@ datarootdir = shell_replace(datarootdir, "prefix", prefix)
 datadir = shell_replace(datadir, "datarootdir", datarootdir)
 
 # REMINDER: kpengine data will be stored in @datadir@/jben/kpengine/.
+
+import os
+def get_datadir():
+    if os.name == "posix":
+        return datadir
+    elif os.name == "nt":
+        # c:\program files\j-ben\data... better way to ensure this path?
+        return "data"
+    else:
+        raise ValueError("Unsupported value of os.name", os.name)

@@ -24,26 +24,6 @@ class Application(object):
         self.prefs.save()
         return result
 
-    def get_data_dir(self):
-        """Configures the "data directory" for J-Ben.
-
-        The installed directory will be used if permissions allow.
-        Otherwise, the user's local settings directory will be used.
-
-        """
-        dirs_d = {
-            "nt": [".."],
-            "posix": ["/usr/local/share/jben",
-                      "/usr/share/jben"],
-            }
-        dirs = dirs_d[os.name]
-        dirs.append(self.get_settings_dir())
-
-        for d in dirs:
-            if os.path.exists(d) and os.access(d, os.W_OK):
-                return d
-        raise Exception(_("Could not find writable data directory"))
-
     def get_home_dir(self):
         env_d = {
             "nt": "APPDATA",
