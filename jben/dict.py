@@ -18,8 +18,11 @@ class DictManager(object):
         self.jmdict = None
         self.find_databases()
 
+    def get_dict_directory(self):
+        return configure.get_datadir()
+
     def find_databases(self):
-        datadir = configure.get_datadir()
+        datadir = self.get_dict_directory()
 
         kd2_path = os.path.join(datadir, "kd2.db")
         if os.path.exists(kd2_path):

@@ -62,7 +62,8 @@ class DictDownload(StoredSizeDialog):
             url = self.urls.pop()
             print "Starting new thread for download:", url
             fname = url.rsplit('/', 1)[-1]
-            out_fname = os.path.join(self.app.dictmgr.get_dict_dir(), fname)
+            out_fname = os.path.join(
+                self.app.dictmgr.get_dict_directory(), fname)
             self.dt = DownloadThread(url, out_fname, timeout=5)
             self.dt.start()
             self._add_progress_bar()
