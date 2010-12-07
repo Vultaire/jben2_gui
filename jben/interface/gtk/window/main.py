@@ -20,7 +20,7 @@ from ..widget.yesnodialog import show_message_yn
 from ..dialog.vocablisteditor import DialogVocabListEditor
 from ..dialog.kanjilisteditor import DialogKanjiListEditor
 from ..dialog.preferences import DialogPreferences
-from ..dialog.dict_download_select import DictDownloadSelect
+from ..dialog.dict_mirror_select import DictMirrorSelect
 from ..dialog.dict_download import DictDownload
 
 
@@ -46,8 +46,9 @@ class Main(StoredSizeWindow):
                 default_button="yes")
             if do_download:
                 # Code is a little unclear here...
-                mirror, files = DictDownloadSelect(self.app, self).run()
-                if mirror:
+                mirror = DictMirrorSelect(self.app, self).run()
+                if mirror != None:
+                    files = dictmgr.get_needed_dict_names()
                     DictDownload(self.app, self, mirror, files).run()
                     downloaded = True
                 # Post-DL...

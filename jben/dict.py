@@ -53,3 +53,12 @@ class DictManager(object):
 
     def kd2_found(self):
         return (self.kd2 is not None)
+
+    def get_needed_dict_names(self):
+        """Returns a list of file names of any missing dictionary files."""
+        needed = []
+        if not self.kd2_found():
+            needed.append("kanjidic2.xml.gz")
+        if not self.jmdict_found():
+            needed.append("JMdict.gz")
+        return needed

@@ -40,9 +40,10 @@ class DictMirrorSelect(StoredSizeDialog):
         Returns the selected mirror's URI.
 
         """
-        result = (None, None)
         resp = gtk.Dialog.run(self)
         if resp == gtk.RESPONSE_OK:
             result = self.get_mirror()
+        else:
+            result = None
         self.destroy()
         return result
