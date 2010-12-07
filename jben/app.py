@@ -11,10 +11,15 @@ from jben import global_refs
 class Application(object):
 
     def __init__(self, interface):
-        mod = __import__("jben.interface", globals(), locals(), [interface], 0)
-        if interface not in dir(mod):
-            raise Exception(_("Interface %s does not exist.") % interface)
-        self.interface = getattr(mod, interface).Interface(self)
+        if interface == "gtk":
+            from jben.interface import gtk
+            self.interface = gtk.Interface(self)
+        elif interface == "console":
+            from jben.interface import console
+            self.interface = console.Interface(self)
+        else:
+            raise ValueError(_("Interface not supported"), interface)
+
         self.prefs = Preferences(self)
         self.dictmgr = DictManager(self)
         global_refs.app = self
