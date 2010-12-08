@@ -1,5 +1,1 @@
-SUBDIRS = kpengine
-
-install-exec-local:
-#	Let's just include the setup.py inside of here...
-	python setup.py install
+SUBDIRS = c python
