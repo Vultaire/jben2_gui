@@ -8,7 +8,7 @@ AC_INIT([J-Ben],
         [jben],
         [http://jben.vultaire.net/])
 AM_INIT_AUTOMAKE([foreign])
-AC_CONFIG_SRCDIR([kpengine/jstroke.h])
+AC_CONFIG_SRCDIR([c/kpengine/jstroke.h])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
@@ -30,6 +30,8 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([strdup strtol])
 
 AC_CONFIG_FILES([Makefile
-                 kpengine/Makefile
-                 jben/configure.py])
+                 c/Makefile
+                 c/kpengine/Makefile
+                 python/Makefile
+                 python/jben/configure.py])
 AC_OUTPUT
