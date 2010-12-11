@@ -42,7 +42,7 @@ EXTRA_DIST = \
 	jben/interface/gtk/window/__init__.py \
 	jben/interface/gtk/window/kanjihwsearch.py \
 	jben/interface/gtk/window/main.py \
-	images/jben.xpm images/jben_16.xpm \
-	images/jben_32.xpm images/jben_48.xpm \
+	data/images/jben.xpm data/images/jben_16.xpm \
+	data/images/jben_32.xpm data/images/jben_48.xpm \
 	scripts/jben.py \
 	test/__init__.py test/dict_downloader.py
