@@ -1,3 +1,3 @@
 include *.txt
 include test/*.py
-include jben/images/*.xpm
+include data/images/*.xpm

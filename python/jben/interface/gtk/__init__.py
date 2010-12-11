@@ -8,6 +8,7 @@ import gtk, gobject
 import os
 
 from .window.main import Main as WindowMain
+from jben import configure
 
 
 class Interface(object):
@@ -19,12 +20,15 @@ class Interface(object):
         self._setup_global_icons()
 
     def _setup_global_icons(self):
-        files = ["jben.xpm", "jben_48.xpm", "jben_32.xpm", "jben_16.xpm"]
-        mod_path = os.path.dirname(__file__)
+        # Assume working directory is just before "images"...
+        data_dir = configure.get_datadir()
+        img_dir = os.path.join(data_dir, "images")
+        fnames = [
+            os.path.join(img_dir, fname) for fname in
+            ("jben.xpm", "jben_48.xpm", "jben_32.xpm", "jben_16.xpm")]
         icons = [
-            gtk.gdk.pixbuf_new_from_file(
-                os.path.join(mod_path, "..", "..", "images", f))
-            for f in files
+            gtk.gdk.pixbuf_new_from_file(fname)
+            for fname in fnames
             ]
         gtk.window_set_default_icon_list(*icons)
 
