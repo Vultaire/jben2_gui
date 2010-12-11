@@ -44,5 +44,13 @@ setup(name='jben',
           'Programming Language :: Python',
           'Topic :: Education'
           ],
-      console=["scripts/jben.py"],  # for py2exe
+
+      # for py2exe
+      windows = [{"script": "scripts/jben.py"}],
+      options = {
+        "py2exe": {
+            "packages": "encodings",
+            "includes": "cairo, pango, pangocairo, atk, gobject, gio",
+            }
+        }
       )
