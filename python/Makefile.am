@@ -19,7 +19,7 @@ install-exec-local:
 
 EXTRA_DIST = \
 	setup.py \
-	jben/__init__.py jben/app.py jben/console.py \
+	jben/__init__.py jben/alphanum.py jben/app.py jben/console.py \
 	jben/dict.py jben/dict_downloader.py jben/download_thread.py \
 	jben/global_refs.py jben/jben_globals.py jben/main.py \
 	jben/preferences.py \
