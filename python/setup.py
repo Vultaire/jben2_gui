@@ -4,6 +4,15 @@
 from distutils.core import setup
 from jben import jben_globals
 
+
+# Py2exe include (Windows only)
+try:
+    import py2exe
+except ImportError:
+    # Py2exe is not *required*...
+    pass
+
+
 setup(name='jben',
       version=jben_globals.VERSION_STR,
       description='J-Ben: A Japanese study program (alpha)',
@@ -34,5 +43,6 @@ setup(name='jben',
           'Operating System :: POSIX :: Linux',
           'Programming Language :: Python',
           'Topic :: Education'
-          ]
+          ],
+      console=["scripts/jben.py"],  # for py2exe
       )
