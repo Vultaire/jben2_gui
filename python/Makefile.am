@@ -32,6 +32,11 @@ EXTRA_DIST = \
 	jben/interface/gtk/dialog/vocablisteditor.py \
 	jben/interface/gtk/dialog/dict_download.py \
 	jben/interface/gtk/dialog/kanjilisteditor.py \
+	jben/interface/gtk/dialog/preferences/__init__.py \
+	jben/interface/gtk/dialog/preferences/tab_prefsfonts.py \
+	jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py \
+	jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py \
+	jben/interface/gtk/dialog/preferences/tab_prefsother.py \
 	jben/interface/gtk/widget/__init__.py \
 	jben/interface/gtk/widget/infomessage.py \
 	jben/interface/gtk/widget/search_frame.py \
