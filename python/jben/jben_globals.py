@@ -26,35 +26,3 @@ AUTHOR_NAME = _("Paul Goins")
 """The name of the author."""
 COPYRIGHT_DATE = _("2007, 2008, 2009, 2010")
 """Copyright date."""
-
-
-JB_DATADIR = None
-"""
-This represents the default data directory for J-Ben.  For UNIX-type systems,
-this typically is "/usr/local/share/jben" or "/usr/share/jben".  For Windows
-systems, it should be "..".  (Note the /; J-Ben will convert /'s to \'s as
-necessary.)
-
-If JB_DATADIR is None, then J-Ben will try to search all these locations for
-the data folder.  This can be overridden by specifying a specific value here.
-"""
-
-if JB_DATADIR is None:
-    if os.name == "nt":
-        JB_DATADIR = ".."
-    else:
-        if os.path.isdir("/usr/local/share/jben"):
-            JB_DATADIR = "/usr/local/share/jben"
-        elif os.path.isdir("/usr/share/jben"):
-            JB_DATADIR = "/usr/share/jben"
-        else:
-            JB_DATADIR = ".." # Fallback; this may be used on future Linux-based
-            #                   mobile installs.
-        pass
-
-if os.name == "nt":
-    CFG_FOLDER = "J-Ben Settings"
-    HOME_ENV = "APPDATA"
-else:
-    CFG_FOLDER = ".jben.d"
-    HOME_ENV = "HOME"

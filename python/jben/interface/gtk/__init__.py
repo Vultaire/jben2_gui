@@ -21,7 +21,7 @@ class Interface(object):
 
     def _setup_global_icons(self):
         # Assume working directory is just before "images"...
-        data_dir = configure.get_datadir()
+        data_dir = configure.get_system_data_dir()
         img_dir = os.path.join(data_dir, "images")
         fnames = [
             os.path.join(img_dir, fname) for fname in

@@ -11,6 +11,7 @@ package_url = """@PACKAGE_URL@"""
 prefix = """@prefix@"""             # Default: /usr/local
 datarootdir = """@datarootdir@"""   # Default: $(prefix)/share
 datadir = """@datadir@"""           # Default: $(datarootdir)
+package = """@PACKAGE@"""
 
 # If defaults are not overridden, we need to merge the variables here
 # appropriately.
@@ -24,14 +25,39 @@ def shell_replace(s, name, value):
 datarootdir = shell_replace(datarootdir, "prefix", prefix)
 datadir = shell_replace(datadir, "datarootdir", datarootdir)
 
+import os
+# pkgdatadir: $(datadir)/$(pkg_name)
+pkgdatadir = os.path.join(datadir, package)
+
+
+######################################################################
+# Helper functions
+######################################################################
+
 # REMINDER: kpengine data will be stored in @datadir@/jben/kpengine/.
 
-import os
-def get_datadir():
+
+def get_data_dir():
+    """Generator.  Returns candidate data directories."""
+    yield get_system_data_dir()
+    yield get_user_data_dir()
+
+def get_system_data_dir():
+    """Returns the pkgdatadir on POSIX, or an equivalent on Windows."""
     if os.name == "posix":
-        return datadir
+        return pkgdatadir
     elif os.name == "nt":
         # c:\program files\j-ben\data... better way to ensure this path?
         return "data"
+    else:
+        raise ValueError("Unsupported value of os.name", os.name)
+
+def get_user_data_dir():
+    """Returns an appropriate user home directory."""
+    home_dir = os.path.expanduser("~")
+    if os.name == "posix":
+        return os.path.join(home_dir, ".jben.d")
+    elif os.name == "nt":
+        return os.path.join(home_dir, "J-Ben Settings")
     else:
         raise ValueError("Unsupported value of os.name", os.name)

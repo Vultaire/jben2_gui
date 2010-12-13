@@ -19,11 +19,46 @@ class DictManager(object):
         self.find_databases()
 
     def get_dict_directory(self):
-        return configure.get_datadir()
+        """Generator.  Yields candidate dictionary data directories.
+
+        This is needed since dictionaries may be installed either
+        system-wide or for a single user.
+
+        """
+        for datadir in configure.get_data_dir():
+            yield os.path.join(datadir, "dicts")
+
+    def get_writeable_dict_directory(self):
+        """Returns a writeable dictionary directory.
+
+        Checks permissions and returns either the system or user data
+        directory.  Creates the directory if it is not found.
+
+        If a writeable directory cannot be found, an exception is
+        raised.
+
+        """
+        for datadir in self.get_dict_directory():
+            print datadir
+            if os.path.exists(datadir):
+                if os.access(datadir, os.W_OK):
+                    return datadir
+            try:
+                os.makedirs(datadir)
+                return datadir
+            except Exception:
+                continue
+        raise Exception(
+            "Unable to find a writeable dictionary directory.")
 
     def find_databases(self):
-        datadir = self.get_dict_directory()
+        for datadir in self.get_dict_directory():
+            self._find_kanjidic2(datadir)
+            self._find_jmdict(datadir)
 
+    def _find_kanjidic2(self, datadir):
+        if self.kd2 != None:
+            return
         kd2_path = os.path.join(datadir, "kd2.db")
         if os.path.exists(kd2_path):
             # Load an existing database.
@@ -38,6 +73,9 @@ class DictManager(object):
             else:
                 self.kd2 = None
 
+    def _find_jmdict(self, datadir):
+        if self.jmdict != None:
+            return
         jmdict_path = os.path.join(datadir, "jmdict.db")
         if os.path.exists(jmdict_path):
             self.jmdict = jblite.jmdict.Database(jmdict_path)
