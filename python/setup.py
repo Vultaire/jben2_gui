@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from distutils.core import setup
-from jben import jben_globals
+from jben import configure
 
 
 # Py2exe include (Windows only)
@@ -14,7 +14,7 @@ except ImportError:
 
 
 setup(name='jben',
-      version=jben_globals.VERSION_STR,
+      version=configure.PACKAGE_VERSION,
       description='J-Ben: A Japanese study program (alpha)',
       author=jben_globals.AUTHOR_NAME,
       author_email='general@vultaire.net',

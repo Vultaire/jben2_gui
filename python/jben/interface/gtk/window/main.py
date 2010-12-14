@@ -10,7 +10,7 @@ from __future__ import absolute_import
 
 import gtk
 
-from jben import jben_globals
+from jben import jben_globals, configure
 from .kanjihwsearch import WindowKanjiHWSearch
 from ..widget.worddict import TabWordDict
 from ..widget.kanjidict import TabKanjiDict
@@ -159,8 +159,8 @@ class Main(StoredSizeWindow):
 
             "See \"Help->License Information...\" for important license "
             "details."
-            ) % (jben_globals.PROGRAM_NAME,
-                 jben_globals.VERSION_STR,
+            ) % (configure.PACKAGE_NAME,
+                 configure.PACKAGE_VERSION,
                  jben_globals.AUTHOR_NAME,
                  jben_globals.COPYRIGHT_DATE)
 
