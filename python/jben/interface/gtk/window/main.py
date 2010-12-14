@@ -164,7 +164,7 @@ class Main(StoredSizeWindow):
                  jben_globals.AUTHOR_NAME,
                  jben_globals.COPYRIGHT_DATE)
 
-        show_message(self, _("About %s") % jben_globals.PROGRAM_NAME, message)
+        show_message(self, _("About %s") % configure.PACKAGE_NAME, message)
 
     def on_menu_help_license(self, widget):
         message = _(
@@ -196,7 +196,7 @@ class Main(StoredSizeWindow):
         show_message(self, _("License Information"), message)
 
     def _layout_window(self):
-        self.set_title(jben_globals.PROGRAM_NAME)
+        self.set_title(configure.PACKAGE_NAME)
         self.menu = self._create_menu()
         children = self._create_children()
         layout = gtk.VBox(spacing = 5)
