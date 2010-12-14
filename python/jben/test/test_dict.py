@@ -34,6 +34,9 @@ class ClassFunctions(unittest.TestCase):
         user_data_dir = configure.get_user_data_dir()
         self.assertTrue(dict_dirs[1].startswith(user_data_dir))
 
-#    def test_get_writeable_dir(self):
-#        # This test *assumes* that we're not running as root.
-#        DictManager
+    def test_get_writeable_dir(self):
+        # This test *assumes* that we're not running as root.
+        data_dir = DictManager.get_writeable_dict_directory()
+        self.assertTrue(isinstance(data_dir, str))
+        self.assertTrue(len(data_dir) > 0)
+        #print data_dir  # Uncomment to manually confirm.
