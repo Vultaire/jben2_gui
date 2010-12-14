@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([J-Ben],
-        [1.9.2],
+AC_INIT([J-Ben 2 BETA],
+        [1.9.3],
         [general at vultaire dot net],
         [jben],
         [http://jben.vultaire.net/])
