@@ -1,10 +1,15 @@
 """Script for accessing variables from configure."""
 
-package_name = """@PACKAGE_NAME@"""
-package_version = """@PACKAGE_VERSION@"""
-package_string = """@PACKAGE_STRING@"""
-package_bugreport = """@PACKAGE_BUGREPORT@"""
-package_url = """@PACKAGE_URL@"""
+# Reference: config.h generated via ./configure
+PACKAGE = """@PACKAGE@"""
+PACKAGE_BUGREPORT = """@PACKAGE_BUGREPORT@"""
+PACKAGE_NAME = """@PACKAGE_NAME@"""
+PACKAGE_STRING = """@PACKAGE_STRING@"""
+PACKAGE_TARNAME = """@PACKAGE_TARNAME@"""
+PACKAGE_URL = """@PACKAGE_URL@"""
+PACKAGE_VERSION = """@PACKAGE_VERSION@"""
+VERSION = """@VERSION@"""
+
 
 # Installation path variables
 # WANTED: A simple way to fully expand these variables automatically.
