@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from distutils.core import setup
-from jben import configure
+from jben import jben_globals, configure
 
 
 # Py2exe include (Windows only)
