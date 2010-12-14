@@ -5,7 +5,7 @@
 #
 # Run via::
 #
-#   python -m coverage run unittest_coverage.py [args]
+#   python -m coverage run unittest_main.py [args]
 #
 # What was done: Python/Lib/unittest/__main__.py was copied VERBATIM
 # here.  This means that running this script via coverage effectively
@@ -14,10 +14,7 @@
 #
 # Unit test coverage with automatic discovery::
 #
-#   python -m coverage run unittest_coverage.py discover
-#
-# It may be possible to use other coverage commands with this, as
-# well...
+#   python -m coverage run unittest_main.py discover
 
 """Main entry point"""
 
