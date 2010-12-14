@@ -52,4 +52,4 @@ EXTRA_DIST = \
 	jben/test/test_dict.py \
 	data/images/jben.xpm data/images/jben_16.xpm \
 	data/images/jben_32.xpm data/images/jben_48.xpm \
-	scripts/jben.py \
+	scripts/jben.py
