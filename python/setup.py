@@ -21,6 +21,7 @@ setup(name='jben',
       url='http://jben.vultaire.net/',
       packages=[
         'jben',
+        'jben.test',
         'jben.interface',
         'jben.interface.console',
         'jben.interface.gtk',
