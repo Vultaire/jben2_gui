@@ -18,7 +18,8 @@ class DictManager(object):
         self.jmdict = None
         self.find_databases()
 
-    def get_dict_directory(self):
+    @classmethod
+    def get_dict_directory(cls):
         """Generator.  Yields candidate dictionary data directories.
 
         This is needed since dictionaries may be installed either
@@ -28,7 +29,8 @@ class DictManager(object):
         for datadir in configure.get_data_dir():
             yield os.path.join(datadir, "dicts")
 
-    def get_writeable_dict_directory(self):
+    @classmethod
+    def get_writeable_dict_directory(cls):
         """Returns a writeable dictionary directory.
 
         Checks permissions and returns either the system or user data
@@ -38,8 +40,7 @@ class DictManager(object):
         raised.
 
         """
-        for datadir in self.get_dict_directory():
-            print datadir
+        for datadir in cls.get_dict_directory():
             if os.path.exists(datadir):
                 if os.access(datadir, os.W_OK):
                     return datadir

@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 import urllib2, sys, os, random
 from jben.preferences import Preferences
+from jben.dict import DictManager
 
 # The following is shamelessly copied from:
 # http://ftp.monash.edu.au/pub/nihongo/.message
@@ -71,8 +72,8 @@ def get_mirror_list(from_inet=False,
 
 def download_dict(fname):
     mirrors = get_mirror_list(from_inet=False)
-    dpath = p.get_dict_path()
-    print "Using output dict path:", dpath
+
+    dpath = DictManager.get_writeable_dict_directory()
 
     def get_next_mirror():
         i = random.randrange(0, len(mirrors))
@@ -84,7 +85,7 @@ def download_dict(fname):
         url = "%s/%s" % (mirror, fname)
         target_fname = "%s/%s" % (dpath, fname)
         try:
-            print "Downloading %s to %s..." % (url, target_fname)
+            #print "Downloading %s to %s..." % (url, target_fname)
             resp = urllib2.urlopen(url)
             data = resp.read()
             resp.close()
@@ -102,6 +103,7 @@ def download_dict(fname):
 
 
 def console_iface():
+    p = Preferences()
     p.load()
 
     print "The following dictionaries are available:"
@@ -135,6 +137,4 @@ def console_iface():
         download_dict(fname)
 
 if __name__ == "__main__":
-    global p
-    p = Preferences()
     console_iface()
