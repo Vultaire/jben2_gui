@@ -6,14 +6,9 @@
 # Author: Paul Goins
 # Created on: 20 December 2008
 
-# NOTE: This module contains code written by other people but
-# available (to the best of my knowledge) under a compatible license.
-# Such code is clearly marked.
-
 from __future__ import absolute_import, with_statement
 
 import sys, os, re, traceback, warnings
-from jben import jben_globals
 from jben.alphanum import make_alphanum_list
 
 
