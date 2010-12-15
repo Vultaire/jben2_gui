@@ -49,4 +49,4 @@ EXTRA_DIST = \
 	jben/interface/gtk/window/main.py \
 	jben/test/__init__.py jben/test/test_dict_downloader.py \
 	jben/test/test_dict.py \
-	scripts/jben.py
+	scripts/jben_launcher.py
