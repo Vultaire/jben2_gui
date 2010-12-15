@@ -1,18 +1,56 @@
-STUB.  This still needs to be fleshed out...
+POSIX build instructions (Linux, BSD, etc.)
+===========================================
+
+J-Ben uses the standard "./configure; make; make install" process.
+Just try the following:
+
+  ./configure && make
+  make install
+
+To run the program:
+
+  python -m jben.main
+
+"jben_launcher.py" *may* also work, but it has not yet been tested.
 
 
-Installation of J-Ben:
+Windows build instructions
+==========================
 
-        python setup.py install
+Prerequisites:
 
-Installation of jben_kpengine:
+1. MinGW, MSys, and the autotools.  (If you don't have these, go to
+   http://sourceforge.net/projects/mingw/files/, and download the
+   "latest version": mingw-get-inst-XXXXXXXX.exe.)
 
+2. GTK+ development libraries.  Get the GTK+ development bundle from
+   www.gtk.org.  Unzip it somewhere and insert its bin folder into
+   your PATH (preferably at the beginning of the PATH to avoid
+   conflicts with other libraries).
 
-        Compiling: ./configure && make
-        Installing: Not yet standardized.
-                Windows: place kpengine folder at same level as jben package.
-                Unix: not yet integrated; source hacking required
+3. Inno Setup, for creating the installer.
 
-Running the program:
+Instructions are as follows:
 
-        python -m jben.main
+1. Do the basic build:
+
+     CFLAGS=-mwindows ./configure && make
+
+2. Make the py2exe executable:
+
+     cd python; setup.py py2exe
+
+3. Run the Inno Setup jben.iss file (update as necessary for your environment)
+
+4. Install the generated executable
+
+This process has been tested on Windows 7 with:
+
+- autoconf 2.67
+- automake 1.11.1
+- py2exe 0.6.9
+- Python 2.7
+- GTK bundle 2.22.0-20101016_win32
+- pygtk 2.22.0
+- pygobject 2.26.0
+- pycairo 1.8.10
