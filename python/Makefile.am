@@ -14,14 +14,6 @@
 install-exec-local:
 	python setup.py install
 
-# Needed data files.  This has been removed from the setup.py file
-# because I want them to be stored alongside other data using
-# ./configure.
-imgdatadir = $(pkgdatadir)/images
-dist_imgdata_DATA = \
-	data/images/jben.xpm data/images/jben_16.xpm \
-	data/images/jben_32.xpm data/images/jben_48.xpm
-
 # We also need to tell Automake to include all the Python sources in
 # the dist tarball.  Here's where we do that.
 EXTRA_DIST = \
