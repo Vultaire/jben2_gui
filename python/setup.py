@@ -30,7 +30,6 @@ setup(name='jben',
         'jben.interface.gtk.widget',
         'jben.interface.gtk.window',
         ],
-      package_data={'jben': ['data/images/*.xpm']},
       scripts=["scripts/jben_launcher.py"],
       install_requires=['jblite', 'PyGTK'],
       classifiers=[
@@ -48,9 +47,9 @@ setup(name='jben',
 
       # for py2exe
       windows = [{"script": "scripts/jben_launcher.py"}],
-      data_files=[("data/images",
-                   ["data/images/jben.xpm", "data/images/jben_16.xpm",
-                    "data/images/jben_32.xpm", "data/images/jben_48.xpm"])],
+      #data_files=[("data/images",
+      #             ["data/images/jben.xpm", "data/images/jben_16.xpm",
+      #              "data/images/jben_32.xpm", "data/images/jben_48.xpm"])],
       options = {
         "py2exe": {
             "packages": "encodings",
