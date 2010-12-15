@@ -102,11 +102,13 @@ Source: "C:\Users\Vultaire\jben-1.9.3\python\dist\unicodedata.pyd"; DestDir: "{a
 Source: "C:\Users\Vultaire\jben-1.9.3\python\dist\USP10.DLL"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Vultaire\jben-1.9.3\python\dist\w9xpopen.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Vultaire\jben-1.9.3\python\dist\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.3\python\dist\data\images\*"; DestDir: "{app}\data\images"; Flags: ignoreversion recursesubdirs
 
 ; C files
 Source: "C:\Users\Vultaire\jben-1.9.3\c\kpengine\jben_kpengine.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.3\c\kpengine\data\*"; DestDir: "{app}\data\kpdata"; Flags: ignoreversion recursesubdirs
+
+; Data files
+Source: "C:\Users\Vultaire\jben-1.9.3\data\images\*"; DestDir: "{app}\data\images"; Flags: ignoreversion recursesubdirs
+Source: "C:\Users\Vultaire\jben-1.9.3\data\kpdata\*"; DestDir: "{app}\data\kpdata"; Flags: ignoreversion recursesubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
