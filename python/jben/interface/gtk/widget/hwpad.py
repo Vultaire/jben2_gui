@@ -153,12 +153,13 @@ class WidgetHWPad(gtk.DrawingArea):
         print "WidgetHWPad.look_up_chars()"
         #return
 
+        data_dir = configure.get_system_data_dir()
+        kpdata_dir = os.path.join(data_dir, "kpdata")
+
         if os.name == "nt":
-            exe_name = "kpengine/jben_kpengine.exe"
-            data_dir = "kpengine/data"
+            exe_name = "jben_kpengine.exe"
         else:
-            exe_name = "/home/vultaire/tmp/jben/bin/linux/release/kpengine/jben_kpengine"
-            data_dir = "/home/vultaire/code/projects/jben/src/kpengine"
+            exe_name = "jben_kpengine"
 
         if not os.path.exists(exe_name) or not os.path.isfile(exe_name):
             show_message(
