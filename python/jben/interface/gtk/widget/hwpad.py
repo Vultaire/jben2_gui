@@ -16,6 +16,7 @@ import os
 from subprocess import Popen, PIPE
 
 from .infomessage import show_message
+from jben import configure
 
 
 class Point(object):
@@ -186,7 +187,7 @@ class WidgetHWPad(gtk.DrawingArea):
             [" ".join([str(point) for point in line])
              for line in self.lines]) + "\n\n"
 
-        p = Popen([exe_name, "-d", data_dir], stdin=PIPE, stdout=PIPE)
+        p = Popen([exe_name, "-d", kpdata_dir], stdin=PIPE, stdout=PIPE)
         stdout, stderr = p.communicate(pipe_data)
 
         klist = stdout[1:].strip().split()
