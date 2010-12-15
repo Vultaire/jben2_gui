@@ -8,10 +8,34 @@ needed files:
 
     autoreconf -i
 
-Afterwards: "./configure && make" as usual.
+Afterwards:
 
+If running on POSIX (Linux, BSD, etc.):
+
+  ./configure && make
+  make install
+
+If running on Windows, it's a bit more complicated:
+
+  Do the basic build:
+
+    CFLAGS=-mwindows ./configure && make
+
+  Make the py2exe executable:
+
+    cd python; setup.py py2exe
+
+  Run the Inno Setup jben.iss file (update as necessary for your environment)
+
+  Install the generated executable
 
 Tested on Windows with:
 
 - autoconf 2.67
 - automake 1.11.1
+- py2exe 0.6.9
+- Python 2.7
+- GTK bundle 2.22.0-20101016_win32
+- pygtk 2.22.0
+- pygobject 2.26.0
+- pycairo 1.8.10
