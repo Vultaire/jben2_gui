@@ -46,7 +46,7 @@ setup(name='jben',
           ],
 
       # for py2exe
-      windows = [{"script": "scripts/jben_launcher.py"}],
+      windows = [{"py2exe": "py2exe/jben.py"}],
       #data_files=[("data/images",
       #             ["data/images/jben.xpm", "data/images/jben_16.xpm",
       #              "data/images/jben_32.xpm", "data/images/jben_48.xpm"])],

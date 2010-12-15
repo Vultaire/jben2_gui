@@ -32,6 +32,7 @@ AC_CHECK_FUNCS([strdup strtol])
 AC_CONFIG_FILES([Makefile
                  c/Makefile
                  c/kpengine/Makefile
+                 data/Makefile
                  python/Makefile
                  python/jben/configure.py])
 AC_OUTPUT
