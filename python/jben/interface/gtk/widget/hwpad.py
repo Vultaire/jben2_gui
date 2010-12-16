@@ -162,23 +162,6 @@ class WidgetHWPad(gtk.DrawingArea):
         else:
             exe_name = "jben_kpengine"
 
-        if not os.path.exists(exe_name) or not os.path.isfile(exe_name):
-            show_message(
-                None, _("Could not find jben_kpengine"),
-                _("J-Ben currently requires the jben_kpengine executable from "
-                  "a J-Ben 1.x.x release to perform handwriting recognition.  "
-                  "Since it could not be found, this feature will not work."))
-            return
-
-        elif not os.path.exists(data_dir) or not os.path.isdir(data_dir):
-            show_message(
-                None, _("Could not find kpengine_data"),
-                _("J-Ben currently requires the kpengine data from "
-                  "a J-Ben 1.x.x release to perform handwriting recognition.  "
-                  "Since it could not be found, this feature will not work."))
-            return
-
-
         # Line format:
         # x y x y x y x y x y\n     (line 1)
         # x y x y x y x y\n         (line 2)
