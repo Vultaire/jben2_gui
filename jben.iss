@@ -7,17 +7,17 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{42681087-31A3-4C49-A2EF-388A3DBF163C}
 AppName=J-Ben
-AppVersion=1.9.4
-;AppVerName=J-Ben 1.9.4
+AppVersion=1.9.5
+;AppVerName=J-Ben 1.9.5
 AppPublisher=Paul Goins
 AppPublisherURL=http://jben.vultaire.net/
 AppSupportURL=http://jben.vultaire.net/
 AppUpdatesURL=http://jben.vultaire.net/
-DefaultDirName={pf}\J-Ben 1.9.4 BETA
-DefaultGroupName=J-Ben 1.9.4 BETA
-LicenseFile=C:\Users\Vultaire\jben-1.9.4\COPYING.txt
-OutputDir=C:\Users\Vultaire\jben-1.9.4
-OutputBaseFilename=J-Ben 1.9.4 BETA setup
+DefaultDirName={pf}\J-Ben 1.9.5 BETA
+DefaultGroupName=J-Ben 1.9.5 BETA
+LicenseFile=C:\Users\Vultaire\jben-1.9.5\COPYING.txt
+OutputDir=C:\Users\Vultaire\jben-1.9.5
+OutputBaseFilename=J-Ben 1.9.5 BETA setup
 Compression=lzma
 SolidCompression=yes
 
@@ -38,77 +38,77 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 ; 6. cd python; setup.py py2exe
 
 ; Python files
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\jben.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\_elementtree.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\_hashlib.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\_socket.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\_sqlite3.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\_ssl.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-Debug-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-DelayLoad-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-ErrorHandling-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-File-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-Handle-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-Heap-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-Interlocked-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-IO-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-LibraryLoader-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-Localization-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-LocalRegistry-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-Misc-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-ProcessEnvironment-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-ProcessThreads-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-Profile-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-String-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-Synch-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\API-MS-Win-Core-SysInfo-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\atk.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\bz2.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\cairo._cairo.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\DNSAPI.DLL"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\freetype6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\gio._gio.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\glib._glib.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\gobject._gobject.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\gtk._gtk.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\intl.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libatk-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libcairo-2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libexpat-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libfontconfig-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libgdk_pixbuf-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libgdk-win32-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libgio-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libgmodule-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libgobject-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libgthread-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libgtk-win32-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libpango-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libpangocairo-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libpangoft2-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libpangowin32-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\libpng14-14.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\library.zip"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\MSIMG32.DLL"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\NSI.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\pango.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\pangocairo.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\pyexpat.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\python27.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\select.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\unicodedata.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\USP10.DLL"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\w9xpopen.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Vultaire\jben-1.9.4\python\dist\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\jben.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\_elementtree.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\_hashlib.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\_socket.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\_sqlite3.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\_ssl.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-Debug-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-DelayLoad-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-ErrorHandling-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-File-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-Handle-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-Heap-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-Interlocked-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-IO-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-LibraryLoader-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-Localization-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-LocalRegistry-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-Misc-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-ProcessEnvironment-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-ProcessThreads-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-Profile-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-String-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-Synch-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\API-MS-Win-Core-SysInfo-L1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\atk.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\bz2.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\cairo._cairo.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\DNSAPI.DLL"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\freetype6.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\gio._gio.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\glib._glib.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\gobject._gobject.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\gtk._gtk.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\intl.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libatk-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libcairo-2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libexpat-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libfontconfig-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libgdk_pixbuf-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libgdk-win32-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libgio-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libgmodule-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libgobject-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libgthread-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libgtk-win32-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libpango-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libpangocairo-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libpangoft2-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libpangowin32-1.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\libpng14-14.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\library.zip"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\MSIMG32.DLL"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\NSI.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\pango.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\pangocairo.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\pyexpat.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\python27.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\select.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\unicodedata.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\USP10.DLL"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\w9xpopen.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\python\dist\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ; C files
-Source: "C:\Users\Vultaire\jben-1.9.4\c\kpengine\jben_kpengine.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Vultaire\jben-1.9.5\c\kpengine\jben_kpengine.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 ; Data files
-Source: "C:\Users\Vultaire\jben-1.9.4\data\images\*"; DestDir: "{app}\data\images"; Flags: ignoreversion recursesubdirs
-Source: "C:\Users\Vultaire\jben-1.9.4\data\kpdata\*"; DestDir: "{app}\data\kpdata"; Flags: ignoreversion recursesubdirs
+Source: "C:\Users\Vultaire\jben-1.9.5\data\images\*"; DestDir: "{app}\data\images"; Flags: ignoreversion recursesubdirs
+Source: "C:\Users\Vultaire\jben-1.9.5\data\kpdata\*"; DestDir: "{app}\data\kpdata"; Flags: ignoreversion recursesubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
