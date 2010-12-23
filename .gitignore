@@ -9,3 +9,6 @@ jbparse/build
 jbparse/dist
 jbparse/MANIFEST*
 *.egg-info
+
+code_layout.rst
+data/images/*.ico
