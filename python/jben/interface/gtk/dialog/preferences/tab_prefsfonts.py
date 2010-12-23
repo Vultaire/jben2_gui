@@ -102,7 +102,7 @@ class TabPrefsFonts(gtk.VBox):
         key, label, textview, button = ctrls
 	fd = gtk.FontSelectionDialog(_("Choose Font"))
         if "font.ja" in key:
-            fd.set_preview_text(_("ROMAJI romaji 日本語　にほんご　ニホンゴ"))
+            fd.set_preview_text("ROMAJI romaji 日本語　にほんご　ニホンゴ")
 	fd.set_font_name(textview.font_name)
 	result = fd.run()
         fd.hide()
