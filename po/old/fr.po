@@ -1,0 +1,866 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-07 00:44+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/config_kanji_test.cpp:33
+msgid "Read kanji test"
+msgstr "Test de lecture des kanji"
+
+#: src/config_kanji_test.cpp:43 src/config_kanji_test.cpp:70
+msgid "Show onyomi"
+msgstr "Montrer la lecture on"
+
+#: src/config_kanji_test.cpp:44 src/config_kanji_test.cpp:71
+msgid "Show kunyomi"
+msgstr "Montrer la lecture kun"
+
+#: src/config_kanji_test.cpp:45 src/config_kanji_test.cpp:72
+msgid "Show English meaning"
+msgstr "Montrer le sens en anglais"
+
+#: src/config_kanji_test.cpp:60
+msgid "Write kanji test"
+msgstr "Test d'écriture des kanji"
+
+#: src/config_kanji_test.cpp:88
+msgid "Keyboard shortcuts"
+msgstr "Raccourcis clavier"
+
+#: src/config_kanji_test.cpp:96
+msgid "Correct answer: "
+msgstr "Réponse correcte"
+
+#: src/config_kanji_test.cpp:105
+msgid "Wrong answer: "
+msgstr "Réponse erronée :"
+
+#: src/config_kanji_test.cpp:115
+msgid "Show answer: "
+msgstr "Montrer la réponse :"
+
+#: src/config_kanji_test.cpp:124
+msgid "Stop drill: "
+msgstr "Arrêter le test :"
+
+#: src/dialog_addkanjibyfreq.cpp:31
+msgid "Add Kanji By Freq"
+msgstr "Ajouter des kanji par fréquence"
+
+#: src/dialog_addkanjibyfreq.cpp:108
+msgid "Your high frequency rank cannot be less than your low frequency rank."
+msgstr "Le rang supérieur ne peut être plus petit que le rang inférieur."
+
+#: src/dialog_addkanjibyfreq.cpp:110
+msgid "Bad frequency range"
+msgstr "Mauvais intervalle de fréquence"
+
+#: src/dialog_addkanjibygrade.cpp:31
+msgid "Jouyou Kanji Grade 1"
+msgstr "Niveau 1 des jôyô kanji"
+
+#: src/dialog_addkanjibygrade.cpp:32
+msgid "Jouyou Kanji Grade 2"
+msgstr "Niveau 2 des jôyô kanji"
+
+#: src/dialog_addkanjibygrade.cpp:33
+msgid "Jouyou Kanji Grade 3"
+msgstr "Niveau 3 des jôyô kanji"
+
+#: src/dialog_addkanjibygrade.cpp:34
+msgid "Jouyou Kanji Grade 4"
+msgstr "Niveau 4 des jôyô kanji"
+
+#: src/dialog_addkanjibygrade.cpp:35
+msgid "Jouyou Kanji Grade 5"
+msgstr "Niveau 5 des jôyô kanji"
+
+#: src/dialog_addkanjibygrade.cpp:36
+msgid "Jouyou Kanji Grade 6"
+msgstr "Niveau 6 des jôyô kanji"
+
+#: src/dialog_addkanjibygrade.cpp:37
+msgid "Jouyou Kanji, General Usage"
+msgstr "Jôyô kanji, usage général"
+
+#: src/dialog_addkanjibygrade.cpp:38
+msgid "Jinmeiyou Kanji (for names)"
+msgstr "Jinmeiyô kanji (pour les noms)"
+
+#: src/dialog_addkanjibygrade.cpp:39
+msgid "Non-Jouyou/Non-Jinmeiyou Kanji"
+msgstr "Kanji ni jôyô ni jinmeiyô"
+
+#: src/dialog_addkanjibygrade.cpp:44
+msgid "Add Kanji By Grade"
+msgstr "Ajouter des kanjis par niveau"
+
+#: src/dialog_addkanjibygrade.cpp:132
+msgid "Your high grade level cannot be less than your low grade level."
+msgstr "Le niveau supérieur ne peut être plus petit que le niveau inférieur."
+
+#: src/dialog_addkanjibygrade.cpp:134
+msgid "Bad grade range"
+msgstr "Mauvais intervalle de niveau"
+
+#: src/dialog_config.cpp:39
+msgid "Change..."
+msgstr "Changer..."
+
+#: src/dialog_config.cpp:42
+msgid "Preferences Editor"
+msgstr "Édition des préférences"
+
+#: src/dialog_config.cpp:43
+msgid "Include on-yomi, kun-yomi and nanori (name) readings"
+msgstr "Inclure les lectures on, kun et nanori (noms)"
+
+#: src/dialog_config.cpp:44
+msgid "Include English meanings"
+msgstr "Inclure le sens anglais"
+
+#: src/dialog_config.cpp:45
+msgid "Include stroke count, Jouyou grade and newspaper frequency rank"
+msgstr "Inclure le nombre de traits, le niveau jôyô et le rang de fréquence dans les journaux"
+
+#: src/dialog_config.cpp:47
+msgid "Include radical component list"
+msgstr "Inclure la liste de radicaux"
+
+#: src/dialog_config.cpp:48
+msgid "Include dictionary reference codes"
+msgstr "Inclure les codes de référence du dictionnaire"
+
+#: src/dialog_config.cpp:49
+msgid "Show vocab from your study list which use the kanji"
+msgstr "Montrer le vocabulaire de votre liste d'étude utilisant le kanji"
+
+#: src/dialog_config.cpp:51
+msgid "Other information (Radical #'s, Korean and Pinyin romanization)"
+msgstr "Autres informations (Référence du radical, coréen et pinyin)"
+
+#: src/dialog_config.cpp:53
+msgid "Use KanjiCafe.com stroke order diagrams"
+msgstr "Utiliser les schémas d'ordre des traits de KanjiCafe.com"
+
+#: src/dialog_config.cpp:54
+msgid "Use KanjiCafe.com animated stroke order diagrams"
+msgstr "Utiliser les schémas animés d'ordre des traits de KanjiCafe.com"
+
+#: src/dialog_config.cpp:56
+msgid "Japanese Font, Normal"
+msgstr "Fonte japonaise normale"
+
+#: src/dialog_config.cpp:57
+msgid "Japanese Font, Large"
+msgstr "Grande fonte japonaise "
+
+#: src/dialog_config.cpp:58
+msgid "English Font, Normal"
+msgstr "Fonte latine normale"
+
+#: src/dialog_config.cpp:59
+msgid "English Font, Small"
+msgstr "Grande fonte latine"
+
+#: src/dialog_config.cpp:64
+msgid "Mobile mode (settings saved to current directory)"
+msgstr "Mode ambulant (réglages sauvegardés dans le dossier courant)"
+
+#: src/dialog_config.cpp:73
+msgid "\"New Japanese-English Character Dictionary\" by Jack Halpern."
+msgstr "« New Japanese-English Character Dictionary » de Jack Halpern."
+
+#: src/dialog_config.cpp:77
+msgid ""
+"\"Modern Reader's Japanese-English Character Dictionary\" by Andrew Nelson"
+msgstr "« Modern Reader's Japanese-English Character Dictionary » d' Andrew Nelson"
+
+#: src/dialog_config.cpp:81
+msgid "\"The New Nelson Japanese-English Character Dictionary\" by John Haig"
+msgstr "« The New Nelson Japanese-English Character Dictionary » de John Haig"
+
+#: src/dialog_config.cpp:85
+msgid "\"Japanese for Busy People\" by AJLT"
+msgstr "« Japanese for Busy People » de l' AJLT"
+
+#: src/dialog_config.cpp:88
+msgid "\"The Kanji Way to Japanese Language Power\" by Dale Crowley"
+msgstr "« The Kanji Way to Japanese Language Power » de Dale Crowley"
+
+#: src/dialog_config.cpp:91
+msgid "\"Kodansha Compact Kanji Guide\""
+msgstr "« Kodansha Compact Kanji Guide »"
+
+#: src/dialog_config.cpp:94
+msgid "\"A Guide To Reading and Writing Japanese\" by Ken Hensall et al."
+msgstr "« A Guide To Reading and Writing Japanese » de Ken Hensall et al."
+
+#: src/dialog_config.cpp:98
+msgid "\"Kanji in Context\" by Nishiguchi and Kono"
+msgstr "« Kanji in Context » de Nishiguchi and Kono"
+
+#: src/dialog_config.cpp:101
+msgid "\"Kanji Learner's Dictionary\" by Jack Halpern"
+msgstr "« Kanji Learner's Dictionary » de Jack Halpern"
+
+#: src/dialog_config.cpp:105
+msgid "\"Essential Kanji\" by P.G. O'Neill"
+msgstr "« Essential Kanji »" de P.G. O'Neill"
+
+#: src/dialog_config.cpp:108
+msgid "\"2001 Kanji\" by Father Joseph De Roo"
+msgstr "« 2001 Kanji » de Father Joseph De Roo"
+
+#: src/dialog_config.cpp:111
+msgid "\"A Guide To Reading and Writing Japanese\" by Florence Sakade"
+msgstr "« A Guide To Reading and Writing Japanese » de Florence Sakade"
+
+#: src/dialog_config.cpp:115
+msgid "\"Tuttle Kanji Cards\" by Alexander Kask"
+msgstr "« Tuttle Kanji Cards » de Alexander Kask"
+
+#: src/dialog_config.cpp:118
+msgid "\"Japanese Kanji Flashcards\" by White Rabbit Press"
+msgstr "« Japanese Kanji Flashcards » de White Rabbit Press"
+
+#: src/dialog_config.cpp:122
+msgid "SKIP codes used by Halpern dictionaries"
+msgstr "Codes SKIP utilisés par les dictionnaires Halpern"
+
+#: src/dialog_config.cpp:125
+msgid "\"Kanji Dictionary\" by Spahn & Hadamitzky"
+msgstr "« Dictionnaires des Kanji » par Spahn et Hadamitzky"
+
+#: src/dialog_config.cpp:128
+msgid "\"Kanji & Kana\" by Spahn & Hadamitzky"
+msgstr "« Kanji et Kana » de Spahn et Hadamitzky"
+
+#: src/dialog_config.cpp:131
+msgid "Four Corner code (various dictionaries)"
+msgstr ""
+
+#: src/dialog_config.cpp:133
+msgid "\"Morohashi Daikanwajiten\""
+msgstr "« Morohashi Daikanwajiten »"
+
+#: src/dialog_config.cpp:136
+msgid "\"A Guide to Remembering Japanese Characters\" by Kenneth G. Henshal"
+msgstr "« A Guide to Remembering Japanese Characters » de Kenneth G. Henshal"
+
+#: src/dialog_config.cpp:140
+msgid "Gakken Kanji Dictionary (\"A New Dictionary of Kanji Usage\")"
+msgstr "Dictionnaire gakken kanji  (« Nouveau dictionnaire de l'usage des kanji  »)"
+
+#: src/dialog_config.cpp:144
+msgid "\"Remembering The Kanji\" by James Heisig"
+msgstr "« Remembering The Kanji » de James Heisig"
+
+#: src/dialog_config.cpp:146
+msgid "\"Japanese Names\" by P.G. O'Neill"
+msgstr "« Japanese Names » de P.G. O'Neil"
+
+#: src/dialog_config.cpp:256 src/frame_maingui.cpp:166
+msgid "Kanji Dictionary"
+msgstr "Dictionnaire de kanji"
+
+#: src/dialog_config.cpp:257
+msgid "Kanji test"
+msgstr "Test de kanji"
+
+#: src/dialog_config.cpp:258
+msgid "Fonts"
+msgstr "Fontes"
+
+#: src/dialog_config.cpp:266
+msgid "Other"
+msgstr "Autres"
+
+#: src/dialog_config.cpp:396
+msgid "Choose Font"
+msgstr "Choisir la fonte"
+
+#: src/dialog_config.cpp:442
+#, c-format
+msgid ""
+"A config file was found in this system's home folder: %s.  Turning mobile "
+"mode off will cause J-Ben to OVERWRITE the existing file when it closes, "
+"destroying whatever is already there.  Is this okay?"
+msgstr ""
+"Un fichier de configuration a été trouvé dans le dossier utilisateur de cet ordinateur : %s. Désactiver le"
+"mode ambulant aura pour conséquence l'écrasement de ce fichier à la fermeture de J-Ben"
+"et la perte de toutes les données qui y sont présentes. Etes-vous d'accord ?"
+
+#: src/dialog_kanjilisteditor.cpp:39 src/dialog_kanjilisteditor.cpp:271
+msgid "Kanji List Editor"
+msgstr "Editeur de la liste des kanji"
+
+#: src/dialog_kanjilisteditor.cpp:41
+msgid "From File"
+msgstr "Depuis un fichier"
+
+#: src/dialog_kanjilisteditor.cpp:42 src/dialog_kanjilisteditor.cpp:44
+msgid "By Grade"
+msgstr "Par niveau"
+
+#: src/dialog_kanjilisteditor.cpp:43 src/dialog_kanjilisteditor.cpp:45
+msgid "By Frequency"
+msgstr "Par fréquence"
+
+#: src/dialog_kanjilisteditor.cpp:46
+msgid "By Both"
+msgstr "Les deux"
+
+#: src/dialog_kanjilisteditor.cpp:96
+msgid "Add Kanji"
+msgstr "Ajouter un kanji"
+
+#: src/dialog_kanjilisteditor.cpp:97
+msgid "Sort Kanji"
+msgstr "Trier les kanji"
+
+#: src/dialog_kanjilisteditor.cpp:136
+msgid ""
+"Unsaved changes are present.  These must be saved before continuing.  "
+"Continue?"
+msgstr "Des modifications non sauvegardées existent. Elles doivent l'être avant de continuer. "
+"Continuer ? "
+
+#: src/dialog_kanjilisteditor.cpp:139
+msgid "Unsaved changes detected"
+msgstr "Existence de modifications non sauvegardées "
+
+#: src/dialog_kanjilisteditor.cpp:152
+msgid "Import from file"
+msgstr "Importer depuis un fichier"
+
+#: src/dialog_kanjilisteditor.cpp:170 src/dialog_kanjilisteditor.cpp:193
+#: src/dialog_kanjilisteditor.cpp:216
+#, c-format
+msgid "Added %d kanji to the list."
+msgstr "Ajouté %d kanji à la liste"
+
+#: src/dialog_kanjilisteditor.cpp:172
+msgid "Add Kanji From File"
+msgstr "Ajouter des kanji depuis un fichier
+"
+
+#: src/dialog_kanjilisteditor.cpp:195
+msgid "Add Kanji by Grade"
+msgstr "Ajouter des kanji par niveau"
+
+#: src/dialog_kanjilisteditor.cpp:218
+msgid "Add Kanji by Frequency"
+msgstr "Ajouter des kanji par fréquence"
+
+#: src/dialog_kanjilisteditor.cpp:269
+#, c-format
+msgid ""
+"Changes Saved.\n"
+"Total kanji in list: %d"
+msgstr "Modifications sauvegardées.\n"
+"Nombre total de kanji dans la liste : %d"
+
+#: src/dialog_kanjiposttest.cpp:36
+msgid "Kanji Test: Results"
+msgstr "Test des kanji : résultats"
+
+#: src/dialog_kanjiposttest.cpp:54
+msgid ""
+"- TEST COMPLETED -\n"
+"\n"
+msgstr "TEST TERMINÉ -\n"
+"\n"
+
+#: src/dialog_kanjiposttest.cpp:55
+#, c-format
+msgid "Final score: %d/%d (%0.3f%%)\n"
+msgstr "Résultat final : %d/%d(%0.3f%%)\n"
+
+#: src/dialog_kanjiposttest.cpp:58 src/dialog_kanjiposttest.cpp:68
+msgid ""
+"List of missed kanji:\n"
+"Liste des kanji ratés :\n"
+msgstr ""
+
+#: src/dialog_kanjiposttest.cpp:62
+msgid ""
+"The test was NOT completed!\n"
+"\n"
+msgstr "Le test n'a pas été terminé !\n"
+"\n"
+
+#: src/dialog_kanjiposttest.cpp:63
+#, c-format
+msgid "Test progress: %d/%d (%0.3f%%)\n"
+msgstr "Avancement du test : %d/%d (%0.3f%%)\n"
+
+#: src/dialog_kanjiposttest.cpp:65
+#, c-format
+msgid "Partial score: %d/%d (%0.3f%%)\n"
+msgstr "Résultat partiel :  %d/%d (%0.3f%%)\n"
+
+#: src/dialog_kanjiposttest.cpp:83
+msgid "Your test results are as follows:"
+msgstr "Vos résultats au test sont comme suit : "
+
+#: src/dialog_kanjipretest.cpp:31
+msgid "Kanji Test: Settings"
+msgstr "Préférences pour le test des kanji"
+
+#: src/dialog_kanjipretest.cpp:32
+msgid "Choose randomly from list"
+msgstr "Choisir au hasard dans la liste"
+
+#: src/dialog_kanjipretest.cpp:33
+msgid "Start at index:"
+msgstr "Commencer à l'index :"
+
+#: src/dialog_kanjipretest.cpp:34
+msgid "Reading kanji"
+msgstr "Lecture des kanji"
+
+#: src/dialog_kanjipretest.cpp:35
+msgid "Writing kanji"
+msgstr "Écriture des kanji"
+
+#: src/dialog_kanjipretest.cpp:37
+msgid "Start Test"
+msgstr "Commencer le test"
+
+#: src/dialog_kanjipretest.cpp:71
+msgid "Choose Kanji to Test"
+msgstr "Choisir le kanji à tester"
+
+#: src/dialog_kanjipretest.cpp:73
+msgid "Choose Test Type"
+msgstr "Choix du type de test"
+
+#: src/dialog_kanjipretest.cpp:79
+msgid "Number of kanji to test:"
+msgstr "Nombre de kanji à tester :"
+
+#: src/dialog_kanjitest.cpp:46
+msgid "J-Ben: Kanji Test"
+msgstr "J-Ben : test des kanji"
+
+#: src/dialog_kanjitest.cpp:47
+msgid "< Kanji >"
+msgstr "< Kanji >"
+
+#: src/dialog_kanjitest.cpp:48
+msgid "< Onyomi >"
+msgstr "< Onyomi >"
+
+#: src/dialog_kanjitest.cpp:49
+msgid "< Kunyomi >"
+msgstr "< Kunyomi >""
+
+#: src/dialog_kanjitest.cpp:50
+msgid "< Meaning >"
+msgstr "<Sens>"
+
+#: src/dialog_kanjitest.cpp:55
+#, c-format
+msgid "Show Answer (_%s)"
+msgstr "Montrer la réponse (_%s)"
+
+#: src/dialog_kanjitest.cpp:58
+#, c-format
+msgid "Correct (_%s)"
+msgstr "Correct  (_%s)"
+
+#: src/dialog_kanjitest.cpp:61
+#, c-format
+msgid "Wrong (_%s)"
+msgstr "Erronés (_%s)"
+
+#: src/dialog_kanjitest.cpp:64
+#, c-format
+msgid "Stop Drill (_%s)"
+msgstr "Arrêter le test (_%s)"
+
+#: src/dialog_kanjitest.cpp:69 src/kdict.cpp:1048 src/kdict.cpp:1461
+msgid "Kanji stroke order graphics used under license from KanjiCafe.com."
+msgstr "Diagrammes de tracé des kanji utilisés avec l'autorisation de KanjiCafe.com."
+
+#: src/dialog_kanjitest.cpp:221
+#, c-format
+msgid "Current score: %d/%d (%0.3f%%)"
+msgstr "Score actuel : %d/%d (%0.3f%%)"
+
+#: src/dialog_kanjitest.cpp:224
+#, c-format
+msgid "Test Progress: %d/%d (%0.3f%% done)"
+msgstr "Avancement du test :  %d/%d (%0.3f%% faits"
+
+#: src/dialog_kanjitest.cpp:228
+#, c-format
+msgid "Final score: %d/%d (%0.3f%%)"
+msgstr "Score final :%d/%d (%0.3f%%)"
+
+#: src/dialog_kanjitest.cpp:231
+#, c-format
+msgid "Extra practice: %d remaining"
+msgstr "À refaire : reste  %d"
+
+#: src/dialog_kanjitest.cpp:277
+msgid "A test is still in progress!  Are you sure?"
+msgstr "Un test est en cours ! Êtes-vous sûr ?"
+
+#: src/dialog_kanjitest.cpp:279
+msgid "Test in progress!"
+msgstr "Test en cours !"
+
+#: src/dialog_setmobile.cpp:32
+msgid "How do you want to use J-Ben?"
+msgstr "Comment voulez-vous utiliser J-Ben ?"
+
+#: src/dialog_setmobile.cpp:34
+msgid "Standard"
+msgstr "Standard"
+
+#: src/dialog_setmobile.cpp:35
+msgid "Mobile"
+msgstr "Mobile"
+
+#: src/dialog_setmobile.cpp:37
+msgid "Standard or Mobile?"
+msgstr "Standard ou mobile?"
+
+#: src/dialog_setmobile.cpp:39
+msgid ""
+"If this is a normal installation, please click \"Standard\".\n"
+"If J-Ben was installed onto a USB or other removable disk, please click "
+"\" Mobile\".\n"
+"(This setting can be changed later via the Edit->Preferences menu.)"
+msgstr "Si c'est une installation normale, merci d'appuyer sur  « Standard ».\n"
+"Si J-Ben a été installé sur un disque USB ou amovible, merci d'appuyer sur  "
+"« Mobile ».\n"
+#: src/dialog_vocablisteditor.cpp:35 src/dialog_vocablisteditor.cpp:101
+msgid "Vocab List Editor"
+msgstr "Editeur de liste de vocabulaire"
+
+#: src/dialog_vocablisteditor.cpp:99
+#, c-format
+msgid ""
+"Changes Saved.\n"
+"Total vocab in list: %d"
+msgstr "Modifications sauvegardées."
+"Total des mots dans la liste : %d"
+#: src/frame_hwpad.cpp:42 src/frame_ksearch.cpp:53
+#: src/frame_ksearch_helpers.cpp:55
+msgid "Clear"
+msgstr "Effacer"
+
+#: src/frame_hwpad.cpp:44
+#, c-format
+msgid "%s: Kanji Handwriting Pad"
+msgstr "%s : Ardoise d'écriture des kanji"
+
+#: src/frame_ksearch.cpp:51
+msgid "Search Methods"
+msgstr "Méthodes de recherche"
+
+#: src/frame_ksearch.cpp:53
+msgid "Add"
+msgstr "Ajouter"
+
+#: src/frame_ksearch.cpp:56 src/widget_dictpanel.cpp:32
+msgid "Search"
+msgstr "Chercher"
+
+#: src/frame_ksearch.cpp:58
+#, c-format
+msgid "%s: Kanji Search"
+msgstr "%s : Recherche de kanji"
+
+#: src/frame_ksearch.cpp:90 src/frame_ksearch.cpp:98 src/frame_ksearch.cpp:272
+msgid "SKIP code"
+msgstr "Code SKIP"
+
+#: src/frame_ksearch.cpp:95 src/frame_ksearch.cpp:270
+#: src/frame_ksearch_helpers.cpp:84
+msgid "Stroke Count"
+msgstr "Nombre de traits"
+
+#: src/frame_ksearch.cpp:97 src/frame_ksearch.cpp:268
+#: src/frame_ksearch.cpp:286
+msgid "Handwriting Recognition"
+msgstr "Reconnaissance manuelle"
+
+#: src/frame_ksearch.cpp:208
+#, c-format
+msgid "Total results: %d (Loading buttons...)"
+msgstr "Nombre total de résultats : %d (chargement des boutons...)"
+
+#: src/frame_ksearch.cpp:227
+msgid "Over 1500 results.  Please narrow down your search."
+msgstr "Plus de 1500 résultats. Merci de restreindre votre recherche."
+
+#: src/frame_ksearch.cpp:230
+#, c-format
+msgid "Total results: %d"
+msgstr "Nombre total de résultats : %d"
+
+#: src/frame_ksearch.cpp:278
+msgid "Drop"
+msgstr "Ignorer"
+
+#: src/frame_ksearch_helpers.cpp:55
+msgid "Handwriting"
+msgstr "Écriture manuelle"
+
+#: src/frame_ksearch_helpers.cpp:86
+msgid "Include common stroke miscounts"
+msgstr "Tenir compte des erreurs fréquentes sur le nombre de traits"
+
+#: src/frame_ksearch_helpers.cpp:88 src/frame_ksearch_helpers.cpp:154
+msgid "Include stroke miscounts"
+msgstr "Tenir compte des erreurs sur le nombre de traits"
+
+#: src/frame_ksearch_helpers.cpp:88 src/frame_ksearch_helpers.cpp:154
+msgid "+/-"
+msgstr "+/-"
+
+#: src/frame_ksearch_helpers.cpp:151
+msgid "SKIP search"
+msgstr "Recherche SKIP"
+
+#: src/frame_ksearch_helpers.cpp:152
+msgid "-"
+msgstr "-"
+
+#: src/frame_ksearch_helpers.cpp:153
+msgid "Include SKIP miscodes"
+msgstr "Inclure les erreurs de code SKIP"
+
+#: src/frame_maingui.cpp:92
+msgid "_File"
+msgstr "_Fichier"
+
+#: src/frame_maingui.cpp:97
+msgid "_Edit"
+msgstr "_Edition"
+
+#: src/frame_maingui.cpp:99
+msgid "_Vocab Study List"
+msgstr "Liste de _vocabulaire à étudier"
+
+#: src/frame_maingui.cpp:102
+msgid "_Kanji Study List"
+msgstr "Liste de _kanji à étudier"
+
+#: src/frame_maingui.cpp:108
+msgid "_Practice"
+msgstr "En_trainement"
+
+#: src/frame_maingui.cpp:110
+msgid "_Kanji"
+msgstr "_Kanji"
+
+#: src/frame_maingui.cpp:113
+msgid "_Tools"
+msgstr "_Outils"
+
+#: src/frame_maingui.cpp:116
+msgid "_Handwriting Recognition for Kanji"
+msgstr "_Reconnaissance manuelle des kanji"
+
+#: src/frame_maingui.cpp:120
+msgid "_Kanji Search"
+msgstr "Recherche des _kanji"
+
+#: src/frame_maingui.cpp:123
+msgid "_Help"
+msgstr "_Aide"
+
+#: src/frame_maingui.cpp:128
+msgid "_License Information..."
+msgstr "Information sur la licence..."
+
+#: src/frame_maingui.cpp:165
+msgid "Word Dictionary"
+msgstr "Dictionnaire"
+
+#: src/frame_maingui.cpp:269
+#, c-format
+msgid ""
+"%s v%s\n"
+"By %s\n"
+"Copyright %s\n"
+"\n"
+"Inspired in large by JWPce and JFC by Glenn Rosenthal:\n"
+"http://www.physics.ucla.edu/~grosenth/\n"
+"\n"
+"Powered by the many Japanese dictionary files from Monash University, many "
+"thanks to Jim Breen:\n"
+"http://www.csse.monash.edu.au/~jwb/japanese.html\n"
+"Thanks also to Jim Rose of kanjicafe.com for his extended RADKFILE2/"
+"KRADFILE2 databases and derived database files.\n"
+"\n"
+"Built using gtkmm: http://www.gtkmm.org/\n"
+"\n"
+"Hand writing recognition is based upon code from im-ja (http://im-ja."
+"sourceforge.net/) and KanjiPad (http://fishsoup.net/software/kanjipad/).  "
+"KanjiPad was written by Owen Taylor.\n"
+"\n"
+"See \"Help->License Information...\" for important license details."
+msgstr ""
+""
+"%s v%s\n"
+"De %s\n"
+"Copyright %s\n"
+"\n"
+"Librement inspiré par  JWPce et JFC de Glenn Rosenthal:\n"
+"http://www.physics.ucla.edu/~grosenth/\n"
+"\n"
+"Utilise les nombreux dictionnaires  l'université Monash, sincères "
+"remerciements à Jim Breen:\n"
+"http://www.csse.monash.edu.au/~jwb/japanese.html\n"
+"Merci aussi à Jim Rose de kanjicafe.com pour KRADKFILE2/"
+"ses bases de données et fichiers dérivés RADKFILE2.\n"
+"\n"
+"Construit avec gtkmm: http://www.gtkmm.org/\n"
+"\n"
+"La reconnaissance manuelle est basée sur le code de im-ja (http://im-ja."
+"sourceforge.net/) et KanjiPad (http://fishsoup.net/software/kanjipad/).  "
+"KanjiPad a été écrit par Owen Taylor.\n"
+"\n"
+"Voir  «Aide -> information sur la licence...» pour des précisions importantes."
+#: src/frame_maingui.cpp:292
+#, c-format
+msgid "About %s"
+msgstr "À propose de %s"
+
+#: src/frame_maingui.cpp:298
+msgid ""
+"Program distributed under the GNU General Public License (GPL) version 2:\n"
+"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
+"\n"
+"The included dictionary data files, with the exception of the handwriting "
+"databases and Jim Rose's extensions to the radical databases, are "
+"distributed under a separate license specified at\n"
+"http://www.csse.monash.edu.au/~jwb/edrdg/license.htm\n"
+"\n"
+"Jim Rose's extended databases are licensed to Monash University with "
+"permission to modify and redistribute the files, as long as his copyright "
+"notices are preserved.\n"
+"\n"
+"The SKIP (System of Kanji Indexing by Patterns) system for ordering kanji "
+"was developed by Jack Halpern (Kanji Dictionary Publishing Society at http://"
+"www.kanji.org/), and is used with his permission.\n"
+"\n"
+"Copies of the GNU General Public License, Monash University's license for "
+"the dictionary files and documentation for the dictionary files are "
+"contained in this program's \"license\" directory."
+msgstr ""
+"Program distribué sous licence publique  GNU (GPL) version 2:\n"
+"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
+"\n"
+"Les dictionnaires inclus, à l'exception de la base de données de "
+"reconnaissance manuelle et les extensions de Jim Rose aux données sur les radicaux,"
+ "sont distribués sous une autre licence présentée à \n"
+"http://www.csse.monash.edu.au/~jwb/edrdg/license.htm\n"
+"\n"
+"Les bases de données étendues de Jim Rose sont licenciées l'université Monash "
+"avec la permission de modifier et de redistribuer les fichiers, tant que ses notices"
+"de  copyright sont préservées.\n"
+"\n"
+" Le système SKIP (System of Kanji Indexing by Patterns) "
+"a été développé par Jack Halpern (Kanji Dictionary Publishing Society à http://"
+"www.kanji.org/), et est utilisé avec sa permission.\n"
+"\n"
+"Les copies de la licence publique GNU, celle de l'université Monash pour "
+"les dictionnaires et leur documentation sont "
+"dans le dossier « license » de ce programme."
+
+#: src/frame_maingui.cpp:323
+#, c-format
+msgid ""
+"  (On this system, it should be located at:\n"
+"%s)"
+msgstr "(sur ce système, il devrait être situé à : \n"
+
+#: src/frame_maingui.cpp:328
+msgid "License Information"
+msgstr "Informations sur la licence"
+
+#: src/jben.cpp:53
+msgid "Error"
+msgstr "Erreur"
+
+#: src/jben.cpp:65
+msgid "Warning"
+msgstr "Avertissement"
+
+#: src/jben.cpp:77
+msgid "Information"
+msgstr "Information"
+
+#: src/panel_kanjidict.cpp:36
+msgid "of 0 kanji"
+msgstr "de 0 kanji"
+
+#: src/panel_kanjidict.cpp:59
+msgid "Enter kanji:"
+msgstr "Entrer le kanji"
+
+#: src/panel_kanjidict.cpp:193
+msgid "No kanji have been selected."
+msgstr "Pas de kanji sélectionné"
+
+#: src/panel_worddict.cpp:40
+msgid "of 0 vocab"
+msgstr "de 0 mot"
+
+#: src/panel_worddict.cpp:63
+msgid "Enter word or expression:"
+msgstr "Entrer un mot ou expression"
+
+#: src/panel_worddict.cpp:167
+#, c-format
+msgid "of %d vocab"
+msgstr "de % mots"
+
+#: src/panel_worddict.cpp:180
+msgid "No search has been entered."
+msgstr "Aucune recherche n'a été demandée."
+
+#: src/panel_worddict.cpp:196
+msgid "No results were found."
+msgstr "Pas de résultats"
+
+#: src/widget_dictpanel.cpp:35
+msgid "Random"
+msgstr "Hasard"
+
+#: src/widget_kanjihwpad.cpp:62
+msgid "Draw Kanji (Right click erases)"
+msgstr "Dessinner le kanji (clic droit pour effacer"
+
+#: src/widget_kanjihwpad.cpp:235
+#, c-format
+msgid "%s:%d: An error occurred while closing the output stream to kpengine."
+msgstr "%s:%d : Une erreur est survenue à la cloture de la sortie vers kpengine"
+
+#: src/widget_kanjihwpad.cpp:289
+#, c-format
+msgid ""
+"%s:%d: kpengine returned an out-of-range character (0x%X).  The character "
+"has been dropped."
+msgstr "%s : %d : kpengine a retourné une erreur de caractère hors intervalle (0x%X).  Le caractère a été "
+"ignoré."
