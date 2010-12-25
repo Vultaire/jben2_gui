@@ -219,7 +219,7 @@ msgstr "« Kanji Learner's Dictionary » de Jack Halpern"
 
 #: src/dialog_config.cpp:105
 msgid "\"Essential Kanji\" by P.G. O'Neill"
-msgstr "« Essential Kanji »" de P.G. O'Neill"
+msgstr "« Essential Kanji » de P.G. O'Neill"
 
 #: src/dialog_config.cpp:108
 msgid "\"2001 Kanji\" by Father Joseph De Roo"
@@ -355,8 +355,7 @@ msgstr "Ajouté %d kanji à la liste"
 
 #: src/dialog_kanjilisteditor.cpp:172
 msgid "Add Kanji From File"
-msgstr "Ajouter des kanji depuis un fichier
-"
+msgstr "Ajouter des kanji depuis un fichier"
 
 #: src/dialog_kanjilisteditor.cpp:195
 msgid "Add Kanji by Grade"
@@ -467,7 +466,7 @@ msgstr "< Onyomi >"
 
 #: src/dialog_kanjitest.cpp:49
 msgid "< Kunyomi >"
-msgstr "< Kunyomi >""
+msgstr "< Kunyomi >"
 
 #: src/dialog_kanjitest.cpp:50
 msgid "< Meaning >"
