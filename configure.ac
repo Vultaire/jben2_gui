@@ -29,7 +29,10 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([strdup strtol])
 
+AM_GNU_GETTEXT([external]) # For gettext... may not be needed in Python though...
+
 AC_CONFIG_FILES([Makefile
+                 po/Makefile.in
                  c/Makefile
                  c/kpengine/Makefile
                  data/Makefile
