@@ -137,10 +137,10 @@ class Main(StoredSizeWindow):
                      _("Sorry, this has not yet been re-implemented."))
 
     def on_menu_help_about(self, widget):
-        message = _(
-            "%s %s\n"
-            "By %s\n"
-            "Copyright %s\n\n"
+        message_template = _(
+            "%(package_name)s %(package_version)s\n"
+            "By %(author)s\n"
+            "Copyright %(copyright)s\n\n"
             "Inspired in large by JWPce and JFC by Glenn Rosenthal:\n"
             "http://www.physics.ucla.edu/~grosenth/\n\n"
 
@@ -159,11 +159,15 @@ class Main(StoredSizeWindow):
 
             "See \"Help->License Information...\" for important license "
             "details."
-            ) % (configure.PACKAGE_NAME,
-                 configure.PACKAGE_VERSION,
-                 jben_globals.AUTHOR_NAME,
-                 jben_globals.COPYRIGHT_DATE)
+            )
+        args = {
+            "package_name": configure.PACKAGE_NAME,
+            "package_version": configure.PACKAGE_VERSION,
+            "author": jben_globals.AUTHOR_NAME,
+            "copyright": jben_globals.COPYRIGHT_DATE,
+            }
 
+        message = message_template % args
         show_message(self, _("About %s") % configure.PACKAGE_NAME, message)
 
     def on_menu_help_license(self, widget):

@@ -105,8 +105,10 @@ class TabPrefsKanjiTest(gtk.VBox):
             widget.set_text(strval)
         except:
             print _("Unhandled keypress captured: "
-                    "keyval: 0x%X, hardware_keycode: 0x%X") \
-                % (event.keyval, event.hardware_keycode)
+                    "keyval: 0x%(keyval)X, "
+                    "hardware_keycode: 0x%(hw_keycode)X") \
+                % {"keyval": event.keyval,
+                   "hw_keycode": event.hardware_keycode}
         return True
 
     def update_prefs(self):
