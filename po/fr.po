@@ -1,0 +1,898 @@
+# French translations for J-Ben package
+# Traductions francaises du paquet J-Ben.
+# Copyright (C) 2010 Paul Goins
+# This file is distributed under the same license as the J-Ben package.
+# <...>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: J-Ben 1.9.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-12-25 12:27+0900\n"
+"PO-Revision-Date: 2010-12-25 12:50+0900\n"
+"Last-Translator: Alain Bertrand <...>\n"
+"Language-Team: French <...>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: python/jben/app.py:21
+msgid "Interface not supported"
+msgstr ""
+
+#: python/jben/app.py:39
+msgid "Could not get home directory from environment."
+msgstr ""
+
+#: python/jben/interface/gtk/dialog/dict_download.py:18
+#, fuzzy
+msgid "Download dictionaries"
+msgstr "Dictionnaire"
+
+#: python/jben/interface/gtk/dialog/dict_mirror_select.py:15
+msgid "Select download site"
+msgstr ""
+
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:17
+msgid "Kanji List Editor"
+msgstr "Editeur de la liste des kanji"
+
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:29
+msgid "Add Kanji"
+msgstr "Ajouter un kanji"
+
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:31
+msgid "Sort Kanji"
+msgstr "Trier les kanji"
+
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:34
+msgid "From File"
+msgstr "Depuis un fichier"
+
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:35
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:45
+#, fuzzy
+msgid "By Jouyou Grade"
+msgstr "Par niveau"
+
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:36
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:46
+msgid "By JLPT Level"
+msgstr ""
+
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:37
+#: python/jben/interface/gtk/dialog/kanjilisteditor.py:47
+msgid "By Frequency"
+msgstr "Par fréquence"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefsfonts.py:26
+msgid "Japanese Font, Normal"
+msgstr "Fonte japonaise normale"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefsfonts.py:27
+msgid "Japanese Font, Large"
+msgstr "Grande fonte japonaise "
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefsfonts.py:28
+msgid "English Font, Normal"
+msgstr "Fonte latine normale"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefsfonts.py:29
+msgid "English Font, Small"
+msgstr "Grande fonte latine"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefsfonts.py:35
+msgid "Change..."
+msgstr "Changer..."
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefsfonts.py:103
+msgid "Choose Font"
+msgstr "Choisir la fonte"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:20
+msgid "Include on-yomi, kun-yomi and nanori (name) readings"
+msgstr "Inclure les lectures on, kun et nanori (noms)"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:22
+msgid "Include English meanings"
+msgstr "Inclure le sens anglais"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:24
+msgid "Include stroke count, Jouyou grade and newspaper frequency rank"
+msgstr ""
+"Inclure le nombre de traits, le niveau jôyô et le rang de fréquence dans "
+"les journaux"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:27
+msgid "Include radical component list"
+msgstr "Inclure la liste de radicaux"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:29
+msgid "Include dictionary reference codes"
+msgstr "Inclure les codes de référence du dictionnaire"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:31
+msgid "Show vocab from your study list which use the kanji"
+msgstr "Montrer le vocabulaire de votre liste d'étude utilisant le kanji"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:33
+msgid "Other information (Radical #'s, Korean and Pinyin romanization)"
+msgstr "Autres informations (Référence du radical, coréen et pinyin)"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:36
+#, fuzzy
+msgid "Use stroke order diagrams if present"
+msgstr "Utiliser les schémas d'ordre des traits de KanjiCafe.com"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:38
+#, fuzzy
+msgid "Use animated stroke order diagrams if present (tests only)"
+msgstr "Utiliser les schémas animés d'ordre des traits de KanjiCafe.com"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:46
+msgid "\"New Japanese-English Character Dictionary\" by Jack Halpern."
+msgstr "« New Japanese-English Character Dictionary » de Jack Halpern."
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:51
+msgid ""
+"\"Modern Reader's Japanese-English Character Dictionary\" by Andrew Nelson"
+msgstr ""
+"« Modern Reader's Japanese-English Character Dictionary » d' Andrew Nelson"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:56
+msgid "\"The New Nelson Japanese-English Character Dictionary\" by John Haig"
+msgstr "« The New Nelson Japanese-English Character Dictionary » de John Haig"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:61
+msgid "\"Japanese for Busy People\" by AJLT"
+msgstr "« Japanese for Busy People » de l' AJLT"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:65
+msgid "\"The Kanji Way to Japanese Language Power\" by Dale Crowley"
+msgstr "« The Kanji Way to Japanese Language Power » de Dale Crowley"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:70
+msgid "\"Kodansha Compact Kanji Guide\""
+msgstr "« Kodansha Compact Kanji Guide »"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:74
+#, fuzzy
+msgid "\"A Guide To Reading and Writing Japanese\" by Ken Henshall et al."
+msgstr "« A Guide To Reading and Writing Japanese » de Ken Hensall et al."
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:79
+msgid "\"Kanji in Context\" by Nishiguchi and Kono"
+msgstr "« Kanji in Context » de Nishiguchi and Kono"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:83
+msgid "\"Kanji Learner's Dictionary\" by Jack Halpern"
+msgstr "« Kanji Learner's Dictionary » de Jack Halpern"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:87
+msgid "\"Essential Kanji\" by P.G. O'Neill"
+msgstr "« Essential Kanji » de P.G. O'Neill"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:91
+msgid "\"2001 Kanji\" by Father Joseph De Roo"
+msgstr "« 2001 Kanji » de Father Joseph De Roo"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:95
+msgid "\"A Guide To Reading and Writing Japanese\" by Florence Sakade"
+msgstr "« A Guide To Reading and Writing Japanese » de Florence Sakade"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:100
+msgid "\"Tuttle Kanji Cards\" by Alexander Kask"
+msgstr "« Tuttle Kanji Cards » de Alexander Kask"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:104
+#, fuzzy
+msgid "\"Japanese Kanji Flashcards\" by Hodges and Okazaki"
+msgstr "« Japanese Kanji Flashcards » de White Rabbit Press"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:108
+msgid "SKIP codes used by Halpern dictionaries"
+msgstr "Codes SKIP utilisés par les dictionnaires Halpern"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:112
+msgid "\"Kanji Dictionary\" by Spahn & Hadamitzky"
+msgstr "« Dictionnaires des Kanji » par Spahn et Hadamitzky"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:116
+msgid "\"Kanji & Kana\" by Spahn & Hadamitzky"
+msgstr "« Kanji et Kana » de Spahn et Hadamitzky"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:120
+msgid "Four Corner code (various dictionaries)"
+msgstr ""
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:124
+msgid "\"Morohashi Daikanwajiten\""
+msgstr "« Morohashi Daikanwajiten »"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:128
+#, fuzzy
+msgid "\"A Guide to Remembering Japanese Characters\" by Kenneth G. Henshall"
+msgstr "« A Guide to Remembering Japanese Characters » de Kenneth G. Henshal"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:133
+msgid "Gakken Kanji Dictionary (\"A New Dictionary of Kanji Usage\")"
+msgstr ""
+"Dictionnaire gakken kanji  (« Nouveau dictionnaire de l'usage des kanji  »)"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:138
+msgid "\"Remembering The Kanji\" by James Heisig"
+msgstr "« Remembering The Kanji » de James Heisig"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:142
+msgid "\"Japanese Names\" by P.G. O'Neill"
+msgstr "« Japanese Names » de P.G. O'Neil"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:146
+msgid "Codes from Yves Maniette's French version of Heisig"
+msgstr ""
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:21
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:31
+msgid "Show onyomi"
+msgstr "Montrer la lecture on"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:22
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:32
+msgid "Show kunyomi"
+msgstr "Montrer la lecture kun"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:23
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:33
+msgid "Show English meaning"
+msgstr "Montrer le sens en anglais"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:28
+#, fuzzy
+msgid "Reading test"
+msgstr "Test de lecture des kanji"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:38
+#, fuzzy
+msgid "Writing test"
+msgstr "Test d'écriture des kanji"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:43
+msgid "Correct answer: "
+msgstr "Réponse correcte"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:44
+msgid "Wrong answer: "
+msgstr "Réponse erronée :"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:45
+msgid "Show answer: "
+msgstr "Montrer la réponse :"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:46
+msgid "Stop drill: "
+msgstr "Arrêter le test :"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:81
+msgid "Keyboard shortcuts"
+msgstr "Raccourcis clavier"
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefskanjitest.py:107
+#, python-format
+msgid ""
+"Unhandled keypress captured: keyval: 0x%(keyval)X, hardware_keycode: 0x%"
+"(hw_keycode)X"
+msgstr ""
+
+#: python/jben/interface/gtk/dialog/preferences/tab_prefsother.py:26
+msgid "Mobile mode (settings saved to current directory)"
+msgstr "Mode ambulant (réglages sauvegardés dans le dossier courant)"
+
+#: python/jben/interface/gtk/dialog/preferences/__init__.py:24
+msgid "Preferences Editor"
+msgstr "Édition des préférences"
+
+#: python/jben/interface/gtk/dialog/preferences/__init__.py:32
+#: python/jben/interface/gtk/window/main.py:289
+msgid "Kanji Dictionary"
+msgstr "Dictionnaire de kanji"
+
+#: python/jben/interface/gtk/dialog/preferences/__init__.py:33
+msgid "Fonts"
+msgstr "Fontes"
+
+#: python/jben/interface/gtk/dialog/preferences/__init__.py:34
+msgid "Kanji test"
+msgstr "Test de kanji"
+
+#: python/jben/interface/gtk/dialog/vocablisteditor.py:17
+msgid "Vocab List Editor"
+msgstr "Editeur de liste de vocabulaire"
+
+#: python/jben/interface/gtk/dict_manager.py:26
+msgid "EDICT (recommended)"
+msgstr ""
+
+#: python/jben/interface/gtk/dict_manager.py:30
+msgid "JMdict (slow, multilingual)"
+msgstr ""
+
+#: python/jben/interface/gtk/dict_manager.py:32
+msgid "JMdict_e (English/Japanese only)"
+msgstr ""
+
+#: python/jben/interface/gtk/dict_manager.py:34
+msgid "KANJIDIC (recommended)"
+msgstr ""
+
+#: python/jben/interface/gtk/dict_manager.py:36
+msgid "KANJID212"
+msgstr ""
+
+#: python/jben/interface/gtk/dict_manager.py:38
+msgid "KANJIDIC2 (slow)"
+msgstr ""
+
+#: python/jben/interface/gtk/widget/kanjidict.py:18
+msgid "Enter kanji:"
+msgstr "Entrer le kanji"
+
+#: python/jben/interface/gtk/widget/kanjidict.py:19
+msgid "of 0 kanji"
+msgstr "de 0 kanji"
+
+#: python/jben/interface/gtk/widget/search_frame.py:28
+msgid "Enter query:"
+msgstr ""
+
+#: python/jben/interface/gtk/widget/search_frame.py:31
+#, fuzzy
+msgid "_Search"
+msgstr "Chercher"
+
+#: python/jben/interface/gtk/widget/search_frame.py:57
+#, fuzzy
+msgid "_Random"
+msgstr "Hasard"
+
+#: python/jben/interface/gtk/widget/search_frame.py:61
+#, fuzzy
+msgid "of 0 items"
+msgstr "de 0 kanji"
+
+#: python/jben/interface/gtk/widget/search_frame.py:80
+#, fuzzy
+msgid "No query has been entered."
+msgstr "Aucune recherche n'a été demandée."
+
+#: python/jben/interface/gtk/widget/search_frame.py:84
+msgid "ERROR: Could not connect to database parser."
+msgstr ""
+
+#: python/jben/interface/gtk/widget/search_frame.py:91
+#, fuzzy
+msgid "No entries found."
+msgstr "Pas de résultats"
+
+#: python/jben/interface/gtk/widget/worddict.py:17
+msgid "Enter word or expression:"
+msgstr "Entrer un mot ou expression"
+
+#: python/jben/interface/gtk/widget/worddict.py:18
+msgid "of 0 vocab"
+msgstr "de 0 mot"
+
+#: python/jben/interface/gtk/window/kanjihwsearch.py:21
+#, python-format
+msgid "%s: Kanji Handwriting Pad"
+msgstr "%s : Ardoise d'écriture des kanji"
+
+#: python/jben/interface/gtk/window/kanjihwsearch.py:27
+msgid "Draw Kanji (Right click erases)"
+msgstr "Dessinner le kanji (clic droit pour effacer"
+
+#: python/jben/interface/gtk/window/kanjihwsearch.py:50
+msgid "Clear"
+msgstr "Effacer"
+
+#: python/jben/interface/gtk/window/main.py:43
+msgid "Dictionaries not found"
+msgstr ""
+
+#: python/jben/interface/gtk/window/main.py:44
+msgid ""
+"Could not find some needed dictionary files.  Do you wish to download them "
+"from the Internet?"
+msgstr ""
+
+#: python/jben/interface/gtk/window/main.py:58
+msgid "Could not download all dictionaries"
+msgstr ""
+
+#: python/jben/interface/gtk/window/main.py:59
+msgid "Could not download all needed files.  Some features may be disabled."
+msgstr ""
+
+#: python/jben/interface/gtk/window/main.py:62
+msgid "Not downloading dictionaries"
+msgstr ""
+
+#: python/jben/interface/gtk/window/main.py:63
+msgid "Not downloading dictionaries.  Some features may be disabled."
+msgstr ""
+
+#: python/jben/interface/gtk/window/main.py:125
+#: python/jben/interface/gtk/window/main.py:136
+msgid "Not yet implemented"
+msgstr ""
+
+#: python/jben/interface/gtk/window/main.py:126
+#: python/jben/interface/gtk/window/main.py:137
+msgid "Sorry, this has not yet been re-implemented."
+msgstr ""
+
+#: python/jben/interface/gtk/window/main.py:141
+#, fuzzy, python-format
+msgid ""
+"%(package_name)s %(package_version)s\n"
+"By %(author)s\n"
+"Copyright %(copyright)s\n"
+"\n"
+"Inspired in large by JWPce and JFC by Glenn Rosenthal:\n"
+"http://www.physics.ucla.edu/~grosenth/\n"
+"\n"
+"Powered by the many Japanese dictionary files from Monash University, many "
+"thanks to Jim Breen:\n"
+"http://www.csse.monash.edu.au/~jwb/japanese.html\n"
+"Thanks also to Jim Rose of kanjicafe.com for his extended RADKFILE2/"
+"KRADFILE2 databases and derived database files.\n"
+"\n"
+"Built using PyGTK: http://www.pygtk.org/\n"
+"\n"
+"Hand writing recognition is based upon code from im-ja (http://im-ja."
+"sourceforge.net/) and KanjiPad (http://fishsoup.net/software/kanjipad/).  "
+"KanjiPad was written by Owen Taylor.\n"
+"\n"
+"See \"Help->License Information...\" for important license details."
+msgstr ""
+"%s v%s\n"
+"De %s\n"
+"Copyright %s\n"
+"\n"
+"Librement inspiré par  JWPce et JFC de Glenn Rosenthal:\n"
+"http://www.physics.ucla.edu/~grosenth/\n"
+"\n"
+"Utilise les nombreux dictionnaires  l'université Monash, sincères "
+"remerciements à Jim Breen:\n"
+"http://www.csse.monash.edu.au/~jwb/japanese.html\n"
+"Merci aussi à Jim Rose de kanjicafe.com pour KRADKFILE2/ses bases de "
+"données et fichiers dérivés RADKFILE2.\n"
+"\n"
+"Construit avec gtkmm: http://www.gtkmm.org/\n"
+"\n"
+"La reconnaissance manuelle est basée sur le code de im-ja (http://im-ja."
+"sourceforge.net/) et KanjiPad (http://fishsoup.net/software/kanjipad/).  "
+"KanjiPad a été écrit par Owen Taylor.\n"
+"\n"
+"Voir  «Aide -> information sur la licence...» pour des précisions "
+"importantes."
+
+#: python/jben/interface/gtk/window/main.py:171
+#, python-format
+msgid "About %s"
+msgstr "À propose de %s"
+
+#: python/jben/interface/gtk/window/main.py:175
+msgid ""
+"Program distributed under the GNU General Public License (GPL) version 2:\n"
+"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
+"\n"
+"The included dictionary data files, with the exception of the handwriting "
+"databases and Jim Rose's extensions to the radical databases, are "
+"distributed under a separate license specified at\n"
+"http://www.csse.monash.edu.au/~jwb/edrdg/license.htm\n"
+"\n"
+"Jim Rose's extended databases are licensed to Monash University with "
+"permission to modify and redistribute the files, as long as his copyright "
+"notices are preserved.\n"
+"\n"
+"The SKIP (System of Kanji Indexing by Patterns) system for ordering kanji "
+"was developed by Jack Halpern (Kanji Dictionary Publishing Society at http://"
+"www.kanji.org/), and is used with his permission.\n"
+"\n"
+"Copies of the GNU General Public License, Monash University's license for "
+"the dictionary files and documentation for the dictionary files are "
+"contained in this program's \"license\" directory."
+msgstr ""
+"Program distribué sous licence publique  GNU (GPL) version 2:\n"
+"http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
+"\n"
+"Les dictionnaires inclus, à l'exception de la base de données de "
+"reconnaissance manuelle et les extensions de Jim Rose aux données sur les "
+"radicaux,sont distribués sous une autre licence présentée à \n"
+"http://www.csse.monash.edu.au/~jwb/edrdg/license.htm\n"
+"\n"
+"Les bases de données étendues de Jim Rose sont licenciées l'université "
+"Monash avec la permission de modifier et de redistribuer les fichiers, tant "
+"que ses noticesde  copyright sont préservées.\n"
+"\n"
+" Le système SKIP (System of Kanji Indexing by Patterns) a été développé "
+"par Jack Halpern (Kanji Dictionary Publishing Society à http://www.kanji."
+"org/), et est utilisé avec sa permission.\n"
+"\n"
+"Les copies de la licence publique GNU, celle de l'université Monash pour "
+"les dictionnaires et leur documentation sont dans le dossier « license » de "
+"ce programme."
+
+#: python/jben/interface/gtk/window/main.py:200
+msgid "License Information"
+msgstr "Informations sur la licence"
+
+#: python/jben/interface/gtk/window/main.py:214
+msgid "_File"
+msgstr "_Fichier"
+
+#: python/jben/interface/gtk/window/main.py:219
+msgid "_Edit"
+msgstr "_Edition"
+
+#: python/jben/interface/gtk/window/main.py:222
+msgid "_Vocab Study List"
+msgstr "Liste de _vocabulaire à étudier"
+
+#: python/jben/interface/gtk/window/main.py:225
+msgid "_Kanji Study List"
+msgstr "Liste de _kanji à étudier"
+
+#: python/jben/interface/gtk/window/main.py:231
+msgid "_Practice"
+msgstr "En_trainement"
+
+#: python/jben/interface/gtk/window/main.py:233
+msgid "_Kanji"
+msgstr "_Kanji"
+
+#: python/jben/interface/gtk/window/main.py:236
+msgid "_Tools"
+msgstr "_Outils"
+
+#: python/jben/interface/gtk/window/main.py:238
+msgid "_Handwriting Recognition for Kanji"
+msgstr "_Reconnaissance manuelle des kanji"
+
+#: python/jben/interface/gtk/window/main.py:241
+msgid "_Kanji Search"
+msgstr "Recherche des _kanji"
+
+#: python/jben/interface/gtk/window/main.py:244
+msgid "_Help"
+msgstr "_Aide"
+
+#: python/jben/interface/gtk/window/main.py:249
+msgid "_License Information..."
+msgstr "Information sur la licence..."
+
+#: python/jben/interface/gtk/window/main.py:288
+msgid "Word Dictionary"
+msgstr "Dictionnaire"
+
+#: python/jben/main.py:14
+#, python-format
+msgid "Select interface: gtk, console (default: %default)"
+msgstr ""
+
+#: python/jben/preferences.py:90
+#, python-format
+msgid "Warning: dropping empty setting \"%s\"!"
+msgstr ""
+
+#~ msgid "Add Kanji By Freq"
+#~ msgstr "Ajouter des kanji par fréquence"
+
+#~ msgid ""
+#~ "Your high frequency rank cannot be less than your low frequency rank."
+#~ msgstr "Le rang supérieur ne peut être plus petit que le rang inférieur."
+
+#~ msgid "Bad frequency range"
+#~ msgstr "Mauvais intervalle de fréquence"
+
+#~ msgid "Jouyou Kanji Grade 1"
+#~ msgstr "Niveau 1 des jôyô kanji"
+
+#~ msgid "Jouyou Kanji Grade 2"
+#~ msgstr "Niveau 2 des jôyô kanji"
+
+#~ msgid "Jouyou Kanji Grade 3"
+#~ msgstr "Niveau 3 des jôyô kanji"
+
+#~ msgid "Jouyou Kanji Grade 4"
+#~ msgstr "Niveau 4 des jôyô kanji"
+
+#~ msgid "Jouyou Kanji Grade 5"
+#~ msgstr "Niveau 5 des jôyô kanji"
+
+#~ msgid "Jouyou Kanji Grade 6"
+#~ msgstr "Niveau 6 des jôyô kanji"
+
+#~ msgid "Jouyou Kanji, General Usage"
+#~ msgstr "Jôyô kanji, usage général"
+
+#~ msgid "Jinmeiyou Kanji (for names)"
+#~ msgstr "Jinmeiyô kanji (pour les noms)"
+
+#~ msgid "Non-Jouyou/Non-Jinmeiyou Kanji"
+#~ msgstr "Kanji ni jôyô ni jinmeiyô"
+
+#~ msgid "Add Kanji By Grade"
+#~ msgstr "Ajouter des kanjis par niveau"
+
+#~ msgid "Your high grade level cannot be less than your low grade level."
+#~ msgstr ""
+#~ "Le niveau supérieur ne peut être plus petit que le niveau inférieur."
+
+#~ msgid "Bad grade range"
+#~ msgstr "Mauvais intervalle de niveau"
+
+#~ msgid "Other"
+#~ msgstr "Autres"
+
+#~ msgid ""
+#~ "A config file was found in this system's home folder: %s.  Turning mobile "
+#~ "mode off will cause J-Ben to OVERWRITE the existing file when it closes, "
+#~ "destroying whatever is already there.  Is this okay?"
+#~ msgstr ""
+#~ "Un fichier de configuration a été trouvé dans le dossier utilisateur "
+#~ "de cet ordinateur : %s. Désactiver lemode ambulant aura pour "
+#~ "conséquence l'écrasement de ce fichier à la fermeture de J-Benet la "
+#~ "perte de toutes les données qui y sont présentes. Etes-vous d'accord ?"
+
+#~ msgid "By Both"
+#~ msgstr "Les deux"
+
+#~ msgid ""
+#~ "Unsaved changes are present.  These must be saved before continuing.  "
+#~ "Continue?"
+#~ msgstr ""
+#~ "Des modifications non sauvegardées existent. Elles doivent l'être avant "
+#~ "de continuer. Continuer ? "
+
+#~ msgid "Unsaved changes detected"
+#~ msgstr "Existence de modifications non sauvegardées "
+
+#~ msgid "Import from file"
+#~ msgstr "Importer depuis un fichier"
+
+#~ msgid "Added %d kanji to the list."
+#~ msgstr "Ajouté %d kanji à la liste"
+
+#~ msgid "Add Kanji From File"
+#~ msgstr "Ajouter des kanji depuis un fichier"
+
+#~ msgid "Add Kanji by Grade"
+#~ msgstr "Ajouter des kanji par niveau"
+
+#~ msgid "Add Kanji by Frequency"
+#~ msgstr "Ajouter des kanji par fréquence"
+
+#~ msgid ""
+#~ "Changes Saved.\n"
+#~ "Total kanji in list: %d"
+#~ msgstr ""
+#~ "Modifications sauvegardées.\n"
+#~ "Nombre total de kanji dans la liste : %d"
+
+#~ msgid "Kanji Test: Results"
+#~ msgstr "Test des kanji : résultats"
+
+#~ msgid ""
+#~ "- TEST COMPLETED -\n"
+#~ "\n"
+#~ msgstr ""
+#~ "TEST TERMINÉ -\n"
+#~ "\n"
+
+#~ msgid "Final score: %d/%d (%0.3f%%)\n"
+#~ msgstr "Résultat final : %d/%d(%0.3f%%)\n"
+
+#~ msgid ""
+#~ "The test was NOT completed!\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Le test n'a pas été terminé !\n"
+#~ "\n"
+
+#~ msgid "Test progress: %d/%d (%0.3f%%)\n"
+#~ msgstr "Avancement du test : %d/%d (%0.3f%%)\n"
+
+#~ msgid "Partial score: %d/%d (%0.3f%%)\n"
+#~ msgstr "Résultat partiel :  %d/%d (%0.3f%%)\n"
+
+#~ msgid "Your test results are as follows:"
+#~ msgstr "Vos résultats au test sont comme suit : "
+
+#~ msgid "Kanji Test: Settings"
+#~ msgstr "Préférences pour le test des kanji"
+
+#~ msgid "Choose randomly from list"
+#~ msgstr "Choisir au hasard dans la liste"
+
+#~ msgid "Start at index:"
+#~ msgstr "Commencer à l'index :"
+
+#~ msgid "Reading kanji"
+#~ msgstr "Lecture des kanji"
+
+#~ msgid "Writing kanji"
+#~ msgstr "Écriture des kanji"
+
+#~ msgid "Start Test"
+#~ msgstr "Commencer le test"
+
+#~ msgid "Choose Kanji to Test"
+#~ msgstr "Choisir le kanji à tester"
+
+#~ msgid "Choose Test Type"
+#~ msgstr "Choix du type de test"
+
+#~ msgid "Number of kanji to test:"
+#~ msgstr "Nombre de kanji à tester :"
+
+#~ msgid "J-Ben: Kanji Test"
+#~ msgstr "J-Ben : test des kanji"
+
+#~ msgid "< Kanji >"
+#~ msgstr "< Kanji >"
+
+#~ msgid "< Onyomi >"
+#~ msgstr "< Onyomi >"
+
+#~ msgid "< Kunyomi >"
+#~ msgstr "< Kunyomi >"
+
+#~ msgid "< Meaning >"
+#~ msgstr "<Sens>"
+
+#~ msgid "Show Answer (_%s)"
+#~ msgstr "Montrer la réponse (_%s)"
+
+#~ msgid "Correct (_%s)"
+#~ msgstr "Correct  (_%s)"
+
+#~ msgid "Wrong (_%s)"
+#~ msgstr "Erronés (_%s)"
+
+#~ msgid "Stop Drill (_%s)"
+#~ msgstr "Arrêter le test (_%s)"
+
+#~ msgid "Kanji stroke order graphics used under license from KanjiCafe.com."
+#~ msgstr ""
+#~ "Diagrammes de tracé des kanji utilisés avec l'autorisation de KanjiCafe."
+#~ "com."
+
+#~ msgid "Current score: %d/%d (%0.3f%%)"
+#~ msgstr "Score actuel : %d/%d (%0.3f%%)"
+
+#~ msgid "Test Progress: %d/%d (%0.3f%% done)"
+#~ msgstr "Avancement du test :  %d/%d (%0.3f%% faits"
+
+#~ msgid "Final score: %d/%d (%0.3f%%)"
+#~ msgstr "Score final :%d/%d (%0.3f%%)"
+
+#~ msgid "Extra practice: %d remaining"
+#~ msgstr "À refaire : reste  %d"
+
+#~ msgid "A test is still in progress!  Are you sure?"
+#~ msgstr "Un test est en cours ! Êtes-vous sûr ?"
+
+#~ msgid "Test in progress!"
+#~ msgstr "Test en cours !"
+
+#~ msgid "How do you want to use J-Ben?"
+#~ msgstr "Comment voulez-vous utiliser J-Ben ?"
+
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#~ msgid "Mobile"
+#~ msgstr "Mobile"
+
+#~ msgid "Standard or Mobile?"
+#~ msgstr "Standard ou mobile?"
+
+#~ msgid ""
+#~ "If this is a normal installation, please click \"Standard\".\n"
+#~ "If J-Ben was installed onto a USB or other removable disk, please click "
+#~ "\" Mobile\".\n"
+#~ "(This setting can be changed later via the Edit->Preferences menu.)"
+#~ msgstr ""
+#~ "Si c'est une installation normale, merci d'appuyer sur  « Standard ».\n"
+#~ "Si J-Ben a été installé sur un disque USB ou amovible, merci d'appuyer "
+#~ "sur  « Mobile ».\n"
+
+#~ msgid ""
+#~ "Changes Saved.\n"
+#~ "Total vocab in list: %d"
+#~ msgstr "Modifications sauvegardées.Total des mots dans la liste : %d"
+
+#~ msgid "Search Methods"
+#~ msgstr "Méthodes de recherche"
+
+#~ msgid "Add"
+#~ msgstr "Ajouter"
+
+#~ msgid "%s: Kanji Search"
+#~ msgstr "%s : Recherche de kanji"
+
+#~ msgid "SKIP code"
+#~ msgstr "Code SKIP"
+
+#~ msgid "Stroke Count"
+#~ msgstr "Nombre de traits"
+
+#~ msgid "Handwriting Recognition"
+#~ msgstr "Reconnaissance manuelle"
+
+#~ msgid "Total results: %d (Loading buttons...)"
+#~ msgstr "Nombre total de résultats : %d (chargement des boutons...)"
+
+#~ msgid "Over 1500 results.  Please narrow down your search."
+#~ msgstr "Plus de 1500 résultats. Merci de restreindre votre recherche."
+
+#~ msgid "Total results: %d"
+#~ msgstr "Nombre total de résultats : %d"
+
+#~ msgid "Drop"
+#~ msgstr "Ignorer"
+
+#~ msgid "Handwriting"
+#~ msgstr "Écriture manuelle"
+
+#~ msgid "Include common stroke miscounts"
+#~ msgstr "Tenir compte des erreurs fréquentes sur le nombre de traits"
+
+#~ msgid "Include stroke miscounts"
+#~ msgstr "Tenir compte des erreurs sur le nombre de traits"
+
+#~ msgid "+/-"
+#~ msgstr "+/-"
+
+#~ msgid "SKIP search"
+#~ msgstr "Recherche SKIP"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "Include SKIP miscodes"
+#~ msgstr "Inclure les erreurs de code SKIP"
+
+#~ msgid ""
+#~ "  (On this system, it should be located at:\n"
+#~ "%s)"
+#~ msgstr "(sur ce système, il devrait être situé à : \n"
+
+#~ msgid "Error"
+#~ msgstr "Erreur"
+
+#~ msgid "Warning"
+#~ msgstr "Avertissement"
+
+#~ msgid "Information"
+#~ msgstr "Information"
+
+#~ msgid "No kanji have been selected."
+#~ msgstr "Pas de kanji sélectionné"
+
+#~ msgid "of %d vocab"
+#~ msgstr "de % mots"
+
+#~ msgid ""
+#~ "%s:%d: An error occurred while closing the output stream to kpengine."
+#~ msgstr ""
+#~ "%s:%d : Une erreur est survenue à la cloture de la sortie vers kpengine"
+
+#~ msgid ""
+#~ "%s:%d: kpengine returned an out-of-range character (0x%X).  The character "
+#~ "has been dropped."
+#~ msgstr ""
+#~ "%s : %d : kpengine a retourné une erreur de caractère hors intervalle "
+#~ "(0x%X).  Le caractère a été ignoré."
