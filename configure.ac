@@ -29,7 +29,10 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([strdup strtol])
 
-AC_CONFIG_FILES([Makefile
+# Check for gettext
+AM_GNU_GETTEXT([external])
+
+AC_CONFIG_FILES([Makefile po/Makefile.in
                  c/Makefile
                  c/kpengine/Makefile
                  data/Makefile
