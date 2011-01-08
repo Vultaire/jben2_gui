@@ -1,5 +1,5 @@
 J-Ben: a Japanese study program
-Copyright 2007, 2008, 2009, 2010 by Paul Goins
+Copyright 2007, 2008, 2009, 2010, 2011 by Paul Goins
 Released under the GNU General Public License (GPL), version 2 or above
 
 This program should be considered "alpha" status and is not intended

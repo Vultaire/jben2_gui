@@ -1,3 +1,5 @@
-SUBDIRS = c python data
+SUBDIRS = c python data po
 
-EXTRA_DIST = COPYING.txt CREDITS.txt INSTALL.txt INSTALL_autoconf.txt README.txt
+EXTRA_DIST = config.rpath  COPYING.txt CREDITS.txt INSTALL.txt INSTALL_autoconf.txt README.txt
+
+ACLOCAL_AMFLAGS = -I m4
