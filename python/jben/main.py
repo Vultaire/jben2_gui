@@ -13,8 +13,8 @@ def init_windows_locale():
 
     """
     if "LANG" not in os.environ:
-        locale, encoding = locale.getdefaultlocale()[0]
-        os.environ["LANG"] = locale
+        def_locale, def_encoding = locale.getdefaultlocale()[0]
+        os.environ["LANG"] = def_locale
 
 def init_gettext():
     """Initializes gettext globally."""
