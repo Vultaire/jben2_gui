@@ -110,6 +110,9 @@ Source: "C:\Users\Vultaire\jben-1.9.5\c\kpengine\jben_kpengine.exe"; DestDir: "{
 Source: "C:\Users\Vultaire\jben-1.9.5\data\images\*"; DestDir: "{app}\data\images"; Flags: ignoreversion recursesubdirs
 Source: "C:\Users\Vultaire\jben-1.9.5\data\kpdata\*"; DestDir: "{app}\data\kpdata"; Flags: ignoreversion recursesubdirs
 
+; Translation files
+Source: "C:\Users\Vultaire\jben-1.9.5\po\fr.gmo"; DestDir: "{app}\locale\fr\LC_MESSAGES"; DestName: "jben.mo"; Flags: ignoreversion
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

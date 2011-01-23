@@ -31,6 +31,7 @@ AC_CHECK_FUNCS([strdup strtol])
 
 # Check for gettext
 AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.17])
 
 AC_CONFIG_FILES([Makefile po/Makefile.in
                  c/Makefile
