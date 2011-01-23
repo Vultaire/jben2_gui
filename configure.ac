@@ -33,10 +33,12 @@ AC_CHECK_FUNCS([strdup strtol])
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.17])
 
-AC_CONFIG_FILES([Makefile po/Makefile.in
+AC_CONFIG_FILES([Makefile
+                 po/Makefile.in
                  c/Makefile
                  c/kpengine/Makefile
                  data/Makefile
                  python/Makefile
-                 python/jben/configure.py])
+                 python/jben/configure.py
+                 jben.iss])
 AC_OUTPUT
