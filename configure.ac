@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.67])
 AC_INIT([J-Ben 2 BETA],
-        [1.9.5],
+        [1.9.6],
         [general at vultaire dot net],
         [jben],
         [http://jben.vultaire.net/])
