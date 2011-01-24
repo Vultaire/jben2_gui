@@ -10,16 +10,14 @@ PACKAGE_URL = """@PACKAGE_URL@"""
 PACKAGE_VERSION = """@PACKAGE_VERSION@"""
 VERSION = """@VERSION@"""
 
-
 # Installation path variables
 # WANTED: A simple way to fully expand these variables automatically.
 prefix = """@prefix@"""             # Default: /usr/local
 datarootdir = """@datarootdir@"""   # Default: $(prefix)/share
 datadir = """@datadir@"""           # Default: $(datarootdir)
-package = """@PACKAGE@"""
 
-# If defaults are not overridden, we need to merge the variables here
-# appropriately.
+# Since values deeper than prefix may not be fully expanded, we may
+# need to merge them manually.
 def shell_replace(s, name, value):
     """Naive shell replacement."""
     key = "${%s}" % name
@@ -32,7 +30,7 @@ datadir = shell_replace(datadir, "datarootdir", datarootdir)
 
 import os
 # pkgdatadir: $(datadir)/$(pkg_name)
-pkgdatadir = os.path.join(datadir, package)
+pkgdatadir = os.path.join(datadir, PACKAGE)
 
 
 ######################################################################

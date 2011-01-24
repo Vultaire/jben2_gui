@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 from optparse import OptionParser
 from jben.app import Application
+from jben import configure
 import gettext, locale, os
 
 def init_windows_locale():
@@ -19,7 +20,11 @@ def init_windows_locale():
 def init_gettext():
     """Initializes gettext globally."""
     # This function may be replaced later to support dynamic language switching.
-    gettext.install("jben", localedir="locale", unicode=True)
+    if os.name == "nt":
+        localedir = "locale"
+    else:
+        localedir = os.path.join(configure.datarootdir, "locale")
+    gettext.install("jben", localedir=localedir, unicode=True)
 
 def parse_args():
     op = OptionParser()
