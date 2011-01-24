@@ -2,18 +2,18 @@
 # Traductions francaises du paquet J-Ben.
 # Copyright (C) 2010 Paul Goins
 # This file is distributed under the same license as the J-Ben package.
-# <...>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: J-Ben 1.9.6\n"
 "Report-Msgid-Bugs-To: general at vultaire dot net\n"
-"POT-Creation-Date: 2011-01-08 23:29+0900\n"
+"POT-Creation-Date: 2011-01-24 22:45+0900\n"
 "PO-Revision-Date: 2010-12-25 12:50+0900\n"
 "Last-Translator: Alain Bertrand <...>\n"
 "Language-Team: French <...>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: python/jben/app.py:21
@@ -100,8 +100,8 @@ msgstr "Inclure le sens anglais"
 #: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:24
 msgid "Include stroke count, Jouyou grade and newspaper frequency rank"
 msgstr ""
-"Inclure le nombre de traits, le niveau jôyô et le rang de fréquence dans "
-"les journaux"
+"Inclure le nombre de traits, le niveau jôyô et le rang de fréquence dans les "
+"journaux"
 
 #: python/jben/interface/gtk/dialog/preferences/tab_prefskanjidict.py:27
 msgid "Include radical component list"
@@ -464,8 +464,8 @@ msgstr ""
 "Utilise les nombreux dictionnaires  l'université Monash, sincères "
 "remerciements à Jim Breen:\n"
 "http://www.csse.monash.edu.au/~jwb/japanese.html\n"
-"Merci aussi à Jim Rose de kanjicafe.com pour KRADKFILE2/ses bases de "
-"données et fichiers dérivés RADKFILE2.\n"
+"Merci aussi à Jim Rose de kanjicafe.com pour KRADKFILE2/ses bases de données "
+"et fichiers dérivés RADKFILE2.\n"
 "\n"
 "Construit avec gtkmm: http://www.gtkmm.org/\n"
 "\n"
@@ -473,8 +473,7 @@ msgstr ""
 "sourceforge.net/) et KanjiPad (http://fishsoup.net/software/kanjipad/).  "
 "KanjiPad a été écrit par Owen Taylor.\n"
 "\n"
-"Voir  «Aide -> information sur la licence...» pour des précisions "
-"importantes."
+"Voir  «Aide -> information sur la licence...» pour des précisions importantes."
 
 #: python/jben/interface/gtk/window/main.py:171
 #, python-format
@@ -515,13 +514,13 @@ msgstr ""
 "Monash avec la permission de modifier et de redistribuer les fichiers, tant "
 "que ses noticesde  copyright sont préservées.\n"
 "\n"
-" Le système SKIP (System of Kanji Indexing by Patterns) a été développé "
-"par Jack Halpern (Kanji Dictionary Publishing Society à http://www.kanji."
-"org/), et est utilisé avec sa permission.\n"
+" Le système SKIP (System of Kanji Indexing by Patterns) a été développé par "
+"Jack Halpern (Kanji Dictionary Publishing Society à http://www.kanji.org/), "
+"et est utilisé avec sa permission.\n"
 "\n"
-"Les copies de la licence publique GNU, celle de l'université Monash pour "
-"les dictionnaires et leur documentation sont dans le dossier « license » de "
-"ce programme."
+"Les copies de la licence publique GNU, celle de l'université Monash pour les "
+"dictionnaires et leur documentation sont dans le dossier « license » de ce "
+"programme."
 
 #: python/jben/interface/gtk/window/main.py:200
 msgid "License Information"
@@ -575,7 +574,7 @@ msgstr "Information sur la licence..."
 msgid "Word Dictionary"
 msgstr "Dictionnaire"
 
-#: python/jben/main.py:14
+#: python/jben/main.py:33
 #, python-format
 msgid "Select interface: gtk, console (default: %default)"
 msgstr ""
@@ -640,10 +639,10 @@ msgstr ""
 #~ "mode off will cause J-Ben to OVERWRITE the existing file when it closes, "
 #~ "destroying whatever is already there.  Is this okay?"
 #~ msgstr ""
-#~ "Un fichier de configuration a été trouvé dans le dossier utilisateur "
-#~ "de cet ordinateur : %s. Désactiver lemode ambulant aura pour "
-#~ "conséquence l'écrasement de ce fichier à la fermeture de J-Benet la "
-#~ "perte de toutes les données qui y sont présentes. Etes-vous d'accord ?"
+#~ "Un fichier de configuration a été trouvé dans le dossier utilisateur de "
+#~ "cet ordinateur : %s. Désactiver lemode ambulant aura pour conséquence "
+#~ "l'écrasement de ce fichier à la fermeture de J-Benet la perte de toutes "
+#~ "les données qui y sont présentes. Etes-vous d'accord ?"
 
 #~ msgid "By Both"
 #~ msgstr "Les deux"
@@ -893,5 +892,5 @@ msgstr ""
 #~ "%s:%d: kpengine returned an out-of-range character (0x%X).  The character "
 #~ "has been dropped."
 #~ msgstr ""
-#~ "%s : %d : kpengine a retourné une erreur de caractère hors intervalle "
-#~ "(0x%X).  Le caractère a été ignoré."
+#~ "%s : %d : kpengine a retourné une erreur de caractère hors intervalle (0x%"
+#~ "X).  Le caractère a été ignoré."
