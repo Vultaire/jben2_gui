@@ -12,7 +12,6 @@ import gtk
 from ..widget.storedsize import StoredSizeDialog
 
 
-
 class EditBox(gtk.TextView):
 
     def __init__(self):
@@ -27,6 +26,93 @@ class EditBox(gtk.TextView):
     def on_text_changed(self, widget):
         print "EditBox.on_text_changed"
         self.modified = True
+
+
+class BaseButton(gtk.Button):
+
+    def __init__(self, label, edit_box):
+        gtk.Button.__init__(self, label)
+        self.connect("clicked", self.on_clicked, edit_box)
+
+    def on_clicked(self, widget, edit_box):
+        print "BaseButton clicked"
+
+
+class AddFromFile(BaseButton):
+
+    def __init__(self, edit_box):
+        BaseButton.__init__(self, _("From File"), edit_box)
+
+    def on_clicked(self, widget, edit_box):
+        print "add.from_jouyou clicked"
+
+
+class AddByJouyou(BaseButton):
+
+    def __init__(self, edit_box):
+        BaseButton.__init__(self, _("By Jouyou Grade"), edit_box)
+
+    def on_clicked(self, widget, edit_box):
+        print "add.by_jouyou clicked"
+
+
+class AddByJlpt(BaseButton):
+
+    def __init__(self, edit_box):
+        BaseButton.__init__(self, _("By JLPT Level"), edit_box)
+
+    def on_clicked(self, widget, edit_box):
+        print "add.by_jlpt clicked"
+
+
+class AddByFreq(BaseButton):
+
+    def __init__(self, edit_box):
+        BaseButton.__init__(self, _("By Frequency"), edit_box)
+
+    def on_clicked(self, widget, edit_box):
+        print "add.by_freq clicked"
+
+
+class SortByJouyou(BaseButton):
+
+    def __init__(self, edit_box):
+        BaseButton.__init__(self, _("By Jouyou Grade"), edit_box)
+
+    def on_clicked(self, widget, edit_box):
+        print "sort.by_jouyou clicked"
+
+
+class SortByJlpt(BaseButton):
+
+    def __init__(self, edit_box):
+        BaseButton.__init__(self, _("By JLPT Level"), edit_box)
+
+    def on_clicked(self, widget, edit_box):
+        print "sort.by_jlpt clicked"
+
+
+class SortByFreq(BaseButton):
+
+    def __init__(self, edit_box):
+        BaseButton.__init__(self, _("By Frequency"), edit_box)
+
+    def on_clicked(self, widget, edit_box):
+        print "sort.by_freq clicked"
+
+
+class DirectEdit(gtk.CheckButton):
+
+    def __init__(self, edit_box):
+        gtk.CheckButton.__init__(self, _("Edit directly"))
+        self.connect("toggled", self.on_toggled, edit_box)
+
+        # Call once to set initial status appropriately.
+        self.on_toggled(self, edit_box)
+
+    def on_toggled(self, widget, edit_box):
+        state = widget.get_active()
+        edit_box.set_sensitive(state)
 
 
 class EditWindow(gtk.ScrolledWindow):
@@ -49,77 +135,22 @@ class AddFrame(ShadowedFrame):
 
     def __init__(self, edit_box):
         ShadowedFrame.__init__(self, _("Add Kanji"))
-
-        add_from_file = gtk.Button(_("From File"))
-        add_by_jouyou = gtk.Button(_("By Jouyou Grade"))
-        add_by_jlpt = gtk.Button(_("By JLPT Level"))
-        add_by_freq = gtk.Button(_("By Frequency"))
-
-        add_from_file.connect("clicked", self.on_file_clicked, edit_box)
-        add_by_jouyou.connect("clicked", self.on_jouyou_clicked, edit_box)
-        add_by_jlpt.connect("clicked", self.on_jlpt_clicked, edit_box)
-        add_by_freq.connect("clicked", self.on_freq_clicked, edit_box)
-
-        add_box = gtk.VBox()
-        for button in (add_from_file, add_by_jouyou, add_by_jlpt, add_by_freq):
-            add_box.pack_start(button, expand=False)
-
-        self.add(add_box)
-
-    def on_file_clicked(self, widget, edit_box):
-        print "add.from_jouyou clicked"
-
-    def on_jouyou_clicked(self, widget, edit_box):
-        print "add.by_jouyou clicked"
-
-    def on_jlpt_clicked(self, widget, edit_box):
-        print "add.by_jlpt clicked"
-
-    def on_freq_clicked(self, widget, edit_box):
-        print "add.by_freq clicked"
+        box = gtk.VBox()
+        for button_class in (AddFromFile, AddByJouyou, AddByJlpt, AddByFreq):
+            button = button_class(edit_box)
+            box.pack_start(button, expand=False)
+        self.add(box)
 
 
 class SortFrame(ShadowedFrame):
 
     def __init__(self, edit_box):
         ShadowedFrame.__init__(self, _("Sort Kanji"))
-
-        sort_by_jouyou = gtk.Button(_("By Jouyou Grade"))
-        sort_by_jlpt = gtk.Button(_("By JLPT Level"))
-        sort_by_freq = gtk.Button(_("By Frequency"))
-
-        sort_by_jouyou.connect("clicked", self.on_jouyou_clicked, edit_box)
-        sort_by_jlpt.connect("clicked", self.on_jlpt_clicked, edit_box)
-        sort_by_freq.connect("clicked", self.on_freq_clicked, edit_box)
-
-        sort_box = gtk.VBox()
-        for button in (sort_by_jouyou, sort_by_jlpt, sort_by_freq):
-            sort_box.pack_start(button, expand=False)
-
-        self.add(sort_box)
-
-    def on_jouyou_clicked(self, widget, edit_box):
-        print "sort.by_jouyou clicked"
-
-    def on_jlpt_clicked(self, widget, edit_box):
-        print "sort.by_jlpt clicked"
-
-    def on_freq_clicked(self, widget, edit_box):
-        print "sort.by_freq clicked"
-
-
-class DirectEdit(gtk.CheckButton):
-
-    def __init__(self, edit_box):
-        gtk.CheckButton.__init__(self, _("Edit directly"))
-        self.connect("toggled", self.on_toggled, edit_box)
-
-        # Call once to set initial status appropriately.
-        self.on_toggled(self, edit_box)
-
-    def on_toggled(self, widget, edit_box):
-        state = widget.get_active()
-        edit_box.set_sensitive(state)
+        box = gtk.VBox()
+        for button_class in (SortByJouyou, SortByJlpt, SortByFreq):
+            button = button_class(edit_box)
+            box.pack_start(button, expand=False)
+        self.add(box)
 
 
 class SideButtons(gtk.VBox):
@@ -144,10 +175,10 @@ class DialogKanjiListEditor(StoredSizeDialog):
         StoredSizeDialog.__init__(self, "gui.kanjilisteditor.size", -1, -1,
                                   _("Kanji List Editor"), parent)
 
-        self.edit_box = EditBox()
+        edit_box = EditBox()
 
-        edit_window = EditWindow(self.edit_box)
-        side_buttons = SideButtons(self.edit_box)
+        edit_window = EditWindow(edit_box)
+        side_buttons = SideButtons(edit_box)
 
         main_box = gtk.HBox(spacing=5)
         main_box.pack_start(side_buttons, expand=False)
