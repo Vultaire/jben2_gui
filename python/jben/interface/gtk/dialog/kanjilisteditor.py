@@ -11,6 +11,10 @@ from __future__ import absolute_import
 import gtk
 from ..widget.storedsize import StoredSizeDialog
 
+#from .addkanjibyfreq import AddKanjiByFreqDialog
+#from .addkanjibyjlpt import AddKanjiByJLPTDialog
+from .addkanjibyjouyou import AddKanjiByJouyouDialog
+
 
 class EditBox(gtk.TextView):
 
@@ -34,6 +38,16 @@ class BaseButton(gtk.Button):
         gtk.Button.__init__(self, label)
         self.connect("clicked", self.on_clicked, edit_box)
 
+    def _get_parent_window(self):
+        parent = self.get_parent()
+        while True:
+            if isinstance(parent, gtk.Window):
+                return parent
+            elif parent == None:
+                raise Exception(
+                    "Expected parent object, but found None instead.")
+            parent = parent.get_parent()
+
     def on_clicked(self, widget, edit_box):
         print "BaseButton clicked"
 
@@ -53,8 +67,16 @@ class AddByJouyou(BaseButton):
         BaseButton.__init__(self, _("By Jouyou Grade"), edit_box)
 
     def on_clicked(self, widget, edit_box):
-        print "add.by_jouyou clicked"
-
+        parent = self._get_parent_window()
+        dialog = AddKanjiByJouyouDialog(parent)
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
+            # Get edit box's kanji
+            # Get kanji in specified range
+            # Merge lists
+            # Update edit box
+            pass
+        dialog.destroy()
 
 class AddByJlpt(BaseButton):
 
