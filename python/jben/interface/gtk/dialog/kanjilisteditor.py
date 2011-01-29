@@ -78,6 +78,21 @@ class SortFrame(ShadowedFrame):
         self.add(sort_box)
 
 
+class DirectEdit(gtk.CheckButton):
+
+    def __init__(self, edit_box):
+        gtk.CheckButton.__init__(self, _("Edit directly"))
+        self.edit_box = edit_box
+        self.connect("toggled", self.on_toggled)
+
+        # Call once to set initial status appropriately.
+        self.on_toggled(self)
+
+    def on_toggled(self, widget):
+        state = widget.get_active()
+        self.edit_box.set_sensitive(state)
+
+
 class SideButtons(gtk.VBox):
 
     def __init__(self, edit_box):
@@ -89,7 +104,7 @@ class SideButtons(gtk.VBox):
         for frame in (add_frame, sort_frame):
             self.pack_start(frame, expand=False)
 
-        direct_edit = gtk.CheckButton(_("Edit directly"))
+        direct_edit = DirectEdit(edit_box)
         align = gtk.Alignment(xalign=1.0)
         align.add(direct_edit)
         self.pack_start(align)
