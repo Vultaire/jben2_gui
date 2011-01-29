@@ -78,42 +78,31 @@ class Main(StoredSizeWindow):
             self.destroy()
 
     def on_menu_edit_vocab(self, widget):
-        print "on_menu_edit_vocab"
-
         dialog = DialogVocabListEditor(self)
         result = dialog.run()
         dialog.destroy()
 
         if result == gtk.RESPONSE_OK:
-            print "OK was clicked."
             # If OK was pressed, update the WordDict GUI's current/max index.
-        else:
-            print "Cancel was clicked; dialog input discarded."
+            pass
 
     def on_menu_edit_kanji(self, widget):
-        print "on_menu_edit_kanji"
-
         dialog = DialogKanjiListEditor(self)
         result = dialog.run()
         dialog.destroy()
 
         if result == gtk.RESPONSE_OK:
-            print "OK was clicked."
             # If OK was pressed, update the KanjiDict GUI's current/max index.
-        else:
-            print "Cancel was clicked; dialog input discarded."
+            pass
 
     def on_menu_edit_prefs(self, widget):
-        print "on_menu_edit_prefs"
-
         dialog = DialogPreferences(self)
         result = dialog.run()
         dialog.destroy()
 
         if result == gtk.RESPONSE_OK:
-            print "OK was clicked."
-        else:
-            print "Cancel was clicked; dialog input discarded."
+            # If OK was pressed, refresh the UI.
+            pass
 
     def on_menu_practice_kanji(self, widget):
         print "on_menu_practice_kanji"
@@ -126,7 +115,6 @@ class Main(StoredSizeWindow):
                      _("Sorry, this has not yet been re-implemented."))
 
     def on_menu_tools_hand(self, widget):
-        print "on_menu_tools_hand"
         # Show kanji handwriting pad... no real reason to make it modal; allow
         # the user to open multiple ones if they desire.
         hwpad = WindowKanjiHWSearch()

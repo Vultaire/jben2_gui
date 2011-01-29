@@ -20,16 +20,22 @@ class EditBox(gtk.TextView):
         self.set_accepts_tab(False)
         self.set_wrap_mode(gtk.WRAP_WORD_CHAR)
 
+        self.modified = False
+
+        self.get_buffer().connect("changed", self.on_text_changed)
+
+    def on_text_changed(self, widget):
+        print "EditBox.on_text_changed"
+        self.modified = True
+
 
 class EditWindow(gtk.ScrolledWindow):
 
-    def __init__(self):
+    def __init__(self, edit_box):
         gtk.ScrolledWindow.__init__(self)
         self.set_shadow_type(gtk.SHADOW_IN)
         self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-
-        self.edit_box = EditBox()
-        self.add(self.edit_box)
+        self.add(edit_box)
 
 
 class ShadowedFrame(gtk.Frame):
@@ -41,7 +47,7 @@ class ShadowedFrame(gtk.Frame):
 
 class AddFrame(ShadowedFrame):
 
-    def __init__(self):
+    def __init__(self, edit_box):
         ShadowedFrame.__init__(self, _("Add Kanji"))
 
         add_from_file = gtk.Button(_("From File"))
@@ -58,7 +64,7 @@ class AddFrame(ShadowedFrame):
 
 class SortFrame(ShadowedFrame):
 
-    def __init__(self):
+    def __init__(self, edit_box):
         ShadowedFrame.__init__(self, _("Sort Kanji"))
 
         sort_by_jouyou = gtk.Button(_("By Jouyou Grade"))
@@ -74,11 +80,11 @@ class SortFrame(ShadowedFrame):
 
 class SideButtons(gtk.VBox):
 
-    def __init__(self):
+    def __init__(self, edit_box):
         gtk.VBox.__init__(self, spacing=5)
 
-        add_frame = AddFrame()
-        sort_frame = SortFrame()
+        add_frame = AddFrame(edit_box)
+        sort_frame = SortFrame(edit_box)
 
         for frame in (add_frame, sort_frame):
             self.pack_start(frame, expand=False)
@@ -94,10 +100,10 @@ class DialogKanjiListEditor(StoredSizeDialog):
         StoredSizeDialog.__init__(self, "gui.kanjilisteditor.size", -1, -1,
                                   _("Kanji List Editor"), parent)
 
-        edit_window = EditWindow()
-        side_buttons = SideButtons()
+        self.edit_box = EditBox()
 
-        #edit_window.edit_box.get_buffer().connect("changed", self.on_text_changed)
+        edit_window = EditWindow(self.edit_box)
+        side_buttons = SideButtons(self.edit_box)
 
         main_box = gtk.HBox(spacing=5)
         main_box.pack_start(side_buttons, expand=False)
@@ -121,16 +127,15 @@ class DialogKanjiListEditor(StoredSizeDialog):
 
         self.set_has_separator(False)
 
-    def on_text_changed(self, widget):
-        print "DialogKanjiListEditor.on_text_changed"
+    def apply(self):
+        print "apply()ing changes"
 
     def on_cancel_clicked(self, widget):
-        print "DialogKanjiListEditor.on_cancel_clicked"
         self.response(gtk.RESPONSE_CANCEL)
 
     def on_apply_clicked(self, widget):
-        print "DialogKanjiListEditor.on_apply_clicked"
+        self.apply()
 
     def on_ok_clicked(self, widget):
-        print "DialogKanjiListEditor.on_ok_clicked"
+        self.apply()
         self.response(gtk.RESPONSE_OK)
