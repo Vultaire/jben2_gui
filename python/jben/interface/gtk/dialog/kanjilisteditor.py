@@ -55,11 +55,28 @@ class AddFrame(ShadowedFrame):
         add_by_jlpt = gtk.Button(_("By JLPT Level"))
         add_by_freq = gtk.Button(_("By Frequency"))
 
+        add_from_file.connect("clicked", self.on_file_clicked, edit_box)
+        add_by_jouyou.connect("clicked", self.on_jouyou_clicked, edit_box)
+        add_by_jlpt.connect("clicked", self.on_jlpt_clicked, edit_box)
+        add_by_freq.connect("clicked", self.on_freq_clicked, edit_box)
+
         add_box = gtk.VBox()
         for button in (add_from_file, add_by_jouyou, add_by_jlpt, add_by_freq):
             add_box.pack_start(button, expand=False)
 
         self.add(add_box)
+
+    def on_file_clicked(self, widget, edit_box):
+        print "add.from_jouyou clicked"
+
+    def on_jouyou_clicked(self, widget, edit_box):
+        print "add.by_jouyou clicked"
+
+    def on_jlpt_clicked(self, widget, edit_box):
+        print "add.by_jlpt clicked"
+
+    def on_freq_clicked(self, widget, edit_box):
+        print "add.by_freq clicked"
 
 
 class SortFrame(ShadowedFrame):
@@ -71,26 +88,38 @@ class SortFrame(ShadowedFrame):
         sort_by_jlpt = gtk.Button(_("By JLPT Level"))
         sort_by_freq = gtk.Button(_("By Frequency"))
 
+        sort_by_jouyou.connect("clicked", self.on_jouyou_clicked, edit_box)
+        sort_by_jlpt.connect("clicked", self.on_jlpt_clicked, edit_box)
+        sort_by_freq.connect("clicked", self.on_freq_clicked, edit_box)
+
         sort_box = gtk.VBox()
         for button in (sort_by_jouyou, sort_by_jlpt, sort_by_freq):
             sort_box.pack_start(button, expand=False)
 
         self.add(sort_box)
 
+    def on_jouyou_clicked(self, widget, edit_box):
+        print "sort.by_jouyou clicked"
+
+    def on_jlpt_clicked(self, widget, edit_box):
+        print "sort.by_jlpt clicked"
+
+    def on_freq_clicked(self, widget, edit_box):
+        print "sort.by_freq clicked"
+
 
 class DirectEdit(gtk.CheckButton):
 
     def __init__(self, edit_box):
         gtk.CheckButton.__init__(self, _("Edit directly"))
-        self.edit_box = edit_box
-        self.connect("toggled", self.on_toggled)
+        self.connect("toggled", self.on_toggled, edit_box)
 
         # Call once to set initial status appropriately.
-        self.on_toggled(self)
+        self.on_toggled(self, edit_box)
 
-    def on_toggled(self, widget):
+    def on_toggled(self, widget, edit_box):
         state = widget.get_active()
-        self.edit_box.set_sensitive(state)
+        edit_box.set_sensitive(state)
 
 
 class SideButtons(gtk.VBox):
