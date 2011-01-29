@@ -75,7 +75,7 @@ class Main(StoredSizeWindow):
 
     def on_menu_file_quit(self, widget):
         if not self.delete_event(None, None):
-            self.destroy(None)
+            self.destroy()
 
     def on_menu_edit_vocab(self, widget):
         print "on_menu_edit_vocab"
