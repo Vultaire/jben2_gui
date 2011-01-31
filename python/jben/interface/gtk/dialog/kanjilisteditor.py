@@ -55,7 +55,7 @@ class BaseButton(gtk.Button):
 class AddFromFile(BaseButton):
 
     def __init__(self, edit_box):
-        BaseButton.__init__(self, _("From File"), edit_box)
+        BaseButton.__init__(self, _("From _File"), edit_box)
 
     def on_clicked(self, widget, edit_box):
         print "add.from_jouyou clicked"
@@ -64,7 +64,7 @@ class AddFromFile(BaseButton):
 class AddByJouyou(BaseButton):
 
     def __init__(self, edit_box):
-        BaseButton.__init__(self, _("By Jouyou Grade"), edit_box)
+        BaseButton.__init__(self, _("By Jouyou _Grade"), edit_box)
 
     def on_clicked(self, widget, edit_box):
         parent = self._get_parent_window()
@@ -81,7 +81,7 @@ class AddByJouyou(BaseButton):
 class AddByJlpt(BaseButton):
 
     def __init__(self, edit_box):
-        BaseButton.__init__(self, _("By JLPT Level"), edit_box)
+        BaseButton.__init__(self, _("By _JLPT Level"), edit_box)
 
     def on_clicked(self, widget, edit_box):
         print "add.by_jlpt clicked"
@@ -90,7 +90,7 @@ class AddByJlpt(BaseButton):
 class AddByFreq(BaseButton):
 
     def __init__(self, edit_box):
-        BaseButton.__init__(self, _("By Frequency"), edit_box)
+        BaseButton.__init__(self, _("By Fre_quency"), edit_box)
 
     def on_clicked(self, widget, edit_box):
         print "add.by_freq clicked"
@@ -99,7 +99,7 @@ class AddByFreq(BaseButton):
 class SortByJouyou(BaseButton):
 
     def __init__(self, edit_box):
-        BaseButton.__init__(self, _("By Jouyou Grade"), edit_box)
+        BaseButton.__init__(self, _("By Jouyou G_rade"), edit_box)
 
     def on_clicked(self, widget, edit_box):
         print "sort.by_jouyou clicked"
@@ -108,7 +108,7 @@ class SortByJouyou(BaseButton):
 class SortByJlpt(BaseButton):
 
     def __init__(self, edit_box):
-        BaseButton.__init__(self, _("By JLPT Level"), edit_box)
+        BaseButton.__init__(self, _("By J_LPT Level"), edit_box)
 
     def on_clicked(self, widget, edit_box):
         print "sort.by_jlpt clicked"
@@ -117,7 +117,7 @@ class SortByJlpt(BaseButton):
 class SortByFreq(BaseButton):
 
     def __init__(self, edit_box):
-        BaseButton.__init__(self, _("By Frequency"), edit_box)
+        BaseButton.__init__(self, _("By Freq_uency"), edit_box)
 
     def on_clicked(self, widget, edit_box):
         print "sort.by_freq clicked"
@@ -126,7 +126,7 @@ class SortByFreq(BaseButton):
 class DirectEdit(gtk.CheckButton):
 
     def __init__(self, edit_box):
-        gtk.CheckButton.__init__(self, _("Edit directly"))
+        gtk.CheckButton.__init__(self, _("_Edit directly"))
         self.connect("toggled", self.on_toggled, edit_box)
 
         # Call once to set initial status appropriately.
