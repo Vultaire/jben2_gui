@@ -114,31 +114,35 @@ class JouyouComboBox(ComboBoxText):
         return None
 
 
-class LowGradeComboBox(JouyouComboBox):
-    pass
-
-
-class HighGradeComboBox(JouyouComboBox):
-    pass
-
-
-class AddKanjiByJouyouDialog(StoredSizeDialog):
+class AddKanjiByJouyouDialog(gtk.Dialog):
 
     def __init__(self, parent):
-        StoredSizeDialog.__init__(
-            self, "gui.addkanjibyjouyou.size", -1, -1,
-            _("Add Kanji By Jouyou Grade"),
-            parent,
-            #flags=gtk.DIALOG_NO_SEPARATOR,  # No difference (on Windows)?
-            buttons=(
-                gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                gtk.STOCK_OK, gtk.RESPONSE_OK),
-            )
+        gtk.Dialog.__init__(self, _("Add Kanji By Jouyou Grade"), parent),
 
-        self.low_grade = LowGradeComboBox()
-        self.high_grade = HighGradeComboBox()
+        self.low_grade = JouyouComboBox()
+        self.high_grade = JouyouComboBox()
 
         self.vbox.set_spacing(5)
         for control in (self.low_grade, self.high_grade):
             self.vbox.pack_start(control)
         self.vbox.show_all()
+
+        buttons=[
+            (gtk.STOCK_CANCEL, self.on_cancel_clicked),
+            (gtk.STOCK_OK, self.on_ok_clicked),
+            ]
+
+        for stock_code, handler in buttons:
+            button = gtk.Button(stock=stock_code)
+            button.connect("clicked", handler)
+            self.action_area.pack_start(button)
+
+        self.action_area.show_all()
+
+    def on_cancel_clicked(self, widget):
+        self.response(gtk.RESPONSE_CANCEL)
+
+    def on_ok_clicked(self, widget):
+        # Do some checks...
+        # *TO DO*
+        self.response(gtk.RESPONSE_OK)
