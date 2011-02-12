@@ -3,78 +3,16 @@
 
 from __future__ import absolute_import
 
-import gtk, gobject
+import gtk
 from ..widget.storedsize import StoredSizeDialog
-
-
-# J-Ben 1 used GtkComboBoxText.  PyGTK does not have this specific
-# subclass for some reason, although the same class exists both in
-# GTKmm and in the original GTK+.
-#
-# There appears to be somewhat of an equivalent via
-# gtk.combo_box_new_text, but this does not allow subclassing.
-#
-# There is, however, a gtk.ComboBoxEntry in PyGTK.  This seems to
-# parallel gtk_combo_box_text_new_with_entry in the C API.
-# However, I don't want the Entry...
-#
-# Fine: let's do things by hand.  It can't be too hard.
-#
-# AFTER DOING IT:
-#
-# This was not simple.  The documentation is abysmal; the official GTK
-# docs are very terse with few examples (the only ComboBox example I
-# could find was for a deprecated API!), and the PyGTK example works
-# but doesn't provide any explanation of what's going on.
-#
-# I guess it shows: people willing to write docs are always welcome on
-# OSS projects :)
-#
-# Anyway, I got this working, so I'll use my version.
-
-
-# Alternative: There is a helper function which auto-creates a
-# ComboBox of the form we want, but we can't subclass this.  We'd have
-# to encapsulate the object which makes it slightly less convenient
-# for packing into the rest of the interface.
-
-
-class ComboBoxText(gtk.ComboBox):
-
-    def __init__(self, strs=[]):
-        # The next 5 lines are pretty much copied from the PyGTK
-        # example:
-        # http://www.pygtk.org/docs/pygtk/class-gtkcombobox.html I've
-        # added comments to make up for the lack of explanation in the
-        # official docs.
-
-        # Create model and attach it to a new ComboBox.
-        self.__model = gtk.ListStore(gobject.TYPE_STRING)
-        gtk.ComboBox.__init__(self, self.__model)
-
-        # Create renderer
-        renderer = gtk.CellRendererText()
-
-        # Map renderer to CellLayout
-        self.pack_start(renderer, True)
-        self.add_attribute(renderer, 'text', 0)
-
-        # From here is my code:
-        for s in strs:
-            self.append_text(s)
-
-        if len(strs) > 0:
-            self.set_active(0)
-
-    def append_text(self, value):
-        itr = self.__model.append()
-        self.__model.set_value(itr, 0, value)
-
-    # Other interfaces could be added, but I don't need them.
+from ..widget.comboboxtext import ComboBoxText
+from ..widget.infomessage import show_message
 
 
 GENERAL_USAGE = 8
 JINMEIYOU = 9
+# Other codes could come here...
+UNCATEGORIZED = 0xFF
 
 
 class JouyouComboBox(ComboBoxText):
@@ -100,8 +38,7 @@ class JouyouComboBox(ComboBoxText):
         Grades are 1-6, representing elementary school grades,
         followed by several special codes.
 
-        Return value is the integer code, or None if the kanji has no
-        category.
+        Return value is the integer code selected.
 
         """
         index = self.get_active()
@@ -111,7 +48,8 @@ class JouyouComboBox(ComboBoxText):
             return GENERAL_USAGE
         elif index == 7:
             return JINMEIYOU
-        return None
+        else:
+            return UNCATEGORIZED
 
 
 class AddKanjiByJouyouDialog(gtk.Dialog):
@@ -122,9 +60,20 @@ class AddKanjiByJouyouDialog(gtk.Dialog):
         self.low_grade = JouyouComboBox()
         self.high_grade = JouyouComboBox()
 
+        low_label = gtk.Label(_("Low grade:"))
+        high_label = gtk.Label(_("High grade:"))
+
+        tbl = gtk.Table(2, 2)
+
+        for i, label in enumerate((low_label, high_label)):
+            align = gtk.Alignment(xalign=1.0, yalign=0.5)
+            align.add(label)
+            tbl.attach(align, 0, 1, i, i+1, xpadding=5, ypadding=5)
+        for i, combo in enumerate((self.low_grade, self.high_grade)):
+            tbl.attach(combo, 1, 2, i, i+1, xpadding=5, ypadding=5)
+
         self.vbox.set_spacing(5)
-        for control in (self.low_grade, self.high_grade):
-            self.vbox.pack_start(control)
+        self.vbox.pack_start(tbl)
         self.vbox.show_all()
 
         buttons=[
@@ -143,6 +92,12 @@ class AddKanjiByJouyouDialog(gtk.Dialog):
         self.response(gtk.RESPONSE_CANCEL)
 
     def on_ok_clicked(self, widget):
-        # Do some checks...
-        # *TO DO*
-        self.response(gtk.RESPONSE_OK)
+        grade_min = self.low_grade.get_grade()
+        grade_max = self.high_grade.get_grade()
+
+        if grade_min <= grade_max:
+            self.response(gtk.RESPONSE_OK)
+        else:
+            show_message(
+                self, _(u"Invalid range selected"),
+                _(u"The upper grade cannot be lower than the lower grade."))
