@@ -1,63 +1,39 @@
 # -*- coding: utf-8 -*-
-"""Dialog for adding kanji by Jouyou grade level."""
+"""Dialog for adding kanji by JLPT grade level."""
 
 from __future__ import absolute_import
 
 import gtk
 from ..widget.comboboxtext import ComboBoxText
-from ..widget.infomessage import show_message
+from ..widget.storedsize import StoredSizeDialog
 
 
-GENERAL_USAGE = 8
-JINMEIYOU = 9
-# Other codes could come here...
-UNCATEGORIZED = 0xFF
-
-
-class JouyouComboBox(ComboBoxText):
+class JlptComboBox(ComboBoxText):
 
     strs = [
-	_("Jouyou Kanji Grade 1"),
-	_("Jouyou Kanji Grade 2"),
-	_("Jouyou Kanji Grade 3"),
-	_("Jouyou Kanji Grade 4"),
-	_("Jouyou Kanji Grade 5"),
-	_("Jouyou Kanji Grade 6"),
-	_("Jouyou Kanji, General Usage"),
-	_("Jinmeiyou Kanji (for names)"),
-	_("Non-Jouyou/Non-Jinmeiyou Kanji")
+	_("Level 4 (Easy)"),
+	_("Level 3"),
+	_("Level 2"),
+	_("Level 1 (Hard)"),
         ]
 
     def __init__(self):
         ComboBoxText.__init__(self, self.strs)
 
     def get_grade(self):
-        """Returns grade as defined in KANJIDIC/KANJIDIC2.
-
-        Grades are 1-6, representing elementary school grades,
-        followed by several special codes.
-
-        Return value is the integer code selected.
-
-        """
+        """Returns the selected JLPT grade."""
         index = self.get_active()
-        if index < 6:
-            return index + 1
-        elif index == 6:
-            return GENERAL_USAGE
-        elif index == 7:
-            return JINMEIYOU
-        else:
-            return UNCATEGORIZED
+        grade = 4 - index
+        return grade
 
 
-class AddKanjiByJouyouDialog(gtk.Dialog):
+class AddKanjiByJlptDialog(gtk.Dialog):
 
     def __init__(self, parent):
-        gtk.Dialog.__init__(self, _("Add Kanji By Jouyou Grade"), parent),
+        gtk.Dialog.__init__(self, _("Add Kanji By JLPT Grade"), parent),
 
-        self.low_grade = JouyouComboBox()
-        self.high_grade = JouyouComboBox()
+        self.low_grade = JlptComboBox()
+        self.high_grade = JlptComboBox()
 
         low_label = gtk.Label(_("Low grade:"))
         high_label = gtk.Label(_("High grade:"))
