@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 import gtk
 from ..widget.comboboxtext import ComboBoxText
-from ..widget.storedsize import StoredSizeDialog
+from ..widget.infomessage import show_message
 
 
 class JlptComboBox(ComboBoxText):
@@ -69,7 +69,10 @@ class AddKanjiByJlptDialog(gtk.Dialog):
     def on_ok_clicked(self, widget):
         grade_min, grade_max = self.get_grades()
 
-        if grade_min <= grade_max:
+        # JLPT grades go from 4 (lowest) to 1 (highest), so the min
+        # grade should actually be equal to or higher than the max
+        # grade.
+        if grade_min >= grade_max:
             self.response(gtk.RESPONSE_OK)
         else:
             show_message(

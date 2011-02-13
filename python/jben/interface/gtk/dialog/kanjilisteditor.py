@@ -11,9 +11,9 @@ from __future__ import absolute_import
 import gtk
 from ..widget.storedsize import StoredSizeDialog
 
-#from .addkanjibyfreq import AddKanjiByFreqDialog
-#from .addkanjibyjlpt import AddKanjiByJLPTDialog
 from .addkanjibyjouyou import AddKanjiByJouyouDialog
+from .addkanjibyjlpt import AddKanjiByJlptDialog
+#from .addkanjibyfreq import AddKanjiByFreqDialog
 
 
 class EditBox(gtk.TextView):
@@ -87,7 +87,7 @@ class AddByJouyou(BaseButton):
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
             low, high = dialog.get_grades()
-            print "TODO: Add kanji from grades %d to %d" % (low, high)
+            print "TODO: Add kanji from Jouyou grades %d to %d" % (low, high)
             # Get kanji in specified range
             # Merge lists
             # Update edit box
@@ -99,7 +99,16 @@ class AddByJlpt(BaseButton):
         BaseButton.__init__(self, _("By _JLPT Level"), edit_box)
 
     def on_clicked(self, widget, edit_box):
-        print "add.by_jlpt clicked"
+        parent = self._get_parent_window()
+        dialog = AddKanjiByJlptDialog(parent)
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
+            low, high = dialog.get_grades()
+            print "TODO: Add kanji from JLPT grades %d to %d" % (low, high)
+            # Get kanji in specified range
+            # Merge lists
+            # Update edit box
+        dialog.destroy()
 
 
 class AddByFreq(BaseButton):
