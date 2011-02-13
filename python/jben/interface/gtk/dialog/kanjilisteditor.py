@@ -13,7 +13,7 @@ from ..widget.storedsize import StoredSizeDialog
 
 from .addkanjibyjouyou import AddKanjiByJouyouDialog
 from .addkanjibyjlpt import AddKanjiByJlptDialog
-#from .addkanjibyfreq import AddKanjiByFreqDialog
+from .addkanjibyfreq import AddKanjiByFreqDialog
 
 
 class EditBox(gtk.TextView):
@@ -117,7 +117,17 @@ class AddByFreq(BaseButton):
         BaseButton.__init__(self, _("By Fre_quency"), edit_box)
 
     def on_clicked(self, widget, edit_box):
-        print "add.by_freq clicked"
+        parent = self._get_parent_window()
+        dialog = AddKanjiByFreqDialog(parent)
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
+            low, high = dialog.get_freq_range()
+            print "TODO: Add kanji between frequency rankings %d and %d." \
+                % (low, high)
+            # Get kanji in specified range
+            # Merge lists
+            # Update edit box
+        dialog.destroy()
 
 
 class SortByJouyou(BaseButton):
