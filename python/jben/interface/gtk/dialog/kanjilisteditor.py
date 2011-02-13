@@ -58,7 +58,22 @@ class AddFromFile(BaseButton):
         BaseButton.__init__(self, _("From _File"), edit_box)
 
     def on_clicked(self, widget, edit_box):
-        print "add.from_jouyou clicked"
+        parent=self._get_parent_window()
+        dialog = gtk.FileChooserDialog(
+            parent=parent,
+            buttons=(
+                gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                gtk.STOCK_OK, gtk.RESPONSE_OK))
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
+            filename = dialog.get_filename()
+            if isinstance(filename, str):
+                print "FILE SELECTED:", repr(filename)
+                # Open file
+                # Make a set of all unique characters
+                # Limit characters to Japanese characters
+                # Update edit box
+        dialog.destroy()
 
 
 class AddByJouyou(BaseButton):
@@ -71,11 +86,12 @@ class AddByJouyou(BaseButton):
         dialog = AddKanjiByJouyouDialog(parent)
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
-            # Get edit box's kanji
+            low = dialog.low_grade.get_grade()
+            high = dialog.high_grade.get_grade()
+            print "TODO: Add kanji from grades %d to %d" % (low, high)
             # Get kanji in specified range
             # Merge lists
             # Update edit box
-            pass
         dialog.destroy()
 
 class AddByJlpt(BaseButton):
