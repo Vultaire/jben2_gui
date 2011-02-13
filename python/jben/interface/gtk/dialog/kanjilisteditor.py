@@ -86,8 +86,7 @@ class AddByJouyou(BaseButton):
         dialog = AddKanjiByJouyouDialog(parent)
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
-            low = dialog.low_grade.get_grade()
-            high = dialog.high_grade.get_grade()
+            low, high = dialog.get_grades()
             print "TODO: Add kanji from grades %d to %d" % (low, high)
             # Get kanji in specified range
             # Merge lists

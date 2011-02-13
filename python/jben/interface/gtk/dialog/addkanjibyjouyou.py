@@ -92,8 +92,7 @@ class AddKanjiByJouyouDialog(gtk.Dialog):
         self.response(gtk.RESPONSE_CANCEL)
 
     def on_ok_clicked(self, widget):
-        grade_min = self.low_grade.get_grade()
-        grade_max = self.high_grade.get_grade()
+        grade_min, grade_max = self.get_grades()
 
         if grade_min <= grade_max:
             self.response(gtk.RESPONSE_OK)
@@ -101,3 +100,8 @@ class AddKanjiByJouyouDialog(gtk.Dialog):
             show_message(
                 self, _(u"Invalid range selected"),
                 _(u"The upper grade cannot be lower than the lower grade."))
+
+    def get_grades(self):
+        grade_min = self.low_grade.get_grade()
+        grade_max = self.high_grade.get_grade()
+        return (grade_min, grade_max)
